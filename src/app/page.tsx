@@ -1,8 +1,33 @@
-export default function Home() {
+export default function HomePage() {
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center p-24">
-			<h1 className="text-5xl font-bold mb-8">Welcome to Compile Strength</h1>
-			<p className="text-lg mb-16">Compile your strongest version.</p>
-		</main>
+		<div className="container mx-auto px-4 py-8">
+			<h1 className="text-4xl font-bold mb-4">Welcome to Compile Strength</h1>
+			<p className="text-muted-foreground mb-8">
+				Your developer fitness toolkit - build strength through code
+			</p>
+
+			<div className="grid gap-6 md:grid-cols-3">
+				<div className="border rounded-lg p-6">
+					<h2 className="text-2xl font-semibold mb-2">Compile Strength</h2>
+					<p className="text-muted-foreground">
+						Build your codebase muscles
+					</p>
+				</div>
+
+				<div className="border rounded-lg p-6">
+					<h2 className="text-2xl font-semibold mb-2">Debug Gains</h2>
+					<p className="text-muted-foreground">
+						Level up your debugging skills
+					</p>
+				</div>
+
+				<div className="border rounded-lg p-6">
+					<h2 className="text-2xl font-semibold mb-2">Commit Training</h2>
+					<p className="text-muted-foreground">
+						Master your version control workflow
+					</p>
+				</div>
+			</div>
+		</div>
 	);
 }
