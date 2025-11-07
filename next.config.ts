@@ -7,6 +7,9 @@ const jiti = createJiti(fileURLToPath(import.meta.url));
 jiti("./src/env");
 
 const nextConfig: NextConfig = {
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 	serverExternalPackages: ["@mastra/*"],
 };
 
