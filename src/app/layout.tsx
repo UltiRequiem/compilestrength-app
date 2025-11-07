@@ -1,44 +1,22 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-
 import type { Metadata } from "next";
-
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Compile Strength",
-	description: "Compile your strongest version.",
+  title: "CompileStrength - Your Workout Compiler",
+  description: "AI-powered workout programming with a code/terminal aesthetic",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en">
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-			>
-				<SidebarProvider>
-					<AppSidebar />
-					<main className="flex-1 w-full">
-						<SidebarTrigger />
-						{children}
-					</main>
-				</SidebarProvider>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en" className="dark">
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
 }
