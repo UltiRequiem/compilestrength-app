@@ -29,9 +29,9 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<SidebarProvider>
+				<SidebarProvider defaultOpen={true}>
 					<AppSidebar />
-					<main className="flex-1 w-full">{children}</main>
+					<main className="w-full overflow-auto">{children}</main>
 				</SidebarProvider>
 			</body>
 		</html>
