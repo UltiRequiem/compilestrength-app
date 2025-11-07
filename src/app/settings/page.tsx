@@ -18,9 +18,68 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useEffect, useState } from "react";
+import { getUserPreferences, updateUserPreferences } from "./actions";
+
+type UserPreferences = {
+	userId: string;
+	units: string;
+	restTimerDefault: number;
+	trainingGoal?: string | null;
+	experienceLevel?: string | null;
+	availableDays?: number | null;
+};
 
 export default function SettingsPage() {
 	const { session, isPending } = useRequireAuth();
+	const [preferences, setPreferences] = useState<UserPreferences | null>(null);
+	const [saving, setSaving] = useState(false);
+	const [units, setUnits] = useState("lbs");
+	const [saveMessage, setSaveMessage] = useState("");
+
+	useEffect(() => {
+		const loadPreferences = async () => {
+			if (session) {
+				try {
+					const prefs = await getUserPreferences();
+					setPreferences(prefs);
+					if (prefs) {
+						setUnits(prefs.units || "lbs");
+					}
+				} catch (error) {
+					console.error("Failed to load preferences:", error);
+				}
+			}
+		};
+		loadPreferences();
+	}, [session]);
+
+	const handleSavePreferences = async () => {
+		setSaving(true);
+		setSaveMessage("");
+		try {
+			const result = await updateUserPreferences({
+				units,
+				restTimerDefault: preferences?.restTimerDefault || 90,
+			});
+			setPreferences(result.preferences);
+			setSaveMessage("Preferences saved successfully!");
+			setTimeout(() => setSaveMessage(""), 3000);
+		} catch (error) {
+			setSaveMessage("Failed to save preferences");
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	const getInitials = (name: string) => {
+		return name
+			.split(" ")
+			.map((n) => n[0])
+			.join("")
+			.toUpperCase()
+			.slice(0, 2);
+	};
 
 	if (isPending) {
 		return (
@@ -33,6 +92,7 @@ export default function SettingsPage() {
 	if (!session) {
 		return null;
 	}
+
 	return (
 		<div className="flex min-h-screen">
 			<Sidebar />
@@ -60,7 +120,7 @@ export default function SettingsPage() {
 								<CardContent className="space-y-4">
 									<div className="flex items-center gap-4">
 										<div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
-											JD
+											{getInitials(session.user.name)}
 										</div>
 										<Button variant="outline" size="sm">
 											Change Avatar
@@ -70,18 +130,21 @@ export default function SettingsPage() {
 									<div className="grid gap-4 md:grid-cols-2">
 										<div className="space-y-2">
 											<Label>Full Name</Label>
-											<Input defaultValue="John Doe" />
+											<Input defaultValue={session.user.name} />
 										</div>
 										<div className="space-y-2">
 											<Label>Username</Label>
-											<Input defaultValue="johndoe" />
+											<Input
+												defaultValue={session.user.email.split("@")[0]}
+												placeholder="username"
+											/>
 										</div>
 									</div>
 
 									<div className="space-y-2">
 										<Label>Email</Label>
 										<div className="flex gap-2">
-											<Input defaultValue="john@example.com" readOnly />
+											<Input value={session.user.email} readOnly />
 											<Badge
 												variant="secondary"
 												className="flex items-center gap-1"
@@ -97,7 +160,7 @@ export default function SettingsPage() {
 										<textarea
 											className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
 											placeholder="Tell us about yourself..."
-											defaultValue="Powerlifter focusing on strength gains"
+											defaultValue=""
 										/>
 									</div>
 
@@ -114,59 +177,79 @@ export default function SettingsPage() {
 									</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-4">
-									<div className="space-y-2">
-										<Label>Default Training Days</Label>
-										<div className="flex gap-2">
-											{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-												(day) => (
-													<Button
-														key={day}
-														variant={
-															["Mon", "Tue", "Thu", "Fri"].includes(day)
-																? "default"
-																: "outline"
-														}
-														size="sm"
-													>
-														{day}
-													</Button>
-												),
-											)}
-										</div>
-									</div>
-
 									<div className="grid gap-4 md:grid-cols-2">
 										<div className="space-y-2">
 											<Label>Preferred Units</Label>
 											<div className="flex gap-2">
-												<Button variant="default" size="sm" className="flex-1">
+												<Button
+													variant={units === "lbs" ? "default" : "outline"}
+													size="sm"
+													className="flex-1"
+													onClick={() => setUnits("lbs")}
+												>
 													lbs
 												</Button>
-												<Button variant="outline" size="sm" className="flex-1">
+												<Button
+													variant={units === "kg" ? "default" : "outline"}
+													size="sm"
+													className="flex-1"
+													onClick={() => setUnits("kg")}
+												>
 													kg
 												</Button>
 											</div>
 										</div>
 
 										<div className="space-y-2">
-											<Label>Default Gym</Label>
-											<Input defaultValue="24 Hour Fitness" />
+											<Label>Rest Timer Default (seconds)</Label>
+											<Input
+												type="number"
+												defaultValue={preferences?.restTimerDefault || 90}
+												placeholder="90"
+											/>
 										</div>
 									</div>
 
-									<div className="flex items-center justify-between rounded-lg border border-border p-4">
-										<div>
-											<p className="font-semibold">Email Notifications</p>
-											<p className="text-sm text-muted-foreground">
-												Receive workout reminders and progress updates
-											</p>
+									<div className="grid gap-4 md:grid-cols-2">
+										<div className="space-y-2">
+											<Label>Training Goal</Label>
+											<Input
+												defaultValue={preferences?.trainingGoal || ""}
+												placeholder="strength, hypertrophy, endurance"
+											/>
 										</div>
-										<Button variant="outline" size="sm">
-											Enabled
-										</Button>
+
+										<div className="space-y-2">
+											<Label>Experience Level</Label>
+											<Input
+												defaultValue={preferences?.experienceLevel || ""}
+												placeholder="beginner, intermediate, advanced"
+											/>
+										</div>
 									</div>
 
-									<Button>Save Preferences</Button>
+									{saveMessage && (
+										<div
+											className={`rounded-lg border p-3 text-sm ${
+												saveMessage.includes("success")
+													? "border-primary/50 bg-primary/10 text-primary"
+													: "border-destructive/50 bg-destructive/10 text-destructive"
+											}`}
+										>
+											{saveMessage}
+										</div>
+									)}
+
+									<Button onClick={handleSavePreferences} disabled={saving}>
+										{saving ? (
+											<>
+												<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+												Saving...
+											</>
+										) : (
+											"Save Preferences"
+										)}
+									</Button>
 								</CardContent>
 							</Card>
 
