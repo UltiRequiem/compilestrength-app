@@ -42,7 +42,7 @@ export default function SettingsPage() {
 			if (session) {
 				try {
 					const prefs = await getUserPreferences();
-					setPreferences(prefs);
+					setPreferences(prefs ?? null);
 					if (prefs) {
 						setUnits(prefs.units || "lbs");
 					}

@@ -3,7 +3,7 @@ import postgres from "postgres";
 import * as schema from "./schema";
 
 let client: postgres.Sql | null = null;
-let db: ReturnType<typeof drizzle> | null = null;
+let db: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
 export function getDb() {
 	// For Cloudflare Workers, we'll get the DATABASE_URL from env
