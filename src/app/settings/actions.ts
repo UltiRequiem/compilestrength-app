@@ -1,16 +1,17 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { PrismaClient } from "@/generated/prisma/client";
+import { getDb } from "@/db";
+import { userPreferences } from "@/db/schema";
 import { requireAuth } from "@/lib/auth-utils";
-
-const prisma = new PrismaClient();
+import { eq } from "drizzle-orm";
 
 export async function getUserPreferences() {
 	const session = await requireAuth();
+	const db = getDb();
 
-	const preferences = await prisma.userPreferences.findUnique({
-		where: { userId: session.user.id },
+	const preferences = await db.query.userPreferences.findFirst({
+		where: eq(userPreferences.userId, session.user.id),
 	});
 
 	return preferences;
@@ -37,31 +38,47 @@ export async function updateUserPreferences(formData: {
 	availableDays?: number;
 }) {
 	const session = await requireAuth();
+	const db = getDb();
 
-	const preferences = await prisma.userPreferences.upsert({
-		where: { userId: session.user.id },
-		create: {
-			userId: session.user.id,
-			units: formData.units || "lbs",
-			restTimerDefault: formData.restTimerDefault || 90,
-			trainingGoal: formData.trainingGoal,
-			experienceLevel: formData.experienceLevel,
-			availableDays: formData.availableDays,
-		},
-		update: {
-			...(formData.units && { units: formData.units }),
-			...(formData.restTimerDefault && {
-				restTimerDefault: formData.restTimerDefault,
-			}),
-			...(formData.trainingGoal && { trainingGoal: formData.trainingGoal }),
-			...(formData.experienceLevel && {
-				experienceLevel: formData.experienceLevel,
-			}),
-			...(formData.availableDays !== undefined && {
-				availableDays: formData.availableDays,
-			}),
-		},
+	// Check if preferences exist
+	const existing = await db.query.userPreferences.findFirst({
+		where: eq(userPreferences.userId, session.user.id),
 	});
+
+	let preferences;
+	if (existing) {
+		// Update existing preferences
+		const updateData: Record<string, unknown> = {};
+		if (formData.units) updateData.units = formData.units;
+		if (formData.restTimerDefault)
+			updateData.restTimerDefault = formData.restTimerDefault;
+		if (formData.trainingGoal) updateData.trainingGoal = formData.trainingGoal;
+		if (formData.experienceLevel)
+			updateData.experienceLevel = formData.experienceLevel;
+		if (formData.availableDays !== undefined)
+			updateData.availableDays = formData.availableDays;
+
+		const [updated] = await db
+			.update(userPreferences)
+			.set(updateData)
+			.where(eq(userPreferences.userId, session.user.id))
+			.returning();
+		preferences = updated;
+	} else {
+		// Create new preferences
+		const [created] = await db
+			.insert(userPreferences)
+			.values({
+				userId: session.user.id,
+				units: formData.units || "lbs",
+				restTimerDefault: formData.restTimerDefault || 90,
+				trainingGoal: formData.trainingGoal || null,
+				experienceLevel: formData.experienceLevel || null,
+				availableDays: formData.availableDays ?? null,
+			})
+			.returning();
+		preferences = created;
+	}
 
 	revalidatePath("/settings");
 

@@ -1,58 +1,183 @@
-# Compile Strength
+# CompileStrength
 
-Production: Cloudflare Workers.
+**Live Site:** [compilestrength.com](https://compilestrength.com)
+
+A full-stack fitness application with AI-powered workout programming and a terminal-inspired aesthetic. Built with Next.js 15 and deployed on Cloudflare Workers.
+
+## Tech Stack
+
+- **Frontend:** Next.js 15 (App Router) with React 19
+- **Styling:** TailwindCSS v4
+- **Backend:** Cloudflare Workers (serverless)
+- **Database:** Neon PostgreSQL (serverless Postgres)
+- **ORM:** Drizzle ORM (Cloudflare Workers compatible)
+- **Authentication:** Better Auth Cloudflare with geolocation tracking
+- **AI:** Mastra framework with OpenAI integration
+- **Deployment:** OpenNext.js adapter for Cloudflare Workers
+
+## Features
+
+### Authentication
+- Email/password authentication via Better Auth
+- Automatic session geolocation tracking (IP, city, country, timezone)
+- Cloudflare IP detection for security
+- Protected routes with Next.js middleware
+
+### Workout Management
+- AI-powered workout program generation
+- Exercise library with muscle groups and equipment types
+- Workout session tracking with RPE (Rate of Perceived Exertion)
+- Personal records tracking
+- User preferences and customization
 
 ## Environment Variables
 
 This application requires the following environment variables:
 
-- `DATABASE_URL` - Database connection string
-- `BETTER_AUTH_SECRET` - Secret for Better Auth (must be at least 32 characters)
-- `BETTER_AUTH_URL` - Base URL for Better Auth
-- `NEXT_PUBLIC_BETTER_AUTH_URL` - Public-facing URL for Better Auth
+### Required Variables
+- `DATABASE_URL` - Neon PostgreSQL connection string
+- `BETTER_AUTH_SECRET` - Secret for Better Auth (min 32 characters)
+- `BETTER_AUTH_URL` - Base URL for auth (e.g., `https://compilestrength.com`)
+- `NEXT_PUBLIC_BETTER_AUTH_URL` - Public auth URL (e.g., `https://compilestrength.com`)
+- `OPENAI_API_KEY` - (Optional) For AI workout generation features
 
 ### Local Development
 
-1. Copy `.dev.vars.example` to `.dev.vars`
-2. Fill in the required values in `.dev.vars`
-3. Run `bun run dev` for Next.js development or `bun run preview` for Cloudflare Workers preview
-
-### Production Deployment
-
-Environment variables must be configured in two places:
-
-#### 1. Build-Time Variables (required for Next.js build)
-
-`NEXT_PUBLIC_*` variables must be set during the build process:
-- If building locally: set in your shell environment before running `bun run deploy`
-- If using CI/CD: set as repository secrets and pass to the build step
-
-Example for local build:
+1. Copy `.env.example` to `.env` (if it exists) or create a `.env` file
+2. Add your environment variables:
+```env
+DATABASE_URL="postgresql://user:pass@your-neon-host.neon.tech/neondb?sslmode=require"
+BETTER_AUTH_SECRET="your-32-char-secret-key-here"
+BETTER_AUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+OPENAI_API_KEY="sk-..."
+```
+3. Run the development server:
 ```bash
-export NEXT_PUBLIC_BETTER_AUTH_URL=https://your-domain.com
+npm run dev
+# or
+bun dev
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000)
+
+### Database Setup
+
+The project uses Drizzle ORM with Neon PostgreSQL:
+
+```bash
+# Push schema to database
+bunx drizzle-kit push
+
+# Open Drizzle Studio (database GUI)
+bunx drizzle-kit studio
+
+# Generate auth schema (if auth config changes)
+npx @better-auth/cli generate --config src/lib/auth.ts --output src/db/auth.schema.ts -y
+```
+
+## Production Deployment
+
+Deployed to Cloudflare Workers at [compilestrength.com](https://compilestrength.com)
+
+### First-Time Deployment
+
+1. **Set public variables in `wrangler.jsonc`** (already configured):
+```jsonc
+{
+  "vars": {
+    "BETTER_AUTH_URL": "https://compilestrength.com",
+    "NEXT_PUBLIC_BETTER_AUTH_URL": "https://compilestrength.com"
+  }
+}
+```
+
+2. **Deploy the worker:**
+```bash
+npm run deploy
+# or
 bun run deploy
 ```
 
-#### 2. Runtime Variables (for Cloudflare Workers)
+3. **Set secrets in Cloudflare** (after first deployment):
+```bash
+# Database connection
+echo "your-neon-postgres-url" | npx wrangler secret put DATABASE_URL
 
-Server-side variables must be set in the Cloudflare Workers dashboard:
+# Auth secret
+echo "your-32-char-secret" | npx wrangler secret put BETTER_AUTH_SECRET
 
-1. Go to your Worker settings in the Cloudflare dashboard  
-2. Navigate to Settings → Variables and Secrets
-3. Add each environment variable:
-   - `DATABASE_URL`
-   - `BETTER_AUTH_SECRET`
-   - `BETTER_AUTH_URL`
-   - `NEXT_PUBLIC_BETTER_AUTH_URL` (yes, this needs to be set here too for consistency)
+# OpenAI API key (optional)
+echo "sk-..." | npx wrangler secret put OPENAI_API_KEY
+```
 
-**Methods to set variables:**
-- As **Environment Variables** in the dashboard (recommended for non-sensitive values)
-- As **Secrets** via `wrangler secret put VARIABLE_NAME` (for sensitive values)
+### Subsequent Deployments
 
-**Important:** With the `nodejs_compat` compatibility flag enabled, these variables will automatically be available in `process.env` at runtime.
+Just run:
+```bash
+npm run deploy
+```
 
-## Deployment
+Secrets persist across deployments. You only need to update them if they change.
+
+## Development Commands
 
 ```bash
-bun run deploy
+# Development
+npm run dev          # Start Next.js dev server
+npm run preview      # Build and preview with Cloudflare Workers locally
+
+# Production
+npm run build        # Build for production
+npm run deploy       # Deploy to Cloudflare Workers
+
+# Database
+bunx drizzle-kit push              # Push schema changes
+bunx drizzle-kit studio            # Open database GUI
+bun run scripts/reset-db.ts        # Reset database (DEV ONLY)
+
+# Code Quality
+npm run lint         # Run ESLint
+npm run check        # Build + TypeScript check
+npm run cf-typegen   # Generate Cloudflare Types
 ```
+
+## Project Structure
+
+```
+src/
+├── app/              # Next.js App Router pages and API routes
+├── components/       # React components (UI in ui/ subdirectory)
+├── lib/              # Core utilities (auth, utils, configs)
+├── db/               # Drizzle ORM schema and database connection
+│   ├── schema.ts           # Complete database schema
+│   ├── auth.schema.ts      # Better Auth generated schema
+│   └── index.ts            # Database connection utilities
+├── agents/           # AI agent implementations (Mastra)
+└── hooks/            # Custom React hooks
+```
+
+## Database Schema
+
+- **Auth Tables:** users, sessions, accounts, verifications (via Better Auth)
+- **Workout Tables:** WorkoutProgram, WorkoutDay, Exercise, ProgramExercise
+- **Tracking Tables:** WorkoutSession, WorkoutSet, PersonalRecord
+- **User Tables:** UserPreferences
+
+All tables use Drizzle ORM with full TypeScript type inference.
+
+## Cloudflare Workers Configuration
+
+- **Runtime:** Node.js compatibility mode (`nodejs_compat` flag)
+- **Adapter:** OpenNext.js for Next.js → Cloudflare Workers
+- **Assets:** Static files served from Cloudflare Assets
+- **Database:** Neon PostgreSQL with connection pooling via `postgres` driver
+- **Auth:** Better Auth Cloudflare with automatic geolocation tracking
+
+## Contributing
+
+This is a personal fitness tracking application. If you'd like to contribute or have suggestions, please open an issue.
+
+## License
+
+Private project - All rights reserved.

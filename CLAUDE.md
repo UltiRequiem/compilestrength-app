@@ -11,8 +11,8 @@ CompileStrength is a full-stack fitness application with an AI-powered workout p
 ### Tech Stack
 - **Frontend**: Next.js 15 with React 19, TailwindCSS v4
 - **Backend**: Cloudflare Workers with Node.js compatibility
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Better Auth with Prisma adapter
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better Auth Cloudflare with Drizzle adapter
 - **AI**: Mastra framework with OpenAI integration
 - **Deployment**: OpenNext.js for Cloudflare Workers
 
@@ -21,8 +21,10 @@ CompileStrength is a full-stack fitness application with an AI-powered workout p
 - `src/components/` - React components (UI components in `ui/` subdirectory)
 - `src/lib/` - Core utilities (auth, utils, client configs)
 - `src/agents/` - AI agent implementations using Mastra
-- `prisma/` - Database schema and migrations
-- `src/generated/prisma/` - Generated Prisma client (custom output path)
+- `src/db/` - Drizzle ORM schema and database connection
+  - `schema.ts` - Complete database schema including auth tables
+  - `auth.schema.ts` - Better Auth generated schema
+  - `index.ts` - Database connection utilities
 
 ### Database Schema
 The application has comprehensive workout tracking models:
@@ -33,10 +35,12 @@ The application has comprehensive workout tracking models:
 - Personal records and user preferences
 
 ### Authentication Flow
-- Better Auth handles email/password authentication
-- Prisma adapter connects to PostgreSQL database
+- Better Auth Cloudflare handles email/password authentication
+- Drizzle ORM adapter connects to PostgreSQL database
+- Automatic geolocation tracking in sessions (via Cloudflare)
 - Session management integrated with Next.js middleware
 - Auth utilities in `src/lib/auth-client.ts` and `src/lib/auth-utils.ts`
+- Cloudflare-specific features: IP detection, geolocation data
 
 ## Development Commands
 
@@ -50,9 +54,12 @@ npm run check        # Build + TypeScript check
 
 ### Database Commands
 ```bash
-bunx prisma migrate dev    # Run database migrations
-bunx prisma db push       # Push schema changes without migration
-bunx prisma generate      # Regenerate Prisma client
+bunx drizzle-kit push              # Push schema changes to database
+bunx drizzle-kit generate          # Generate migrations
+bunx drizzle-kit migrate           # Run migrations
+bunx drizzle-kit studio            # Open Drizzle Studio (GUI)
+bun run scripts/reset-db.ts        # Reset database (drops all tables)
+npx @better-auth/cli generate      # Regenerate auth schema
 ```
 
 ### Deployment
@@ -72,9 +79,10 @@ npm run cf-typegen   # Generate Cloudflare Types
 - `OPENAI_API_KEY` - Optional, for AI features
 
 ### Environment Setup
-1. Copy `.dev.vars.example` to `.dev.vars` for local development
-2. Use `wrangler secret put` for production secrets
-3. Set `NEXT_PUBLIC_*` variables at build time for deployment
+1. Use `.env` file for local development with Next.js
+2. Use `wrangler secret put` for production secrets (after deployment)
+3. Set `NEXT_PUBLIC_*` variables in `wrangler.jsonc` under `vars` section
+4. Note: `.env` is used for local dev, secrets must be set in Cloudflare for production
 
 ## Cloudflare Workers Specific
 
@@ -104,7 +112,7 @@ npm run cf-typegen   # Generate Cloudflare Types
 ### Type Safety
 - Strict TypeScript configuration
 - Environment variables validated via @t3-oss/env-nextjs
-- Prisma provides database type safety
+- Drizzle ORM provides database type safety with full TypeScript inference
 
 ## AI Integration
 
