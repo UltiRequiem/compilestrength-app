@@ -46,7 +46,7 @@ NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL
 3. **DEPLOYMENT.md** - Complete deployment checklist and troubleshooting guide
 
 ### Dependencies
-- **package-lock.json** - Generated during npm install (for consistency)
+- **package-lock.json** - Generated during dependency installation (included for compatibility)
 
 ## Solution for User
 
@@ -62,7 +62,7 @@ NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL
 
 2. **Deploy with Build-Time Variable**
    ```bash
-   NEXT_PUBLIC_BETTER_AUTH_URL=https://compilestrength.com npm run deploy
+   NEXT_PUBLIC_BETTER_AUTH_URL=https://compilestrength.com bun run deploy
    ```
 
 ### Why This Will Fix It
@@ -82,7 +82,7 @@ NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL
 ### NEXT_PUBLIC_* Variables Special Case
 - These must be available at BUILD time (embedded in client bundle)
 - They also need to be set in Cloudflare for runtime consistency
-- Must be passed as environment variables when running `npm run deploy`
+- Must be passed as environment variables when running `bun run deploy`
 
 ## Verification
 

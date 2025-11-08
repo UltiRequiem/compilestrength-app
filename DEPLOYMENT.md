@@ -35,23 +35,25 @@ When running the deployment command, you must set `NEXT_PUBLIC_BETTER_AUTH_URL`:
 
 ```bash
 # Option 1: Set inline with deploy command
-NEXT_PUBLIC_BETTER_AUTH_URL=https://compilestrength.com npm run deploy
+NEXT_PUBLIC_BETTER_AUTH_URL=https://compilestrength.com bun run deploy
 
 # Option 2: Export before deploying
 export NEXT_PUBLIC_BETTER_AUTH_URL=https://compilestrength.com
-npm run deploy
+bun run deploy
 ```
 
 ### Step 3: Deploy
 
 ```bash
-npm run deploy
+bun run deploy
 ```
 
 This will:
 1. Build your Next.js application (with NEXT_PUBLIC vars embedded)
 2. Adapt it for Cloudflare Workers
 3. Deploy to Cloudflare
+
+**Note:** This project uses `bun` as the package manager.
 
 ## Verification
 
@@ -84,7 +86,7 @@ echo $NEXT_PUBLIC_BETTER_AUTH_URL  # Should output your URL
 If not set, export it and rebuild:
 ```bash
 export NEXT_PUBLIC_BETTER_AUTH_URL=https://compilestrength.com
-npm run deploy
+bun run deploy
 ```
 
 ## Local Development
@@ -106,12 +108,12 @@ For local development:
 
 3. Run dev server:
    ```bash
-   npm run dev
+   bun run dev
    ```
 
 4. For Cloudflare Workers preview:
    ```bash
-   npm run preview
+   bun run preview
    ```
 
 ## CI/CD Setup (Optional)
@@ -131,7 +133,7 @@ If using GitHub Actions or another CI/CD platform:
    - name: Build and Deploy
      env:
        NEXT_PUBLIC_BETTER_AUTH_URL: ${{ secrets.NEXT_PUBLIC_BETTER_AUTH_URL }}
-     run: npm run deploy
+     run: bun run deploy
    ```
 
 ## Understanding the Fix

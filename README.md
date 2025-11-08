@@ -15,7 +15,7 @@ This application requires the following environment variables:
 
 1. Copy `.dev.vars.example` to `.dev.vars`
 2. Fill in the required values in `.dev.vars`
-3. Run `npm run dev` for Next.js development or `npm run preview` for Cloudflare Workers preview
+3. Run `bun run dev` for Next.js development or `bun run preview` for Cloudflare Workers preview
 
 ### Production Deployment
 
@@ -24,13 +24,13 @@ Environment variables must be configured in two places:
 #### 1. Build-Time Variables (required for Next.js build)
 
 `NEXT_PUBLIC_*` variables must be set during the build process:
-- If building locally: set in your shell environment before running `npm run deploy`
+- If building locally: set in your shell environment before running `bun run deploy`
 - If using CI/CD: set as repository secrets and pass to the build step
 
 Example for local build:
 ```bash
 export NEXT_PUBLIC_BETTER_AUTH_URL=https://your-domain.com
-npm run deploy
+bun run deploy
 ```
 
 #### 2. Runtime Variables (for Cloudflare Workers)
@@ -54,5 +54,5 @@ Server-side variables must be set in the Cloudflare Workers dashboard:
 ## Deployment
 
 ```bash
-npm run deploy
+bun run deploy
 ```
