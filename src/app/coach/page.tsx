@@ -287,7 +287,7 @@ export default function CoachPage() {
 						{/* Quick Prompts */}
 						<div className="border-t border-border p-4">
 							<div className="mb-3 flex gap-2 overflow-x-auto pb-2">
-								{quickPrompts.map((prompt, idx) => (
+								{quickPrompts.map((prompt, _idx) => (
 									<Button
 										key={prompt}
 										variant="outline"
