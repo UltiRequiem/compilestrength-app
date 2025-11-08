@@ -182,9 +182,9 @@ export default function CoachPage() {
 									</Badge>
 								</div>
 								<div className="space-y-3">
-									{contextItems.map((item, idx) => (
+									{contextItems.map((item) => (
 										<div
-											key={idx}
+											key={item.label}
 											className="rounded-lg border border-border p-3"
 										>
 											<p className="text-xs text-muted-foreground">
