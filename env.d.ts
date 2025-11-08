@@ -4,6 +4,11 @@
 declare namespace Cloudflare {
 	interface Env {
 		ASSETS: Fetcher;
+		// Custom environment variables
+		DATABASE_URL: string;
+		BETTER_AUTH_SECRET: string;
+		BETTER_AUTH_URL: string;
+		NEXT_PUBLIC_BETTER_AUTH_URL: string;
 	}
 }
 interface CloudflareEnv extends Cloudflare.Env {}
