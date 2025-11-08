@@ -10,7 +10,8 @@ A full-stack fitness application with AI-powered workout programming and a termi
 - **Styling:** TailwindCSS v4
 - **Backend:** Cloudflare Workers (serverless)
 - **Database:** Neon PostgreSQL (serverless Postgres)
-- **ORM:** Drizzle ORM (Cloudflare Workers compatible)
+- **ORM:** Drizzle ORM with @neondatabase/serverless driver
+- **Database Connection:** HTTP-based driver optimized for edge runtimes (not WebSocket)
 - **Authentication:** Better Auth Cloudflare with geolocation tracking
 - **AI:** Mastra framework with OpenAI integration
 - **Deployment:** OpenNext.js adapter for Cloudflare Workers
@@ -171,7 +172,10 @@ All tables use Drizzle ORM with full TypeScript type inference.
 - **Runtime:** Node.js compatibility mode (`nodejs_compat` flag)
 - **Adapter:** OpenNext.js for Next.js → Cloudflare Workers
 - **Assets:** Static files served from Cloudflare Assets
-- **Database:** Neon PostgreSQL with connection pooling via `postgres` driver
+- **Database:** Neon PostgreSQL with `@neondatabase/serverless` driver (HTTP-based)
+  - Uses HTTP transport instead of WebSocket for reliability in Workers
+  - No connection pooling needed - lightweight HTTP requests
+  - Avoids 30s timeout issues common with traditional Postgres drivers
 - **Auth:** Better Auth Cloudflare with automatic geolocation tracking
 
 ## Contributing

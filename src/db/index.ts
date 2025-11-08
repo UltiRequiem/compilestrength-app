@@ -1,9 +1,6 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
-
-let client: postgres.Sql | null = null;
-let db: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
 export function getDb() {
 	// For Cloudflare Workers, we'll get the DATABASE_URL from env
@@ -15,18 +12,10 @@ export function getDb() {
 		throw new Error("DATABASE_URL is not defined");
 	}
 
-	// Reuse connection in development
-	if (db) {
-		return db;
-	}
-
-	// Create new postgres client
-	client = postgres(databaseUrl, {
-		prepare: false,
-		max: 1, // Cloudflare Workers limitation
-	});
-
-	db = drizzle(client, { schema });
+	// Use Neon serverless driver - works perfectly in Cloudflare Workers
+	// This uses HTTP instead of WebSocket, which is more reliable in Workers
+	const sql = neon(databaseUrl);
+	const db = drizzle(sql, { schema });
 
 	return db;
 }

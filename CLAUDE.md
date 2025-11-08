@@ -11,7 +11,8 @@ CompileStrength is a full-stack fitness application with an AI-powered workout p
 ### Tech Stack
 - **Frontend**: Next.js 15 with React 19, TailwindCSS v4
 - **Backend**: Cloudflare Workers with Node.js compatibility
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: Neon PostgreSQL (serverless) with Drizzle ORM
+- **Database Driver**: @neondatabase/serverless (HTTP-based, optimized for Workers)
 - **Authentication**: Better Auth Cloudflare with Drizzle adapter
 - **AI**: Mastra framework with OpenAI integration
 - **Deployment**: OpenNext.js for Cloudflare Workers
@@ -91,6 +92,10 @@ npm run cf-typegen   # Generate Cloudflare Types
 - OpenNext.js adapter for Cloudflare deployment
 - Assets served from `.open-next/assets`
 - Worker script at `.open-next/worker.js`
+- **Database Driver**: Uses @neondatabase/serverless with HTTP transport (not WebSocket)
+  - This driver is specifically designed for serverless/edge runtimes
+  - Avoids connection timeouts common with traditional PostgreSQL drivers in Workers
+  - No connection pooling needed - each request creates a lightweight HTTP connection
 
 ### Deployment Process
 1. OpenNext.js builds the application for Cloudflare

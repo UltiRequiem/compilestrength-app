@@ -1,6 +1,6 @@
-import postgres from "postgres";
+import { neon } from "@neondatabase/serverless";
 
-const sql = postgres(process.env.DATABASE_URL!);
+const sql = neon(process.env.DATABASE_URL!);
 
 async function resetDatabase() {
 	console.log("🗑️  Dropping all tables...");
@@ -11,8 +11,6 @@ async function resetDatabase() {
 	await sql`GRANT ALL ON SCHEMA public TO public`;
 
 	console.log("✅ Database reset complete!");
-
-	await sql.end();
 }
 
 resetDatabase().catch((error) => {
