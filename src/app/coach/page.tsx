@@ -220,9 +220,9 @@ export default function CoachPage() {
 
 						{/* Messages */}
 						<div className="flex-1 overflow-auto p-6 space-y-6">
-							{messages.map((msg, idx) => (
+							{messages.map((msg) => (
 								<div
-									key={idx}
+									key={msg.timestamp}
 									className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
 								>
 									<div
@@ -287,7 +287,7 @@ export default function CoachPage() {
 						{/* Quick Prompts */}
 						<div className="border-t border-border p-4">
 							<div className="mb-3 flex gap-2 overflow-x-auto pb-2">
-								{quickPrompts.map((prompt, _idx) => (
+								{quickPrompts.map((prompt) => (
 									<Button
 										key={prompt}
 										variant="outline"

@@ -66,6 +66,7 @@ export default function SettingsPage() {
 			setSaveMessage("Preferences saved successfully!");
 			setTimeout(() => setSaveMessage(""), 3000);
 		} catch (_error) {
+			console.error("Failed to save preferences", _error);
 			setSaveMessage("Failed to save preferences");
 		} finally {
 			setSaving(false);
