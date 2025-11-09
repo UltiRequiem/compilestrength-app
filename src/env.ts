@@ -6,10 +6,10 @@ export const env = createEnv({
 		OPENAI_API_KEY: z.string().min(1).optional(),
 		DATABASE_URL: z.string().min(1),
 		BETTER_AUTH_SECRET: z.string().min(32),
-		BETTER_AUTH_URL: z.string().url(),
+		BETTER_AUTH_URL: z.url(),
 	},
 	client: {
-		NEXT_PUBLIC_BETTER_AUTH_URL: z.string().url(),
+		NEXT_PUBLIC_BETTER_AUTH_URL: z.url(),
 	},
 	runtimeEnv: {
 		OPENAI_API_KEY: process.env.OPENAI_API_KEY,
