@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { withCloudflare } from "better-auth-cloudflare";
-import { getDb } from "@/db";
+import { db } from "@/db";
 import { env } from "@/env";
 
 const cloudflareConfig = withCloudflare(
@@ -16,7 +16,7 @@ const cloudflareConfig = withCloudflare(
 		},
 		secret: env.BETTER_AUTH_SECRET,
 		baseURL: env.BETTER_AUTH_URL,
-		database: drizzleAdapter(getDb(), {
+		database: drizzleAdapter(db, {
 			provider: "pg",
 			usePlural: true,
 		}),
