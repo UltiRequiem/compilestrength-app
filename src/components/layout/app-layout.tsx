@@ -1,8 +1,8 @@
 "use client";
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import type { ReactNode } from "react";
 import { AppSidebar } from "@/components/dashboard/sidebar";
-import { ReactNode } from "react";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 interface AppLayoutProps {
 	children: ReactNode;
