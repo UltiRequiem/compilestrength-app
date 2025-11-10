@@ -12,7 +12,7 @@ import {
 	X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -106,19 +106,15 @@ export default function LogWorkoutPage() {
 	}
 
 	return (
-		<div className="flex min-h-screen">
-			<Sidebar />
-
-			<main className="ml-64 flex-1">
-				<div className="grid-background min-h-screen p-8">
-					<div className="mx-auto max-w-4xl">
-						{/* Header */}
-						<div className="mb-8">
-							<div className="mb-4 flex items-center justify-between">
-								<div>
-									<h1 className="text-3xl font-bold">
-										Day 1: Upper Power - In Progress
-									</h1>
+		<AppLayout>
+			<div className="mx-auto max-w-4xl">
+				{/* Header */}
+				<div className="mb-8">
+					<div className="mb-4 flex items-center justify-between">
+						<div>
+							<h1 className="text-3xl font-bold">
+								Day 1: Upper Power - In Progress
+							</h1>
 									<div className="mt-2 flex items-center gap-4">
 										<div className="flex items-center gap-2">
 											<Clock className="h-4 w-4 text-primary" />
@@ -347,9 +343,7 @@ export default function LogWorkoutPage() {
 								</div>
 							</CardContent>
 						</Card>
-					</div>
-				</div>
-			</main>
-		</div>
+			</div>
+		</AppLayout>
 	);
 }

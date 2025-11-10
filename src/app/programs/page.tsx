@@ -10,7 +10,7 @@ import {
 	Save,
 } from "lucide-react";
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -123,21 +123,17 @@ export default function ProgramsPage() {
 	];
 
 	return (
-		<div className="flex min-h-screen">
-			<Sidebar />
-
-			<main className="ml-64 flex-1">
-				<div className="grid-background min-h-screen p-8">
-					<div className="mx-auto max-w-6xl">
-						{/* Header */}
-						<div className="mb-8">
-							<div className="mb-4 flex items-start justify-between">
-								<div>
-									<h1 className="text-3xl font-bold">{program.name}</h1>
-									<p className="text-sm text-muted-foreground">
-										Generated on {program.generated} | For: {program.goal} Goal
-									</p>
-								</div>
+		<AppLayout>
+			<div className="mx-auto max-w-6xl">
+				{/* Header */}
+				<div className="mb-8">
+					<div className="mb-4 flex items-start justify-between">
+						<div>
+							<h1 className="text-3xl font-bold">{program.name}</h1>
+							<p className="text-sm text-muted-foreground">
+								Generated on {program.generated} | For: {program.goal} Goal
+							</p>
+						</div>
 								<div className="flex gap-2">
 									<Button size="sm" variant="outline">
 										<Save className="h-4 w-4" />
@@ -313,9 +309,7 @@ export default function ProgramsPage() {
 								</div>
 							</CardContent>
 						</Card>
-					</div>
-				</div>
-			</main>
-		</div>
+			</div>
+		</AppLayout>
 	);
 }

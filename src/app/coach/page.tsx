@@ -10,7 +10,7 @@ import {
 	TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -98,13 +98,10 @@ export default function CoachPage() {
 	];
 
 	return (
-		<div className="flex min-h-screen">
-			<Sidebar />
-
-			<main className="ml-64 flex-1">
-				<div className="flex h-screen">
-					{/* Left Sidebar - Coach Selection */}
-					<div className="w-80 border-r border-border bg-sidebar">
+		<AppLayout>
+			<div className="flex h-screen -m-8">
+				{/* Left Sidebar - Coach Selection */}
+				<div className="w-80 border-r border-border bg-sidebar">
 						<div className="flex h-full flex-col">
 							{/* Coach Selector */}
 							<div className="border-b border-sidebar-border p-4">
@@ -325,9 +322,8 @@ export default function CoachPage() {
 								Coach has access to your training history and current program
 							</p>
 						</div>
-					</div>
 				</div>
-			</main>
-		</div>
+			</div>
+		</AppLayout>
 	);
 }

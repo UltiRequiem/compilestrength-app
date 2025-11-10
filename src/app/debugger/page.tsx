@@ -10,7 +10,7 @@ import {
 	TrendingDown,
 } from "lucide-react";
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,22 +109,18 @@ export default function DebuggerPage() {
 	];
 
 	return (
-		<div className="flex min-h-screen">
-			<Sidebar />
-
-			<main className="ml-64 flex-1">
-				<div className="grid-background min-h-screen p-8">
-					<div className="mx-auto max-w-6xl">
-						{/* Header */}
-						<div className="mb-8">
-							<h1 className="text-3xl font-bold">Gains Debugger</h1>
-							<p className="text-muted-foreground">
-								Stack Trace for Your Progress
-							</p>
-							<p className="text-sm text-muted-foreground">
-								Last analyzed: 2 hours ago
-							</p>
-						</div>
+		<AppLayout>
+			<div className="mx-auto max-w-6xl">
+				{/* Header */}
+				<div className="mb-8">
+					<h1 className="text-3xl font-bold">Gains Debugger</h1>
+					<p className="text-muted-foreground">
+						Stack Trace for Your Progress
+					</p>
+					<p className="text-sm text-muted-foreground">
+						Last analyzed: 2 hours ago
+					</p>
+				</div>
 
 						{/* Run Analysis Button */}
 						<Card className="mb-8 border-primary/50 glow-green-hover">
@@ -387,9 +383,7 @@ export default function DebuggerPage() {
 								</Card>
 							</>
 						)}
-					</div>
-				</div>
-			</main>
-		</div>
+			</div>
+		</AppLayout>
 	);
 }

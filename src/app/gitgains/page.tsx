@@ -9,7 +9,7 @@ import {
 	Star,
 	TrendingUp,
 } from "lucide-react";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -137,20 +137,16 @@ export default function GitGainsPage() {
 	];
 
 	return (
-		<div className="flex min-h-screen">
-			<Sidebar />
-
-			<main className="ml-64 flex-1">
-				<div className="grid-background min-h-screen p-8">
-					<div className="mx-auto max-w-7xl">
-						{/* Header */}
-						<div className="mb-8 flex items-center justify-between">
-							<div>
-								<h1 className="text-3xl font-bold">GitGains</h1>
-								<p className="text-muted-foreground">
-									Your Training History & Progress
-								</p>
-							</div>
+		<AppLayout>
+			<div className="mx-auto max-w-7xl">
+				{/* Header */}
+				<div className="mb-8 flex items-center justify-between">
+					<div>
+						<h1 className="text-3xl font-bold">GitGains</h1>
+						<p className="text-muted-foreground">
+							Your Training History & Progress
+						</p>
+					</div>
 							<div className="flex gap-2">
 								<Button variant="outline">
 									<Calendar className="h-4 w-4" />
@@ -387,9 +383,7 @@ export default function GitGainsPage() {
 								</Card>
 							</div>
 						</div>
-					</div>
-				</div>
-			</main>
-		</div>
+			</div>
+		</AppLayout>
 	);
 }

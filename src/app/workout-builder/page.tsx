@@ -10,7 +10,7 @@ import {
 	Target,
 } from "lucide-react";
 import { useState } from "react";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,19 +79,15 @@ export default function WorkoutBuilderPage() {
 	];
 
 	return (
-		<div className="flex min-h-screen">
-			<Sidebar />
-
-			<main className="ml-64 flex-1">
-				<div className="grid-background min-h-screen p-8">
-					<div className="mx-auto max-w-4xl">
-						{/* Header */}
-						<div className="mb-8">
-							<h1 className="text-3xl font-bold">Workout Builder</h1>
-							<p className="text-muted-foreground">
-								Generate your custom AI-powered training program
-							</p>
-						</div>
+		<AppLayout>
+			<div className="mx-auto max-w-4xl">
+				{/* Header */}
+				<div className="mb-8">
+					<h1 className="text-3xl font-bold">Workout Builder</h1>
+					<p className="text-muted-foreground">
+						Generate your custom AI-powered training program
+					</p>
+				</div>
 
 						{/* Progress Indicator */}
 						{!isGenerating && (
@@ -407,10 +403,8 @@ export default function WorkoutBuilderPage() {
 									</Button>
 								</div>
 							</div>
-						)}
-					</div>
-				</div>
-			</main>
-		</div>
+				)}
+			</div>
+		</AppLayout>
 	);
 }
