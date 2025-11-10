@@ -57,19 +57,19 @@ export const createUserPreferencesStore = (
 	);
 };
 
-// Utility functions for weight conversion
 export const convertWeight = (
 	weight: number,
 	fromUnit: "lbs" | "kg",
 	toUnit: "lbs" | "kg",
 ): number => {
-	if (fromUnit === toUnit) return weight;
 	if (fromUnit === "lbs" && toUnit === "kg") {
 		return Math.round((weight / 2.205) * 10) / 10;
 	}
+
 	if (fromUnit === "kg" && toUnit === "lbs") {
 		return Math.round(weight * 2.205 * 10) / 10;
 	}
+
 	return weight;
 };
 

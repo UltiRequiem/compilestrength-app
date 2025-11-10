@@ -107,7 +107,6 @@ export const useUserPreferencesStore = <T,>(
 	return useStore(userPreferencesStoreContext, selector);
 };
 
-// Stable selectors to prevent infinite loops
 const unitsSelector = (state: UserPreferencesStore) => state.units;
 const restTimerSelector = (state: UserPreferencesStore) =>
 	state.restTimerDefault;
@@ -116,7 +115,6 @@ const trainingGoalSelector = (state: UserPreferencesStore) =>
 const experienceLevelSelector = (state: UserPreferencesStore) =>
 	state.experienceLevel;
 
-// Convenience hooks for common use cases
 export const useUnits = () => useUserPreferencesStore(unitsSelector);
 export const useRestTimerDefault = () =>
 	useUserPreferencesStore(restTimerSelector);
@@ -125,7 +123,6 @@ export const useTrainingGoal = () =>
 export const useExperienceLevel = () =>
 	useUserPreferencesStore(experienceLevelSelector);
 
-// Individual action selectors to prevent object recreation
 const setUnitsSelector = (state: UserPreferencesStore) => state.setUnits;
 const setRestTimerDefaultSelector = (state: UserPreferencesStore) =>
 	state.setRestTimerDefault;
@@ -140,7 +137,6 @@ const setPreferencesSelector = (state: UserPreferencesStore) =>
 const resetPreferencesSelector = (state: UserPreferencesStore) =>
 	state.resetPreferences;
 
-// Individual action hooks
 export const useSetUnits = () => useUserPreferencesStore(setUnitsSelector);
 export const useSetRestTimerDefault = () =>
 	useUserPreferencesStore(setRestTimerDefaultSelector);
@@ -154,14 +150,3 @@ export const useSetPreferences = () =>
 	useUserPreferencesStore(setPreferencesSelector);
 export const useResetPreferences = () =>
 	useUserPreferencesStore(resetPreferencesSelector);
-
-// Convenience hook that returns all actions (but creates new object each time - use with caution)
-export const usePreferencesActions = () => ({
-	setUnits: useSetUnits(),
-	setRestTimerDefault: useSetRestTimerDefault(),
-	setTrainingGoal: useSetTrainingGoal(),
-	setExperienceLevel: useSetExperienceLevel(),
-	setAvailableDays: useSetAvailableDays(),
-	setPreferences: useSetPreferences(),
-	resetPreferences: useResetPreferences(),
-});

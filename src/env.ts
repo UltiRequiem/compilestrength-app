@@ -9,7 +9,7 @@ export const env = createEnv({
 		BETTER_AUTH_URL: z.url(),
 	},
 	client: {
-		NEXT_PUBLIC_BETTER_AUTH_URL: z.url(),
+		NEXT_PUBLIC_BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
 	},
 	runtimeEnv: {
 		OPENAI_API_KEY: process.env.OPENAI_API_KEY,
