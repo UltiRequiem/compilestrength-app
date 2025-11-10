@@ -23,7 +23,6 @@ export default function DebuggerPage() {
 	const [isAnalyzing, setIsAnalyzing] = useState(false);
 	const [analysisComplete, setAnalysisComplete] = useState(true);
 
-	// Use user preferences for weight units
 	const units = useUnits();
 
 	if (isPending) {

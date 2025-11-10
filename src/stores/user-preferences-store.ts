@@ -40,7 +40,7 @@ export const createUserPreferencesStore = (
 	initState: UserPreferencesState = defaultInitState,
 ) => {
 	return createStore<UserPreferencesStore>()(
-		subscribeWithSelector((set, _get) => ({
+		subscribeWithSelector((set) => ({
 			...initState,
 			setUnits: (units) => set({ units }),
 			setRestTimerDefault: (restTimerDefault) => set({ restTimerDefault }),

@@ -4,6 +4,7 @@ import {
 	boolean,
 	index,
 	integer,
+	json,
 	pgTable,
 	real,
 	text,
@@ -179,6 +180,54 @@ export const userPreferences = pgTable("UserPreferences", {
 	availableDays: integer("availableDays"), // days per week
 });
 
+// Compiler Feature Tables
+export const workoutRoutines = pgTable(
+	"WorkoutRoutine",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => createId()),
+		userId: text("userId")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		name: text("name").notNull(),
+		description: text("description"),
+		routine: json("routine").notNull(), // JSON object containing the full routine structure
+		agentType: text("agentType").notNull().default("bodybuilding"), // bodybuilding, powerlifting, endurance, general
+		conversationId: text("conversationId"),
+		createdAt: timestamp("createdAt").notNull().defaultNow(),
+		updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+	},
+	(table) => ({
+		userIdIdx: index("WorkoutRoutine_userId_idx").on(table.userId),
+		conversationIdIdx: index("WorkoutRoutine_conversationId_idx").on(
+			table.conversationId,
+		),
+	}),
+);
+
+export const agentConversations = pgTable(
+	"AgentConversation",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => createId()),
+		userId: text("userId")
+			.notNull()
+			.references(() => users.id, { onDelete: "cascade" }),
+		agentType: text("agentType").notNull(), // bodybuilding, powerlifting, endurance, general
+		messages: json("messages").notNull(), // Array of UIMessage objects
+		userProfile: json("userProfile"), // User profile data collected during conversation
+		status: text("status").notNull().default("active"), // active, completed, archived
+		createdAt: timestamp("createdAt").notNull().defaultNow(),
+		updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+	},
+	(table) => ({
+		userIdIdx: index("AgentConversation_userId_idx").on(table.userId),
+		statusIdx: index("AgentConversation_status_idx").on(table.status),
+	}),
+);
+
 // Relations
 export const workoutProgramsRelations = relations(
 	workoutPrograms,
@@ -267,5 +316,31 @@ export const userPreferencesRelations = relations(
 			fields: [userPreferences.userId],
 			references: [users.id],
 		}),
+	}),
+);
+
+// Compiler Feature Relations
+export const workoutRoutinesRelations = relations(
+	workoutRoutines,
+	({ one }) => ({
+		user: one(users, {
+			fields: [workoutRoutines.userId],
+			references: [users.id],
+		}),
+		conversation: one(agentConversations, {
+			fields: [workoutRoutines.conversationId],
+			references: [agentConversations.id],
+		}),
+	}),
+);
+
+export const agentConversationsRelations = relations(
+	agentConversations,
+	({ one, many }) => ({
+		user: one(users, {
+			fields: [agentConversations.userId],
+			references: [users.id],
+		}),
+		routines: many(workoutRoutines),
 	}),
 );
