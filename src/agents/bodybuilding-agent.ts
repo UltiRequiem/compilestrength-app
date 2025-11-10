@@ -6,7 +6,6 @@ import type {
 	WorkoutRoutine,
 } from "@/stores/workout-routine-store";
 
-// Define schemas for tool inputs
 const exerciseSchema = z.object({
 	name: z.string().describe("The name of the exercise"),
 	muscleGroups: z
@@ -225,7 +224,6 @@ export const setGenerationProgress = tool({
 	},
 });
 
-// Bodybuilding-focused system prompt
 export const BODYBUILDING_SYSTEM_PROMPT = `You are CompileStrength's Bodybuilding Programming AI Assistant, a world-class expert in hypertrophy-focused training and muscle development.
 
 Your expertise includes:
@@ -289,7 +287,6 @@ Start each conversation by introducing yourself and asking about the user's body
 
 Remember: Every recommendation should be backed by scientific principles and tailored to the individual user's needs, goals, and constraints.`;
 
-// Export the tools as a set
 export const bodybuildingTools = {
 	updateUserProfile,
 	createWorkoutRoutine,

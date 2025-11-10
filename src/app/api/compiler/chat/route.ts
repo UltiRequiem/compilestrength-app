@@ -10,7 +10,7 @@ import {
 	bodybuildingTools,
 } from "@/agents/bodybuilding-agent";
 
-export const maxDuration = 60; // 60 seconds for workout generation
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
 	try {
@@ -22,7 +22,6 @@ export async function POST(req: Request) {
 			agentType?: string;
 		} = await req.json();
 
-		// For now, only support bodybuilding agent
 		if (agentType !== "bodybuilding") {
 			return new Response("Agent not available yet", { status: 400 });
 		}
@@ -32,28 +31,19 @@ export async function POST(req: Request) {
 			system: BODYBUILDING_SYSTEM_PROMPT,
 			messages: convertToModelMessages(messages),
 			tools: bodybuildingTools,
-			stopWhen: stepCountIs(10), // Allow multiple tool calls
+			stopWhen: stepCountIs(10),
 			onStepFinish: ({ text, toolCalls, toolResults }) => {
 				console.log("Step finished:", {
 					text: text ? `${text.substring(0, 100)}...` : "No text",
 					toolCallsCount: toolCalls.length,
 					toolResultsCount: toolResults.length,
 				});
-
-				// Log detailed tool result information
-				toolResults.forEach((toolResult, index) => {
-					console.log(`Tool result ${index}:`, {
-						toolName: toolResult.toolName,
-						output: toolResult.output,
-						fullObject: toolResult,
-					});
-				});
 			},
 			temperature: 0.7,
 		});
 
 		return result.toUIMessageStreamResponse({
-			onError: (error) => {
+			onError(error) {
 				console.error("Compiler chat error:", error);
 				return "I encountered an issue while generating your workout. Please try again or provide more specific information about your goals.";
 			},

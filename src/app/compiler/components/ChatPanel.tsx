@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Loader2, Send, Square } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	type UserProfile,
 	useWorkoutRoutineActions,
@@ -28,118 +28,134 @@ export function ChatPanel() {
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLTextAreaElement>(null);
 	const processedRoutinesRef = useRef<Set<string>>(new Set());
+	const prevMessagesLengthRef = useRef(0);
 	const { setIsGenerating, setRoutine, setUserProfile, setGenerationProgress } =
 		useWorkoutRoutineActions();
 
-	// Handle tool result data from API
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	// Function to save routine to database
-	const saveRoutineToDatabase = async (routine: WorkoutRoutine) => {
-		try {
-			console.log("💾 Saving routine to database:", routine.name);
+	// Function to save routine to database - wrapped in useCallback to prevent recreating on every render
+	const saveRoutineToDatabase = useCallback(
+		async (routine: WorkoutRoutine) => {
+			try {
+				console.log("💾 Saving routine to database:", routine.name);
 
-			const response = await fetch("/api/compiler/save-routine", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ routine }),
-			});
+				const response = await fetch("/api/compiler/save-routine", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ routine }),
+				});
 
-			if (response.ok) {
-				const result = (await response.json()) as {
-					success: boolean;
-					programId: string;
-					message: string;
-				};
-				console.log(
-					"✅ Routine saved to database successfully:",
-					result.programId,
-				);
-			} else {
-				console.error(
-					"❌ Failed to save routine to database:",
-					response.statusText,
-				);
-			}
-		} catch (error) {
-			console.error("❌ Error saving routine to database:", error);
-		}
-	};
-
-	const handleToolResult = (data: { toolName: string; result: any }) => {
-		console.log("=== HANDLING TOOL RESULT ===");
-		console.log("Tool name:", data.toolName);
-		console.log("Tool result:", data.result);
-		console.log("Full data object:", JSON.stringify(data, null, 2));
-
-		switch (data.toolName) {
-			case "updateUserProfile":
-				if (data.result?.profile) {
+				if (response.ok) {
+					const result = (await response.json()) as {
+						success: boolean;
+						programId: string;
+						message: string;
+					};
 					console.log(
-						"📝 Updating user profile in store:",
-						data.result.profile,
+						"✅ Routine saved to database successfully:",
+						result.programId,
 					);
-					setUserProfile(data.result.profile as UserProfile);
-					console.log("✅ User profile updated in store");
 				} else {
-					console.log("❌ No profile data found in result");
+					console.error(
+						"❌ Failed to save routine to database:",
+						response.statusText,
+					);
 				}
-				break;
+			} catch (error) {
+				console.error("❌ Error saving routine to database:", error);
+			}
+		},
+		[],
+	);
 
-			case "createWorkoutRoutine":
-				if (data.result?.routine) {
-					const routine = data.result.routine as WorkoutRoutine;
-					console.log("🏋️ Creating workout routine in store:", routine);
-					console.log("🏋️ Routine has", routine.days?.length || 0, "days");
-					setRoutine(routine);
-					console.log("✅ Workout routine updated in store");
+	// Handle tool result data from API - wrapped in useCallback to prevent infinite loops
+	const handleToolResult = useCallback(
+		(data: { toolName: string; result: unknown }) => {
+			console.log("=== HANDLING TOOL RESULT ===");
+			console.log("Tool name:", data.toolName);
+			console.log("Tool result:", data.result);
+			console.log("Full data object:", JSON.stringify(data, null, 2));
 
-					// Only save to database if we haven't already saved this routine
-					// Use both ID and name for more robust duplicate detection
-					const routineKey = `${routine.id}-${routine.name}`;
-					if (!processedRoutinesRef.current.has(routineKey)) {
-						console.log("💾 New routine detected, saving to database");
-						processedRoutinesRef.current.add(routineKey);
-						saveRoutineToDatabase(routine);
+			switch (data.toolName) {
+				case "updateUserProfile":
+					if (
+						data.result &&
+						typeof data.result === "object" &&
+						"profile" in data.result
+					) {
+						console.log("📝 Updating user profile in store:", data.result.profile);
+						setUserProfile(data.result.profile as UserProfile);
+						console.log("✅ User profile updated in store");
 					} else {
-						console.log("🔄 Routine already processed, skipping database save");
+						console.log("❌ No profile data found in result");
 					}
-				} else {
-					console.log("❌ No routine data found in result");
+					break;
+
+				case "createWorkoutRoutine":
+					if (
+						data.result &&
+						typeof data.result === "object" &&
+						"routine" in data.result
+					) {
+						const routine = data.result.routine as WorkoutRoutine;
+						console.log("🏋️ Creating workout routine in store:", routine);
+						console.log("🏋️ Routine has", routine.days?.length || 0, "days");
+						setRoutine(routine);
+						console.log("✅ Workout routine updated in store");
+
+						// Only save to database if we haven't already saved this routine
+						// Use both ID and name for more robust duplicate detection
+						const routineKey = `${routine.id}-${routine.name}`;
+						if (!processedRoutinesRef.current.has(routineKey)) {
+							console.log("💾 New routine detected, saving to database");
+							processedRoutinesRef.current.add(routineKey);
+							void saveRoutineToDatabase(routine);
+						} else {
+							console.log("🔄 Routine already processed, skipping database save");
+						}
+					} else {
+						console.log("❌ No routine data found in result");
+						console.log(
+							"Available keys in result:",
+							Object.keys((data.result as object) || {}),
+						);
+					}
+					break;
+
+				case "setGenerationProgress":
+					if (
+						data.result &&
+						typeof data.result === "object" &&
+						"steps" in data.result
+					) {
+						console.log(
+							"📊 Updating generation progress in store:",
+							data.result.steps,
+						);
+						setGenerationProgress(
+							data.result.steps as Array<{
+								step: string;
+								description: string;
+								completed: boolean;
+							}>,
+						);
+						console.log("✅ Generation progress updated in store");
+					} else {
+						console.log("❌ No steps data found in result");
+					}
+					break;
+
+				default:
+					console.log("❓ Unknown tool result:", data.toolName, data.result);
 					console.log(
 						"Available keys in result:",
-						Object.keys(data.result || {}),
+						Object.keys((data.result as object) || {}),
 					);
-				}
-				break;
-
-			case "setGenerationProgress":
-				if (data.result?.steps) {
-					console.log(
-						"📊 Updating generation progress in store:",
-						data.result.steps,
-					);
-					setGenerationProgress(data.result.steps);
-					console.log("✅ Generation progress updated in store");
-				} else {
-					console.log("❌ No steps data found in result");
-				}
-				break;
-
-			default:
-				console.log("❓ Unknown tool result:", data.toolName, data.result);
-				console.log(
-					"Available keys in result:",
-					Object.keys(data.result || {}),
-				);
-		}
-	};
-
-	// Auto-scroll to bottom when new messages arrive
-	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-	}, []);
+			}
+		},
+		[setUserProfile, setRoutine, setGenerationProgress, saveRoutineToDatabase],
+	);
 
 	// Update generating state based on chat status
 	useEffect(() => {
@@ -150,6 +166,13 @@ export function ChatPanel() {
 	useEffect(() => {
 		console.log("💭 Messages changed, checking for tool results");
 
+		// Only auto-scroll when a new message is added (not during streaming updates)
+		// This prevents uncomfortable scrolling while the user is reading
+		if (messages.length > prevMessagesLengthRef.current) {
+			messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+			prevMessagesLengthRef.current = messages.length;
+		}
+
 		// Get the latest message
 		const latestMessage = messages[messages.length - 1];
 		if (latestMessage && latestMessage.role === "assistant") {
@@ -157,9 +180,9 @@ export function ChatPanel() {
 
 			// Check each part of the message for tool results
 			latestMessage.parts.forEach((part) => {
-				if (part.type?.startsWith("tool-") && (part as any).output) {
+				if (part.type?.startsWith("tool-") && (part as unknown as { output?: unknown }).output) {
 					const toolName = part.type.replace("tool-", "");
-					const output = (part as any).output;
+					const output = (part as unknown as { output: unknown }).output;
 
 					console.log("🛠️ Found tool result in message:", toolName, output);
 
@@ -178,7 +201,7 @@ export function ChatPanel() {
 			inputRef.current.style.height = "auto";
 			inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
 		}
-	}, []);
+	}, [input]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
