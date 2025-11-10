@@ -2,16 +2,20 @@
 
 **Live Site:** [compilestrength.com](https://compilestrength.com)
 
-A full-stack fitness application with AI-powered workout programming and a terminal-inspired aesthetic. Built with Next.js 15 and deployed on Cloudflare Workers.
+A full-stack fitness application with AI-powered workout programming and a
+terminal-inspired aesthetic. Built with Next.js 15 and deployed on Cloudflare
+Workers.
 
 ## Tech Stack
 
 - **Frontend:** Next.js 15 (App Router) with React 19
 - **Styling:** TailwindCSS v4
+- **State Management:** Zustand for global client state (user preferences)
 - **Backend:** Cloudflare Workers (serverless)
 - **Database:** Neon PostgreSQL (serverless Postgres)
 - **ORM:** Drizzle ORM with @neondatabase/serverless driver
-- **Database Connection:** HTTP-based driver optimized for edge runtimes (not WebSocket)
+- **Database Connection:** HTTP-based driver optimized for edge runtimes (not
+  WebSocket)
 - **Authentication:** Better Auth Cloudflare with geolocation tracking
 - **AI:** Mastra framework with OpenAI integration
 - **Deployment:** OpenNext.js adapter for Cloudflare Workers
@@ -19,33 +23,46 @@ A full-stack fitness application with AI-powered workout programming and a termi
 ## Features
 
 ### Authentication
+
 - Email/password authentication via Better Auth
 - Automatic session geolocation tracking (IP, city, country, timezone)
 - Cloudflare IP detection for security
 - Protected routes with Next.js middleware
 
 ### Workout Management
+
 - AI-powered workout program generation
 - Exercise library with muscle groups and equipment types
 - Workout session tracking with RPE (Rate of Perceived Exertion)
 - Personal records tracking
 - User preferences and customization
 
+### Global State Management
+
+- User preferences (weight units, rest timers, training goals) managed via
+  Zustand
+- Automatic weight unit conversion between lbs and kg across the entire app
+- Session-safe state that resets when users switch accounts
+- SSR-compatible implementation following Next.js best practices
+
 ## Environment Variables
 
 This application requires the following environment variables:
 
 ### Required Variables
+
 - `DATABASE_URL` - Neon PostgreSQL connection string
 - `BETTER_AUTH_SECRET` - Secret for Better Auth (min 32 characters)
 - `BETTER_AUTH_URL` - Base URL for auth (e.g., `https://compilestrength.com`)
-- `NEXT_PUBLIC_BETTER_AUTH_URL` - Public auth URL (e.g., `https://compilestrength.com`)
+- `NEXT_PUBLIC_BETTER_AUTH_URL` - Public auth URL (e.g.,
+  `https://compilestrength.com`)
 - `OPENAI_API_KEY` - (Optional) For AI workout generation features
 
 ### Local Development
 
 1. Copy `.env.example` to `.env` (if it exists) or create a `.env` file
 2. Add your environment variables:
+
 ```env
 DATABASE_URL="postgresql://user:pass@your-neon-host.neon.tech/neondb?sslmode=require"
 BETTER_AUTH_SECRET="your-32-char-secret-key-here"
@@ -53,7 +70,9 @@ BETTER_AUTH_URL="http://localhost:3000"
 NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
 OPENAI_API_KEY="sk-..."
 ```
+
 3. Run the development server:
+
 ```bash
 npm run dev
 # or
@@ -79,11 +98,13 @@ npx @better-auth/cli generate --config src/lib/auth.ts --output src/db/auth.sche
 
 ## Production Deployment
 
-Deployed to Cloudflare Workers at [compilestrength.com](https://compilestrength.com)
+Deployed to Cloudflare Workers at
+[compilestrength.com](https://compilestrength.com)
 
 ### First-Time Deployment
 
 1. **Set public variables in `wrangler.jsonc`** (already configured):
+
 ```jsonc
 {
   "vars": {
@@ -94,6 +115,7 @@ Deployed to Cloudflare Workers at [compilestrength.com](https://compilestrength.
 ```
 
 2. **Deploy the worker:**
+
 ```bash
 npm run deploy
 # or
@@ -101,6 +123,7 @@ bun run deploy
 ```
 
 3. **Set secrets in Cloudflare** (after first deployment):
+
 ```bash
 # Database connection
 echo "your-neon-postgres-url" | npx wrangler secret put DATABASE_URL
@@ -115,6 +138,7 @@ echo "sk-..." | npx wrangler secret put OPENAI_API_KEY
 ### Subsequent Deployments
 
 Just run:
+
 ```bash
 npm run deploy
 ```
@@ -150,6 +174,10 @@ src/
 ├── app/              # Next.js App Router pages and API routes
 ├── components/       # React components (UI in ui/ subdirectory)
 ├── lib/              # Core utilities (auth, utils, configs)
+├── stores/           # Zustand store definitions
+│   └── user-preferences-store.ts  # Global user preferences with weight conversion
+├── providers/        # React context providers and Zustand store providers
+│   └── user-preferences-store-provider.tsx  # SSR-safe Zustand provider
 ├── db/               # Drizzle ORM schema and database connection
 │   ├── schema.ts           # Complete database schema
 │   ├── auth.schema.ts      # Better Auth generated schema
@@ -172,7 +200,8 @@ All tables use Drizzle ORM with full TypeScript type inference.
 - **Runtime:** Node.js compatibility mode (`nodejs_compat` flag)
 - **Adapter:** OpenNext.js for Next.js → Cloudflare Workers
 - **Assets:** Static files served from Cloudflare Assets
-- **Database:** Neon PostgreSQL with `@neondatabase/serverless` driver (HTTP-based)
+- **Database:** Neon PostgreSQL with `@neondatabase/serverless` driver
+  (HTTP-based)
   - Uses HTTP transport instead of WebSocket for reliability in Workers
   - No connection pooling needed - lightweight HTTP requests
   - Avoids 30s timeout issues common with traditional Postgres drivers
@@ -180,7 +209,8 @@ All tables use Drizzle ORM with full TypeScript type inference.
 
 ## Contributing
 
-This is a personal fitness tracking application. If you'd like to contribute or have suggestions, please open an issue.
+This is a personal fitness tracking application. If you'd like to contribute or
+have suggestions, please open an issue.
 
 ## License
 

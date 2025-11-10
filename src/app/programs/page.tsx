@@ -134,181 +134,171 @@ export default function ProgramsPage() {
 								Generated on {program.generated} | For: {program.goal} Goal
 							</p>
 						</div>
-								<div className="flex gap-2">
-									<Button size="sm" variant="outline">
-										<Save className="h-4 w-4" />
-									</Button>
-									<Button size="sm" variant="outline">
-										<Download className="h-4 w-4" />
-										Export
-									</Button>
-									<Button size="sm" variant="outline">
-										<RefreshCw className="h-4 w-4" />
-										Regenerate
-									</Button>
-									<Button size="sm">
-										<Play className="h-4 w-4" />
-										Start Program
+						<div className="flex gap-2">
+							<Button size="sm" variant="outline">
+								<Save className="h-4 w-4" />
+							</Button>
+							<Button size="sm" variant="outline">
+								<Download className="h-4 w-4" />
+								Export
+							</Button>
+							<Button size="sm" variant="outline">
+								<RefreshCw className="h-4 w-4" />
+								Regenerate
+							</Button>
+							<Button size="sm">
+								<Play className="h-4 w-4" />
+								Start Program
+							</Button>
+						</div>
+					</div>
+
+					{/* Week Tabs */}
+					<div className="flex gap-2">
+						{[1, 2, 3, 4].map((week) => (
+							<Button
+								key={week}
+								variant={activeWeek === week ? "default" : "outline"}
+								onClick={() => setActiveWeek(week)}
+								size="sm"
+							>
+								Week {week}
+							</Button>
+						))}
+					</div>
+				</div>
+
+				{/* Day Cards */}
+				<div className="grid gap-4 md:grid-cols-2">
+					{days.map((day) => (
+						<Card key={day.id} className="card-hover border-primary/20">
+							<CardHeader>
+								<div className="flex items-center justify-between">
+									<CardTitle className="text-lg">{day.name}</CardTitle>
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() =>
+											setExpandedDay(expandedDay === day.id ? null : day.id)
+										}
+									>
+										{expandedDay === day.id ? (
+											<ChevronUp className="h-4 w-4" />
+										) : (
+											<ChevronDown className="h-4 w-4" />
+										)}
 									</Button>
 								</div>
-							</div>
-
-							{/* Week Tabs */}
-							<div className="flex gap-2">
-								{[1, 2, 3, 4].map((week) => (
-									<Button
-										key={week}
-										variant={activeWeek === week ? "default" : "outline"}
-										onClick={() => setActiveWeek(week)}
-										size="sm"
-									>
-										Week {week}
-									</Button>
-								))}
-							</div>
-						</div>
-
-						{/* Day Cards */}
-						<div className="grid gap-4 md:grid-cols-2">
-							{days.map((day) => (
-								<Card key={day.id} className="card-hover border-primary/20">
-									<CardHeader>
-										<div className="flex items-center justify-between">
-											<CardTitle className="text-lg">{day.name}</CardTitle>
-											<Button
-												variant="ghost"
-												size="sm"
-												onClick={() =>
-													setExpandedDay(expandedDay === day.id ? null : day.id)
-												}
-											>
-												{expandedDay === day.id ? (
-													<ChevronUp className="h-4 w-4" />
-												) : (
-													<ChevronDown className="h-4 w-4" />
-												)}
-											</Button>
-										</div>
-									</CardHeader>
-									<CardContent>
-										{expandedDay === day.id ? (
-											<div className="space-y-4">
-												{/* Full Exercise Details */}
-												<div className="rounded-lg border border-border overflow-hidden">
-													<table className="w-full text-sm">
-														<thead className="bg-muted">
-															<tr>
-																<th className="p-2 text-left font-semibold">
-																	Exercise
-																</th>
-																<th className="p-2 text-left font-semibold">
-																	Sets × Reps
-																</th>
-																<th className="p-2 text-left font-semibold">
-																	Intensity
-																</th>
-																<th className="p-2 text-left font-semibold">
-																	Rest
-																</th>
-															</tr>
-														</thead>
-														<tbody className="divide-y divide-border">
-															{day.exercises.map((exercise, idx) => (
-																<tr
-																	key={idx}
-																	className="hover:bg-accent/50 transition-colors"
-																>
-																	<td className="p-2 font-medium">
-																		{exercise.name}
-																	</td>
-																	<td className="p-2 terminal-text text-primary">
-																		{exercise.sets}
-																	</td>
-																	<td className="p-2">
-																		<Badge
-																			variant="secondary"
-																			className="text-xs"
-																		>
-																			{exercise.rpe}
-																		</Badge>
-																	</td>
-																	<td className="p-2 text-muted-foreground">
-																		{exercise.rest}
-																	</td>
-																</tr>
-															))}
-														</tbody>
-													</table>
-												</div>
-												<Button className="w-full">
-													<Play className="h-4 w-4" />
-													Start Workout
-												</Button>
-											</div>
-										) : (
-											<div className="space-y-2">
-												{/* Collapsed View */}
-												{day.exercises.slice(0, 3).map((exercise, idx) => (
-													<div
-														key={idx}
-														className="flex justify-between text-sm"
-													>
-														<span className="text-muted-foreground">
-															{exercise.name}
-														</span>
-														<span className="terminal-text text-primary">
-															{exercise.sets}
-														</span>
-													</div>
-												))}
-												{day.exercises.length > 3 && (
-													<p className="text-xs text-muted-foreground">
-														+{day.exercises.length - 3} more exercises
-													</p>
-												)}
-												<Button
-													variant="outline"
-													size="sm"
-													className="mt-3 w-full"
-												>
-													Log This Workout
-												</Button>
-											</div>
-										)}
-									</CardContent>
-								</Card>
-							))}
-						</div>
-
-						{/* Program Notes */}
-						<Card className="mt-8 border-primary/50">
-							<CardHeader>
-								<CardTitle>Program Notes</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<div className="space-y-4 terminal-text text-sm text-primary">
-									<p>
-										<span className="text-muted-foreground">{">"}</span> This is
-										a 4-day upper/lower split focused on building muscle mass
-										through progressive overload.
-									</p>
-									<p>
-										<span className="text-muted-foreground">{">"}</span>{" "}
-										Progression Scheme: Increase weight when you can hit the top
-										of the rep range for all sets.
-									</p>
-									<p>
-										<span className="text-muted-foreground">{">"}</span> Deload
-										Week: Week 4 - reduce weight by 20% and focus on technique.
-									</p>
-									<p>
-										<span className="text-muted-foreground">{">"}</span> Rest
-										between sessions: Ensure at least 1 day between upper/lower
-										workouts.
-									</p>
-								</div>
+								{expandedDay === day.id ? (
+									<div className="space-y-4">
+										{/* Full Exercise Details */}
+										<div className="rounded-lg border border-border overflow-hidden">
+											<table className="w-full text-sm">
+												<thead className="bg-muted">
+													<tr>
+														<th className="p-2 text-left font-semibold">
+															Exercise
+														</th>
+														<th className="p-2 text-left font-semibold">
+															Sets × Reps
+														</th>
+														<th className="p-2 text-left font-semibold">
+															Intensity
+														</th>
+														<th className="p-2 text-left font-semibold">
+															Rest
+														</th>
+													</tr>
+												</thead>
+												<tbody className="divide-y divide-border">
+													{day.exercises.map((exercise, idx) => (
+														<tr
+															key={idx}
+															className="hover:bg-accent/50 transition-colors"
+														>
+															<td className="p-2 font-medium">
+																{exercise.name}
+															</td>
+															<td className="p-2 terminal-text text-primary">
+																{exercise.sets}
+															</td>
+															<td className="p-2">
+																<Badge variant="secondary" className="text-xs">
+																	{exercise.rpe}
+																</Badge>
+															</td>
+															<td className="p-2 text-muted-foreground">
+																{exercise.rest}
+															</td>
+														</tr>
+													))}
+												</tbody>
+											</table>
+										</div>
+										<Button className="w-full">
+											<Play className="h-4 w-4" />
+											Start Workout
+										</Button>
+									</div>
+								) : (
+									<div className="space-y-2">
+										{/* Collapsed View */}
+										{day.exercises.slice(0, 3).map((exercise, idx) => (
+											<div key={idx} className="flex justify-between text-sm">
+												<span className="text-muted-foreground">
+													{exercise.name}
+												</span>
+												<span className="terminal-text text-primary">
+													{exercise.sets}
+												</span>
+											</div>
+										))}
+										{day.exercises.length > 3 && (
+											<p className="text-xs text-muted-foreground">
+												+{day.exercises.length - 3} more exercises
+											</p>
+										)}
+										<Button variant="outline" size="sm" className="mt-3 w-full">
+											Log This Workout
+										</Button>
+									</div>
+								)}
 							</CardContent>
 						</Card>
+					))}
+				</div>
+
+				{/* Program Notes */}
+				<Card className="mt-8 border-primary/50">
+					<CardHeader>
+						<CardTitle>Program Notes</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<div className="space-y-4 terminal-text text-sm text-primary">
+							<p>
+								<span className="text-muted-foreground">{">"}</span> This is a
+								4-day upper/lower split focused on building muscle mass through
+								progressive overload.
+							</p>
+							<p>
+								<span className="text-muted-foreground">{">"}</span> Progression
+								Scheme: Increase weight when you can hit the top of the rep
+								range for all sets.
+							</p>
+							<p>
+								<span className="text-muted-foreground">{">"}</span> Deload
+								Week: Week 4 - reduce weight by 20% and focus on technique.
+							</p>
+							<p>
+								<span className="text-muted-foreground">{">"}</span> Rest
+								between sessions: Ensure at least 1 day between upper/lower
+								workouts.
+							</p>
+						</div>
+					</CardContent>
+				</Card>
 			</div>
 		</AppLayout>
 	);
