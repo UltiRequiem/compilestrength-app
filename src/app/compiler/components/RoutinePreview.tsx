@@ -17,15 +17,15 @@ export function RoutinePreview() {
 
 	if (isGenerating && !routine) {
 		return (
-			<div className="flex flex-col h-full">
-				<div className="border-b border-green-800/30 p-4">
+			<div className="flex flex-col h-full min-h-0">
+				<div className="border-b border-green-800/30 p-4 shrink-0">
 					<h2 className="text-lg font-mono text-green-400 flex items-center gap-2">
 						<Loader2 className="w-5 h-5 animate-spin" />
 						Generating Your Routine
 					</h2>
 				</div>
 
-				<div className="flex-1 flex items-center justify-center p-8">
+				<div className="flex-1 flex items-center justify-center p-8 min-h-0">
 					<div className="space-y-4 w-full max-w-md">
 						{generationProgress.map((step, index) => (
 							<div key={step.step} className="flex items-center gap-3">
@@ -56,8 +56,8 @@ export function RoutinePreview() {
 
 	if (!routine) {
 		return (
-			<div className="flex flex-col h-full">
-				<div className="border-b border-green-800/30 p-4">
+			<div className="flex flex-col h-full min-h-0">
+				<div className="border-b border-green-800/30 p-4 shrink-0">
 					<h2 className="text-lg font-mono text-green-400 flex items-center gap-2">
 						<Dumbbell className="w-5 h-5" />
 						Workout Routine
@@ -67,7 +67,7 @@ export function RoutinePreview() {
 					</p>
 				</div>
 
-				<div className="flex-1 flex items-center justify-center p-8">
+				<div className="flex-1 flex items-center justify-center p-8 min-h-0">
 					<div className="text-center space-y-4">
 						<div className="w-16 h-16 border-2 border-green-800/30 rounded-lg flex items-center justify-center mx-auto">
 							<Dumbbell className="w-8 h-8 text-green-800" />
@@ -86,14 +86,14 @@ export function RoutinePreview() {
 	}
 
 	return (
-		<div className="flex flex-col h-full">
+		<div className="flex flex-col h-full min-h-0">
 			{/* Header */}
-			<div className="border-b border-green-800/30 p-4">
+			<div className="border-b border-green-800/30 p-4 shrink-0">
 				<RoutineHeader routine={routine} />
 			</div>
 
 			{/* Routine Content */}
-			<div className="flex-1 overflow-y-auto p-4">
+			<div className="flex-1 overflow-y-auto p-4 min-h-0 scrollbar-terminal">
 				<div className="space-y-6">
 					{routine.days.map((day, dayIndex) => (
 						<div key={day.id} className="space-y-3">
@@ -140,7 +140,7 @@ export function RoutinePreview() {
 
 			{/* Generation Indicator */}
 			{isGenerating && (
-				<div className="border-t border-green-800/30 p-3">
+				<div className="border-t border-green-800/30 p-3 shrink-0">
 					<div className="flex items-center gap-2 text-green-600 font-mono text-xs">
 						<Loader2 className="w-4 h-4 animate-spin" />
 						<span>Updating routine...</span>
