@@ -192,7 +192,9 @@ export function DashboardClient({
 					<div className="space-y-3">
 						<Button
 							className="w-full justify-start text-left h-auto py-4"
-							onClick={() => (window.location.href = "/compiler")}
+							onClick={() => {
+								window.location.href = "/compiler";
+							}}
 						>
 							<Sparkles className="h-5 w-5" />
 							<div className="flex-1">

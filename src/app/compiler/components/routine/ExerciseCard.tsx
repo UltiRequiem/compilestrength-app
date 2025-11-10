@@ -7,21 +7,20 @@ interface ExerciseCardProps {
 	exercise: Exercise;
 }
 
-export function ExerciseCard({ exercise }: ExerciseCardProps) {
-	const formatRestTime = (seconds: number): string => {
-		if (seconds >= 60) {
-			const minutes = Math.floor(seconds / 60);
-			const remainingSeconds = seconds % 60;
-			return remainingSeconds > 0
-				? `${minutes}m ${remainingSeconds}s`
-				: `${minutes}m`;
-		}
-		return `${seconds}s`;
-	};
+const formatRestTime = (seconds: number): string => {
+	if (seconds >= 60) {
+		const minutes = Math.floor(seconds / 60);
+		const remainingSeconds = seconds % 60;
+		return remainingSeconds > 0
+			? `${minutes}m ${remainingSeconds}s`
+			: `${minutes}m`;
+	}
+	return `${seconds}s`;
+};
 
+export function ExerciseCard({ exercise }: ExerciseCardProps) {
 	return (
 		<div className="bg-green-950/10 border border-green-800/30 rounded-lg p-3 hover:border-green-700/50 transition-colors">
-			{/* Exercise Header */}
 			<div className="flex items-start justify-between mb-2">
 				<div className="flex-1">
 					<h4 className="font-mono text-green-400 text-sm font-medium">
@@ -42,7 +41,10 @@ export function ExerciseCard({ exercise }: ExerciseCardProps) {
 					</div>
 				</div>
 
-				<button className="text-green-700 hover:text-green-500 p-1">
+				<button
+					type="button"
+					className="text-green-700 hover:text-green-500 p-1"
+				>
 					<MoreHorizontal className="w-4 h-4" />
 				</button>
 			</div>
