@@ -54,8 +54,14 @@ export default function DebuggerPage() {
 			description: "Your bench press weight hasn't increased in 6 weeks",
 			details: [
 				"at Bench Press (chest.ts:45)",
-				`Last 4 sessions: ${formatWeight(convertWeight(185, "lbs", units), units)} × 8, 8, 7, 7 (no change)`,
-				`Recommended: Increase weight by ${formatWeight(convertWeight(5, "lbs", units), units)} or add 1-2 reps`,
+				`Last 4 sessions: ${formatWeight(
+					convertWeight(185, "lbs", units),
+					units,
+				)} × 8, 8, 7, 7 (no change)`,
+				`Recommended: Increase weight by ${formatWeight(
+					convertWeight(5, "lbs", units),
+					units,
+				)} or add 1-2 reps`,
 			],
 			trend: "flat",
 		},

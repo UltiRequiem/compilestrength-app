@@ -40,9 +40,15 @@ export default function GitGainsPage() {
 			date: "Nov 7, 2024",
 			time: "6:30 PM",
 			type: "Upper Power",
-			message: `Upper Power - 12 sets, ${formatWeight(convertWeight(8450, "lbs", units), units)} volume`,
+			message: `Upper Power - 12 sets, ${formatWeight(
+				convertWeight(8450, "lbs", units),
+				units,
+			)} volume`,
 			prs: [
-				`Bench Press ${formatWeight(convertWeight(225, "lbs", units), units)} × 8`,
+				`Bench Press ${formatWeight(
+					convertWeight(225, "lbs", units),
+					units,
+				)} × 8`,
 			],
 		},
 		{
@@ -50,7 +56,10 @@ export default function GitGainsPage() {
 			date: "Nov 6, 2024",
 			time: "5:45 PM",
 			type: "Lower Power",
-			message: `Lower Power - 16 sets, ${formatWeight(convertWeight(12300, "lbs", units), units)} volume`,
+			message: `Lower Power - 16 sets, ${formatWeight(
+				convertWeight(12300, "lbs", units),
+				units,
+			)} volume`,
 			prs: [],
 		},
 		{
@@ -58,7 +67,10 @@ export default function GitGainsPage() {
 			date: "Nov 5, 2024",
 			time: "7:00 PM",
 			type: "Push Day",
-			message: `Push Day A - 10 sets, ${formatWeight(convertWeight(6800, "lbs", units), units)} volume`,
+			message: `Push Day A - 10 sets, ${formatWeight(
+				convertWeight(6800, "lbs", units),
+				units,
+			)} volume`,
 			prs: [],
 		},
 		{
@@ -66,9 +78,15 @@ export default function GitGainsPage() {
 			date: "Nov 4, 2024",
 			time: "6:15 PM",
 			type: "Pull Day",
-			message: `Pull Day A - 11 sets, ${formatWeight(convertWeight(7200, "lbs", units), units)} volume`,
+			message: `Pull Day A - 11 sets, ${formatWeight(
+				convertWeight(7200, "lbs", units),
+				units,
+			)} volume`,
 			prs: [
-				`Barbell Row ${formatWeight(convertWeight(185, "lbs", units), units)} × 10`,
+				`Barbell Row ${formatWeight(
+					convertWeight(185, "lbs", units),
+					units,
+				)} × 10`,
 			],
 		},
 	];

@@ -81,7 +81,10 @@ export default function CoachPage() {
 		},
 		{
 			role: "coach",
-			content: `Great question! Let me analyze your recent training data... I see you've been stuck at ${formatWeight(convertWeight(185, "lbs", units), units)} for 4 sessions. Here are some strategies:`,
+			content: `Great question! Let me analyze your recent training data... I see you've been stuck at ${formatWeight(
+				convertWeight(185, "lbs", units),
+				units,
+			)} for 4 sessions. Here are some strategies:`,
 			timestamp: "2:33 PM",
 			hasCard: true,
 		},
@@ -221,10 +224,14 @@ export default function CoachPage() {
 						{messages.map((msg) => (
 							<div
 								key={msg.timestamp}
-								className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+								className={`flex ${
+									msg.role === "user" ? "justify-end" : "justify-start"
+								}`}
 							>
 								<div
-									className={`max-w-2xl ${msg.role === "user" ? "order-2" : "order-1"}`}
+									className={`max-w-2xl ${
+										msg.role === "user" ? "order-2" : "order-1"
+									}`}
 								>
 									<div
 										className={`rounded-lg p-4 ${

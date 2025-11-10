@@ -32,10 +32,22 @@ export const UserPreferencesStoreProvider = ({
 }: UserPreferencesStoreProviderProps) => {
 	const storeRef = useRef<UserPreferencesStoreApi | null>(null);
 	const { data: session } = useSession();
+	const sessionUserId = session?.user?.id;
 
 	if (storeRef.current === null) {
 		storeRef.current = createUserPreferencesStore(defaultInitState);
 	}
+
+	// Reset preferences when user changes
+	useEffect(() => {
+		if (storeRef.current && sessionUserId) {
+			const currentState = storeRef.current.getState();
+			if (currentState.hasLoadedFromServer) {
+				// Reset when switching users
+				storeRef.current.getState().resetPreferences();
+			}
+		}
+	}, [sessionUserId]);
 
 	// Load user preferences from server when session is available
 	useEffect(() => {

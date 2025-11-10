@@ -69,7 +69,10 @@ export default function LogWorkoutPage() {
 			id: 1,
 			name: "Bench Press",
 			target: "4 sets × 6-8 reps @ RPE 8",
-			lastTime: `${formatWeight(convertWeight(185, "lbs", units), units)} × 8, 8, 7, 7`,
+			lastTime: `${formatWeight(
+				convertWeight(185, "lbs", units),
+				units,
+			)} × 8, 8, 7, 7`,
 			sets: [
 				{
 					number: 1,
@@ -105,7 +108,10 @@ export default function LogWorkoutPage() {
 			id: 2,
 			name: "Barbell Row",
 			target: "4 sets × 8-10 reps @ RPE 8",
-			lastTime: `${formatWeight(convertWeight(155, "lbs", units), units)} × 10, 10, 9, 8`,
+			lastTime: `${formatWeight(
+				convertWeight(155, "lbs", units),
+				units,
+			)} × 10, 10, 9, 8`,
 			sets: [
 				{
 					number: 1,

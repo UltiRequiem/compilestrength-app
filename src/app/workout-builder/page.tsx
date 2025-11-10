@@ -248,7 +248,10 @@ export default function WorkoutBuilderPage() {
 												Squat
 											</Label>
 											<Input
-												placeholder={`${formatWeight(convertWeight(315, "lbs", units), units)}`}
+												placeholder={`${formatWeight(
+													convertWeight(315, "lbs", units),
+													units,
+												)}`}
 											/>
 										</div>
 										<div>
@@ -256,7 +259,10 @@ export default function WorkoutBuilderPage() {
 												Bench
 											</Label>
 											<Input
-												placeholder={`${formatWeight(convertWeight(225, "lbs", units), units)}`}
+												placeholder={`${formatWeight(
+													convertWeight(225, "lbs", units),
+													units,
+												)}`}
 											/>
 										</div>
 										<div>
@@ -264,7 +270,10 @@ export default function WorkoutBuilderPage() {
 												Deadlift
 											</Label>
 											<Input
-												placeholder={`${formatWeight(convertWeight(405, "lbs", units), units)}`}
+												placeholder={`${formatWeight(
+													convertWeight(405, "lbs", units),
+													units,
+												)}`}
 											/>
 										</div>
 									</div>
