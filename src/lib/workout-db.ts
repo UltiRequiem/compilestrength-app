@@ -15,7 +15,6 @@ export async function saveWorkoutRoutineToDb(
 	console.log("💾 Saving workout routine to database:", routine.name);
 
 	try {
-		// Check if a program with the same name and user already exists
 		const existingProgram = await db
 			.select()
 			.from(workoutPrograms)
@@ -32,14 +31,13 @@ export async function saveWorkoutRoutineToDb(
 			return existingProgram[0];
 		}
 
-		// First, create the workout program
 		const [program] = await db
 			.insert(workoutPrograms)
 			.values({
 				userId,
 				name: routine.name,
 				description: routine.description || "",
-				goalType: routine.goals.join(","), // Store goals as comma-separated string
+				goalType: routine.goals.join(","),
 				experienceLevel: routine.difficulty,
 				frequency: routine.frequency,
 				durationWeeks: routine.duration,
@@ -47,11 +45,7 @@ export async function saveWorkoutRoutineToDb(
 			})
 			.returning();
 
-		console.log("✅ Created workout program:", program.id);
-
-		// Then, create workout days and exercises
 		for (const [dayIndex, day] of routine.days.entries()) {
-			// Create workout day
 			const [workoutDay] = await db
 				.insert(workoutDays)
 				.values({
