@@ -109,7 +109,9 @@ export default function ProgramsPage() {
 							</p>
 						</div>
 						<Button
-							onClick={() => (window.location.href = "/compiler")}
+							onClick={() => {
+								window.location.href = "/app/compiler";
+							}}
 							className="gap-2"
 						>
 							<Zap className="w-4 h-4" />
@@ -274,7 +276,7 @@ export default function ProgramsPage() {
 							<Button
 								size="sm"
 								variant="outline"
-								onClick={() => (window.location.href = "/compiler")}
+								onClick={() => (window.location.href = "/app/compiler")}
 							>
 								<RefreshCw className="h-4 w-4" />
 								Generate New
