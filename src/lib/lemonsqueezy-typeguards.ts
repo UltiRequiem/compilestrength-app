@@ -2,14 +2,25 @@
  * Type guards for LemonSqueezy webhook events
  */
 
-export function webhookHasMeta(obj: unknown): obj is {
+export interface LemonSqueezyWebhookEvent {
 	meta: {
 		event_name: string;
 		custom_data?: {
 			user_id: string;
 		};
 	};
-} {
+}
+
+export interface LemonSqueezyWebhookEventWithData
+	extends LemonSqueezyWebhookEvent {
+	data: {
+		id: string;
+		type: string;
+		attributes: Record<string, unknown>;
+	};
+}
+
+export function webhookHasMeta(obj: unknown): obj is LemonSqueezyWebhookEvent {
 	return (
 		typeof obj === "object" &&
 		obj !== null &&
@@ -20,19 +31,9 @@ export function webhookHasMeta(obj: unknown): obj is {
 	);
 }
 
-export function webhookHasData(obj: unknown): obj is {
-	data: {
-		id: string;
-		type: string;
-		attributes: Record<string, unknown>;
-	};
-	meta: {
-		event_name: string;
-		custom_data?: {
-			user_id: string;
-		};
-	};
-} {
+export function webhookHasData(
+	obj: unknown,
+): obj is LemonSqueezyWebhookEventWithData {
 	return (
 		webhookHasMeta(obj) &&
 		"data" in obj &&
