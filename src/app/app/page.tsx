@@ -44,17 +44,6 @@ function isWorkoutDay(value: unknown): value is WorkoutDay {
 	);
 }
 
-function isExercise(value: unknown): value is Exercise {
-	if (typeof value !== "object" || value === null) return false;
-	const exercise = value as Record<string, unknown>;
-	return (
-		typeof exercise.id === "string" &&
-		typeof exercise.name === "string" &&
-		typeof exercise.sets === "number" &&
-		typeof exercise.reps === "string"
-	);
-}
-
 // Cached function to get user routines - cache for 5 minutes
 const getCachedUserRoutines = unstable_cache(
 	async (userId: string) => {

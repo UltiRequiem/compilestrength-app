@@ -9,7 +9,6 @@ import {
 	Sparkles,
 	TrendingUp,
 } from "lucide-react";
-import { AppLayout } from "@/components/layout/app-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +41,7 @@ export function DashboardClient({
 	// Use user preferences for weight units
 	const units = useUnits();
 	return (
-		<AppLayout>
+		<>
 			<div className="mb-8">
 				<h1 className="text-3xl font-bold">
 					Welcome back, {userName.split(" ")[0]}
@@ -239,6 +238,6 @@ export function DashboardClient({
 					</div>
 				</div>
 			</div>
-		</AppLayout>
+		</>
 	);
 }
