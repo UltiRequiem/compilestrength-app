@@ -47,22 +47,20 @@ export default function FFMICalculator() {
 				? fatFreeMassKg * 2.20462 // Convert kg to lbs
 				: fatFreeMassKg;
 
-		// Determine category
+		// Determine category (matching info box ranges)
 		let category = "";
 		if (adjustedFFMI < 18) {
 			category = "Below average";
-		} else if (adjustedFFMI < 20) {
+		} else if (adjustedFFMI >= 18 && adjustedFFMI < 20) {
 			category = "Average";
-		} else if (adjustedFFMI < 22) {
+		} else if (adjustedFFMI >= 20 && adjustedFFMI < 22) {
 			category = "Above average";
-		} else if (adjustedFFMI < 23) {
+		} else if (adjustedFFMI >= 22 && adjustedFFMI < 24) {
 			category = "Excellent";
-		} else if (adjustedFFMI < 25) {
+		} else if (adjustedFFMI >= 24 && adjustedFFMI < 26) {
 			category = "Superior - Natural limit";
-		} else if (adjustedFFMI < 26) {
-			category = "Suspected steroid use";
 		} else {
-			category = "Very likely steroid use";
+			category = "Very likely enhanced (steroid use)";
 		}
 
 		setResult({

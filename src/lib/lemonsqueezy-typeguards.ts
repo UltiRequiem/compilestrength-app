@@ -1,7 +1,3 @@
-/**
- * Type guards for LemonSqueezy webhook events
- */
-
 export interface LemonSqueezyWebhookEvent {
 	meta: {
 		event_name: string;

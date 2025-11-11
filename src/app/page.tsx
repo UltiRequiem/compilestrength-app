@@ -91,7 +91,7 @@ export default function LandingPage() {
 						Ready to compile your gains?
 					</h2>
 					<p className="text-gray-400 mb-6">
-						7-day free trial. No credit card required.
+						Start your 7-day free trial — payment details collected at checkout.
 					</p>
 					<Link href="/signup">
 						<Button size="lg">Get Started</Button>
