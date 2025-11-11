@@ -1,25 +1,25 @@
 "use server";
 
 import {
+	cancelSubscription,
 	createCheckout,
 	getPrice,
 	getProduct,
 	getSubscription,
 	listPrices,
 	listProducts,
-	type Variant,
-	cancelSubscription,
 	updateSubscription,
+	type Variant,
 } from "@lemonsqueezy/lemonsqueezy.js";
-import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { configureLemonSqueezy } from "@/config/lemonsqueezy";
 import { db } from "@/db";
 import { plans, subscriptions, webhookEvents } from "@/db/schema";
-import { auth } from "@/lib/auth";
 import { env } from "@/env";
+import { auth } from "@/lib/auth";
 import { webhookHasData, webhookHasMeta } from "@/lib/lemonsqueezy-typeguards";
-import { headers } from "next/headers";
 
 type NewPlan = typeof plans.$inferInsert;
 type NewSubscription = typeof subscriptions.$inferInsert;
@@ -97,7 +97,7 @@ export async function syncPlans() {
 				? currentPriceObj?.attributes.unit_price_decimal
 				: currentPriceObj?.attributes.unit_price;
 
-			const priceString = price !== null ? price?.toString() ?? "" : "";
+			const priceString = price !== null ? (price?.toString() ?? "") : "";
 
 			const isSubscription =
 				currentPriceObj?.attributes.category === "subscription";
@@ -116,7 +116,7 @@ export async function syncPlans() {
 				isUsageBased,
 				productId: variant.product_id,
 				productName,
-				variantId: Number.parseInt(v.id) as number,
+				variantId: Number.parseInt(v.id, 10) as number,
 				trialInterval,
 				trialIntervalCount,
 				sort: variant.sort,
@@ -286,13 +286,10 @@ export async function processWebhookEvent(webhookEventId: string) {
 
 				// Create/update subscription in the database.
 				try {
-					await db
-						.insert(subscriptions)
-						.values(updateData)
-						.onConflictDoUpdate({
-							target: subscriptions.lemonSqueezyId,
-							set: updateData,
-						});
+					await db.insert(subscriptions).values(updateData).onConflictDoUpdate({
+						target: subscriptions.lemonSqueezyId,
+						set: updateData,
+					});
 				} catch (error) {
 					processingError = `Failed to upsert Subscription #${updateData.lemonSqueezyId} to the database.`;
 					console.error(error);
@@ -345,7 +342,7 @@ export async function cancelSub(id: string) {
 				endsAt: cancelledSub.data?.data.attributes.ends_at,
 			})
 			.where(eq(subscriptions.lemonSqueezyId, id));
-	} catch (error) {
+	} catch (_error) {
 		throw new Error(`Failed to cancel Subscription #${id} in the database.`);
 	}
 
@@ -387,7 +384,7 @@ export async function pauseUserSubscription(id: string) {
 				isPaused: returnedSub.data?.data.attributes.pause !== null,
 			})
 			.where(eq(subscriptions.lemonSqueezyId, id));
-	} catch (error) {
+	} catch (_error) {
 		throw new Error(`Failed to pause Subscription #${id} in the database.`);
 	}
 
@@ -428,7 +425,7 @@ export async function unpauseUserSubscription(id: string) {
 				isPaused: returnedSub.data?.data.attributes.pause !== null,
 			})
 			.where(eq(subscriptions.lemonSqueezyId, id));
-	} catch (error) {
+	} catch (_error) {
 		throw new Error(`Failed to unpause Subscription #${id} in the database.`);
 	}
 
@@ -466,7 +463,9 @@ export async function changePlan(currentPlanId: string, newPlanId: string) {
 	);
 
 	if (!subscription) {
-		throw new Error(`No subscription with plan id #${currentPlanId} was found.`);
+		throw new Error(
+			`No subscription with plan id #${currentPlanId} was found.`,
+		);
 	}
 
 	// Get the new plan details from the database.
@@ -495,7 +494,7 @@ export async function changePlan(currentPlanId: string, newPlanId: string) {
 				endsAt: updatedSub.data?.data.attributes.ends_at,
 			})
 			.where(eq(subscriptions.lemonSqueezyId, subscription.lemonSqueezyId));
-	} catch (error) {
+	} catch (_error) {
 		throw new Error(
 			`Failed to update Subscription #${subscription.lemonSqueezyId} in the database.`,
 		);

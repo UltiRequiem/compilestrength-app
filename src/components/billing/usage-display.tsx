@@ -10,8 +10,10 @@ export async function UsageDisplay() {
 	}
 
 	const compilePercentage = (usage.compilesUsed / usage.compilesLimit) * 100;
-	const editPercentage = (usage.routineEditsUsed / usage.routineEditsLimit) * 100;
-	const messagePercentage = (usage.aiMessagesUsed / usage.aiMessagesLimit) * 100;
+	const editPercentage =
+		(usage.routineEditsUsed / usage.routineEditsLimit) * 100;
+	const messagePercentage =
+		(usage.aiMessagesUsed / usage.aiMessagesLimit) * 100;
 
 	const resetsAt = new Date(usage.periodEnd).toLocaleDateString();
 
@@ -19,9 +21,7 @@ export async function UsageDisplay() {
 		<Card>
 			<CardHeader>
 				<CardTitle>Usage This Week</CardTitle>
-				<p className="text-sm text-muted-foreground">
-					Resets on {resetsAt}
-				</p>
+				<p className="text-sm text-muted-foreground">Resets on {resetsAt}</p>
 			</CardHeader>
 			<CardContent className="space-y-6">
 				<div>

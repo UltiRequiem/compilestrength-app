@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import { requireAuth } from "@/lib/auth-utils";
-import { AppLayout } from "@/components/layout/app-layout";
 import { Plans } from "@/components/billing/plans";
 import { Subscriptions } from "@/components/billing/subscriptions";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AppLayout } from "@/components/layout/app-layout";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireAuth } from "@/lib/auth-utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function BillingPage() {
-	const session = await requireAuth();
+	const _session = await requireAuth();
 
 	return (
 		<AppLayout>

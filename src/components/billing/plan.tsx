@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { getCheckoutURL } from "@/app/actions/lemonsqueezy";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -11,9 +12,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { getCheckoutURL } from "@/app/actions/lemonsqueezy";
-import { formatPrice } from "@/lib/subscription-utils";
 import type { plans } from "@/db/schema";
+import { formatPrice } from "@/lib/subscription-utils";
 
 type Plan = typeof plans.$inferSelect;
 

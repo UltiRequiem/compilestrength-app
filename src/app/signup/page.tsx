@@ -3,17 +3,25 @@
 import { Lock, Mail, Terminal, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { signUp } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
+import { signUp, useSession } from "@/lib/auth-client";
 
 export default function SignUpPage() {
 	const router = useRouter();
+	const { data: session, isPending } = useSession();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	// Redirect if already logged in
+	useEffect(() => {
+		if (!isPending && session) {
+			router.push("/app");
+		}
+	}, [session, isPending, router]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

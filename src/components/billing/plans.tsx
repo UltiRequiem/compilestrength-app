@@ -1,6 +1,6 @@
+import { syncPlans } from "@/app/actions/lemonsqueezy";
 import { db } from "@/db";
 import { plans } from "@/db/schema";
-import { syncPlans } from "@/app/actions/lemonsqueezy";
 import { Plan } from "./plan";
 
 type NewPlan = typeof plans.$inferSelect;

@@ -112,7 +112,8 @@ export function getSubscriptionMessage(
  * Format price for display
  */
 export function formatPrice(price: string | number, interval?: string | null) {
-	const numPrice = typeof price === "string" ? Number.parseInt(price) : price;
+	const numPrice =
+		typeof price === "string" ? Number.parseInt(price, 10) : price;
 	const dollars = (numPrice / 100).toFixed(2);
 
 	if (interval) {

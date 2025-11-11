@@ -1,12 +1,12 @@
+import { AlertCircle, AlertTriangle, CheckCircle2, Info } from "lucide-react";
 import Link from "next/link";
+import { getActiveSubscription } from "@/app/actions/lemonsqueezy";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { getActiveSubscription } from "@/app/actions/lemonsqueezy";
 import {
-	hasActiveSubscription,
 	getSubscriptionMessage,
+	hasActiveSubscription,
 } from "@/lib/subscription-utils";
-import { AlertCircle, CheckCircle2, Info, AlertTriangle } from "lucide-react";
 
 /**
  * Banner component to show subscription status

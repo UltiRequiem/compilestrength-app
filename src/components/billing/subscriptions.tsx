@@ -1,8 +1,8 @@
-import { getUserSubscriptions } from "@/app/actions/lemonsqueezy";
-import { db, plans } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { SubscriptionCard } from "./subscription-card";
+import { getUserSubscriptions } from "@/app/actions/lemonsqueezy";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { db, plans } from "@/db/schema";
+import { SubscriptionCard } from "./subscription-card";
 
 export async function Subscriptions() {
 	const userSubscriptions = await getUserSubscriptions();
@@ -50,8 +50,10 @@ export async function Subscriptions() {
 			cancelled: 6,
 			expired: 7,
 		};
-		return (statusOrder[a.status as keyof typeof statusOrder] || 99) -
-			(statusOrder[b.status as keyof typeof statusOrder] || 99);
+		return (
+			(statusOrder[a.status as keyof typeof statusOrder] || 99) -
+			(statusOrder[b.status as keyof typeof statusOrder] || 99)
+		);
 	});
 
 	return (

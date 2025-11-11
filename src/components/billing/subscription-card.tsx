@@ -1,12 +1,18 @@
 "use client";
 
+import { MoreVerticalIcon } from "lucide-react";
 import { useState } from "react";
+import {
+	cancelSub,
+	getSubscriptionURLs,
+	pauseUserSubscription,
+	unpauseUserSubscription,
+} from "@/app/actions/lemonsqueezy";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -17,19 +23,12 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreVerticalIcon } from "lucide-react";
-import {
-	cancelSub,
-	pauseUserSubscription,
-	unpauseUserSubscription,
-	getSubscriptionURLs,
-} from "@/app/actions/lemonsqueezy";
+import type { plans, subscriptions } from "@/db/schema";
 import {
 	formatPrice,
 	getSubscriptionMessage,
 	type SubscriptionStatus,
 } from "@/lib/subscription-utils";
-import type { subscriptions, plans } from "@/db/schema";
 
 type Subscription = typeof subscriptions.$inferSelect;
 type Plan = typeof plans.$inferSelect;
@@ -42,9 +41,8 @@ export function SubscriptionCard({
 	plan: Plan;
 }) {
 	const [loading, setLoading] = useState(false);
-	const [urls, setUrls] = useState<
-		Awaited<ReturnType<typeof getSubscriptionURLs>>
-	>();
+	const [urls, setUrls] =
+		useState<Awaited<ReturnType<typeof getSubscriptionURLs>>>();
 
 	const status = subscription.status as SubscriptionStatus;
 	const { hasAccess, message, type } = getSubscriptionMessage(subscription);
@@ -58,9 +56,7 @@ export function SubscriptionCard({
 	};
 
 	const handleCancel = async () => {
-		if (
-			!confirm("Are you sure you want to cancel your subscription?")
-		) {
+		if (!confirm("Are you sure you want to cancel your subscription?")) {
 			return;
 		}
 

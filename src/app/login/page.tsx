@@ -3,15 +3,22 @@
 import { Lock, Mail, Terminal } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { signIn } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
+import { signIn, useSession } from "@/lib/auth-client";
 
 export default function LoginPage() {
 	const router = useRouter();
+	const { data: session, isPending } = useSession();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (!isPending && session) {
+			router.push("/app");
+		}
+	}, [session, isPending, router]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

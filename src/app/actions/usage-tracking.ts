@@ -3,7 +3,7 @@
 import { and, eq, gte, lte } from "drizzle-orm";
 import { headers } from "next/headers";
 import { db } from "@/db";
-import { usageTracking, subscriptions } from "@/db/schema";
+import { subscriptions, usageTracking } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { getActiveSubscription } from "./lemonsqueezy";
 
