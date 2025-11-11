@@ -2,6 +2,8 @@
 
 import {
 	Bug,
+	CreditCard,
+	Dumbbell,
 	FolderOpen,
 	GitBranch,
 	Home,
@@ -35,9 +37,11 @@ const navigation = [
 	{ name: "AI Compiler", href: "/app/compiler", icon: Zap, badge: "New" },
 	{ name: "Workout Builder", href: "/app/workout-builder", icon: Wrench },
 	{ name: "My Programs", href: "/app/programs", icon: FolderOpen },
+	{ name: "Log Workout", href: "/app/log-workout", icon: Dumbbell },
 	{ name: "GitGains", href: "/app/gitgains", icon: GitBranch },
 	{ name: "Gains Debugger", href: "/app/debugger", icon: Bug },
 	{ name: "The Coach", href: "/app/coach", icon: User },
+	{ name: "Billing", href: "/app/billing", icon: CreditCard },
 	{ name: "Settings", href: "/app/settings", icon: Settings },
 ];
 
