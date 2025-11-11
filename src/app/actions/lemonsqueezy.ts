@@ -256,7 +256,8 @@ export async function processWebhookEvent(webhookEventId: string) {
 			if (plan.length < 1) {
 				processingError = `Plan with variantId ${variantId} not found.`;
 			} else {
-				const subscriptionItem = attributes.first_subscription_item as SubscriptionItem;
+				const subscriptionItem =
+					attributes.first_subscription_item as SubscriptionItem;
 				const priceId = subscriptionItem.price_id;
 
 				// Get the price data from Lemon Squeezy.
@@ -347,6 +348,7 @@ export async function cancelSub(id: string) {
 			})
 			.where(eq(subscriptions.lemonSqueezyId, id));
 	} catch (_error) {
+		console.error(_error);
 		throw new Error(`Failed to cancel Subscription #${id} in the database.`);
 	}
 
@@ -389,6 +391,7 @@ export async function pauseUserSubscription(id: string) {
 			})
 			.where(eq(subscriptions.lemonSqueezyId, id));
 	} catch (_error) {
+		console.error(_error);
 		throw new Error(`Failed to pause Subscription #${id} in the database.`);
 	}
 
@@ -414,7 +417,6 @@ export async function unpauseUserSubscription(id: string) {
 	}
 
 	const returnedSub = await updateSubscription(id, {
-		// @ts-expect-error - null is valid
 		pause: null,
 	});
 
@@ -430,6 +432,7 @@ export async function unpauseUserSubscription(id: string) {
 			})
 			.where(eq(subscriptions.lemonSqueezyId, id));
 	} catch (_error) {
+		console.error(_error);
 		throw new Error(`Failed to unpause Subscription #${id} in the database.`);
 	}
 
