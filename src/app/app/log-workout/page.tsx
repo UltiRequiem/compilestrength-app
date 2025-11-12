@@ -29,52 +29,15 @@ import {
 	useRestTimerDefault,
 	useUnits,
 } from "@/providers/user-preferences-store-provider";
+import {
+	Exercise,
+	WorkoutDay,
+	WorkoutProgram,
+	Set,
+	ExerciseWithSets,
+} from "./types";
+import { formatTime } from "./utils";
 
-const formatTime = (seconds: number) => {
-	const mins = Math.floor(seconds / 60);
-	const secs = seconds % 60;
-	return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
-
-interface Exercise {
-	id: string;
-	exerciseId: string;
-	exerciseName: string;
-	sets: number;
-	reps: string;
-	restSeconds: number;
-	notes?: string;
-	muscleGroup: string;
-	equipmentType: string;
-}
-
-interface WorkoutDay {
-	id: string;
-	name: string;
-	type: string;
-	description?: string;
-	exercises: Exercise[];
-}
-
-interface WorkoutProgram {
-	id: string;
-	name: string;
-	description?: string;
-	days: WorkoutDay[];
-}
-
-interface Set {
-	id?: string;
-	number: number;
-	weight: number;
-	reps: number | null;
-	rpe: number | null;
-	completed: boolean;
-}
-
-interface ExerciseWithSets extends Exercise {
-	completedSets: Set[];
-}
 
 export default function LogWorkoutPage() {
 	const { session, isPending } = useRequireAuth();
@@ -95,13 +58,6 @@ export default function LogWorkoutPage() {
 	const units = useUnits();
 	const defaultRestTime = useRestTimerDefault();
 
-	// Load workout programs
-	useEffect(() => {
-		if (session) {
-			loadPrograms();
-		}
-	}, [session, loadPrograms]);
-
 	const loadPrograms = async () => {
 		try {
 			const response = await fetch("/api/workout-programs");
@@ -121,6 +77,13 @@ export default function LogWorkoutPage() {
 			setLoading(false);
 		}
 	};
+
+	// Load workout programs
+	useEffect(() => {
+		if (session) {
+			loadPrograms();
+		}
+	}, [session]);
 
 	const startWorkout = async () => {
 		if (!selectedDay) return;

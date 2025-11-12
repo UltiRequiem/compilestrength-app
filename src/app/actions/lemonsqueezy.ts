@@ -20,16 +20,13 @@ import { plans, subscriptions, webhookEvents } from "@/db/schema";
 import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { webhookHasData, webhookHasMeta } from "@/lib/lemonsqueezy-typeguards";
+import type {
+	NewPlan,
+	Plan,
+	NewSubscription,
+	SubscriptionItem,
+} from "./lemonsqueezy.types";
 
-type NewPlan = typeof plans.$inferInsert;
-type Plan = typeof plans.$inferSelect;
-type NewSubscription = typeof subscriptions.$inferInsert;
-
-interface SubscriptionItem {
-	id: number;
-	price_id: number;
-	is_usage_based: boolean;
-}
 
 /**
  * Sync plans from LemonSqueezy to the database
