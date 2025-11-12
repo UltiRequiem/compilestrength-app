@@ -98,7 +98,6 @@ export default async function LandingPage() {
 					</div>
 				</div>
 
-				{/* CTA */}
 				<div className="mt-20 border border-green-400/20 p-8 rounded-lg text-center">
 					<h2 className="text-3xl font-bold mb-4">
 						Ready to compile your gains?

@@ -297,6 +297,9 @@ export async function processWebhookEvent(webhookEventId: string) {
 						target: subscriptions.lemonSqueezyId,
 						set: updateData,
 					});
+
+					// Revalidate billing page after subscription update
+					revalidatePath("/app/billing");
 				} catch (error) {
 					processingError = `Failed to upsert Subscription #${updateData.lemonSqueezyId} to the database.`;
 					console.error(error);
