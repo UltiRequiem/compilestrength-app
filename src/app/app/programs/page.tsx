@@ -78,7 +78,7 @@ export default function ProgramsPage() {
 	// Show loading state while fetching routines
 	if (loadingRoutines) {
 		return (
-			<AppLayout>
+			<>
 				<div className="flex items-center justify-center h-64">
 					<div className="text-center space-y-4">
 						<Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
@@ -87,14 +87,14 @@ export default function ProgramsPage() {
 						</p>
 					</div>
 				</div>
-			</AppLayout>
+			</>
 		);
 	}
 
 	// Show empty state if no routines
 	if (routines.length === 0) {
 		return (
-			<AppLayout>
+			<>
 				<div className="flex items-center justify-center h-64">
 					<div className="text-center space-y-6 max-w-md">
 						<div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center mx-auto">
@@ -118,7 +118,7 @@ export default function ProgramsPage() {
 						</Button>
 					</div>
 				</div>
-			</AppLayout>
+			</>
 		);
 	}
 
