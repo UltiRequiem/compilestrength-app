@@ -15,12 +15,11 @@ export function SubscriptionRefresh() {
 		const checkoutSuccess = searchParams.get("checkout");
 
 		if (checkoutSuccess === "success") {
-			// Remove the query parameter
 			const url = new URL(window.location.href);
 			url.searchParams.delete("checkout");
 			window.history.replaceState({}, "", url.toString());
 
-			// Refresh the page to get updated subscription data
+			// Get updated subscription data
 			router.refresh();
 		}
 	}, [searchParams, router]);
