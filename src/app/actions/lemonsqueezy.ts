@@ -162,7 +162,7 @@ export async function getCheckoutURL(variantId: number, embed = false) {
 		},
 		productOptions: {
 			enabledVariants: [variantId],
-			redirectUrl: `${env.BETTER_AUTH_URL}/app/billing/`,
+			redirectUrl: `${env.BETTER_AUTH_URL}/app/billing/?checkout=success`,
 			receiptButtonText: "Go to Dashboard",
 			receiptThankYouNote: "Thank you for subscribing to CompileStrength!",
 		},

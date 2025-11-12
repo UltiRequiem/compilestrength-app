@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Plans } from "@/components/billing/plans";
+import { SubscriptionRefresh } from "@/components/billing/subscription-refresh";
 import { Subscriptions } from "@/components/billing/subscriptions";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireAuth } from "@/lib/auth-utils";
@@ -11,6 +12,7 @@ export default async function BillingPage() {
 
 	return (
 		<>
+			<SubscriptionRefresh />
 			<div className="mb-8">
 				<h1 className="text-3xl font-bold mb-2">Billing</h1>
 				<p className="text-muted-foreground">
