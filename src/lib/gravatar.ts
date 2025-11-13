@@ -2,7 +2,6 @@ import md5 from "md5";
 
 /**
  * Get Gravatar URL for an email address
-
  * @param email - User's email address
  * @param size - Image size (default: 80)
  * @param defaultImage - Default image type (default: "identicon")
