@@ -107,10 +107,42 @@ export default function CoachPage() {
 	];
 
 	return (
-		<div className="flex h-screen -m-8">
-			{/* Left Sidebar - Coach Selection */}
-			<div className="w-80 border-r border-border bg-sidebar">
-				<div className="flex h-full flex-col">
+		<div className="flex flex-col lg:flex-row h-[calc(100vh-8rem)] lg:h-[calc(100vh-12rem)] -mx-4 lg:-mx-8 -mb-4 lg:-mb-8">
+			{/* Mobile Coach Selector - Dropdown at top */}
+			<div className="lg:hidden border-b border-border bg-sidebar p-4">
+				<h2 className="mb-3 text-sm font-semibold">Your Coach</h2>
+				<div className="grid grid-cols-2 gap-2">
+					{coaches.map((coach) => (
+						<Card
+							key={coach.id}
+							className={`cursor-pointer card-hover ${
+								selectedCoach === coach.id ? "border-primary glow-green" : ""
+							}`}
+							onClick={() => setSelectedCoach(coach.id)}
+						>
+							<CardContent className="p-2">
+								<div className="flex items-center gap-2">
+									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-lg">
+										{coach.avatar}
+									</div>
+									<div className="flex-1 min-w-0">
+										<p className="font-semibold text-xs truncate">
+											{coach.name}
+										</p>
+										<p className="text-[10px] text-muted-foreground truncate">
+											{coach.specialty}
+										</p>
+									</div>
+								</div>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</div>
+
+			{/* Desktop Left Sidebar - Coach Selection */}
+			<div className="hidden lg:flex lg:w-80 border-r border-border bg-sidebar">
+				<div className="flex h-full flex-col w-full">
 					{/* Coach Selector */}
 					<div className="border-b border-sidebar-border p-4">
 						<h2 className="mb-4 text-lg font-semibold">Select Your Coach</h2>
@@ -175,7 +207,7 @@ export default function CoachPage() {
 					</div>
 
 					{/* Context Panel */}
-					<div className="flex-1 overflow-auto p-4">
+					<div className="flex-1 overflow-auto p-4 scrollbar-custom">
 						<div className="mb-3 flex items-center justify-between">
 							<h3 className="text-sm font-semibold">Context</h3>
 							<Badge variant="secondary" className="text-xs">
@@ -200,7 +232,7 @@ export default function CoachPage() {
 			{/* Main Chat Area */}
 			<div className="flex flex-1 flex-col">
 				{/* Chat Header */}
-				<div className="flex items-center justify-between border-b border-border p-4">
+				<div className="flex items-center justify-between border-b border-border p-3 lg:p-4">
 					<div className="flex items-center gap-3">
 						<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xl">
 							💪
@@ -216,7 +248,7 @@ export default function CoachPage() {
 				</div>
 
 				{/* Messages */}
-				<div className="flex-1 overflow-auto p-6 space-y-6">
+				<div className="flex-1 overflow-auto p-3 lg:p-6 space-y-4 lg:space-y-6 scrollbar-custom">
 					{messages.map((msg) => (
 						<div
 							key={msg.timestamp}
@@ -225,7 +257,7 @@ export default function CoachPage() {
 							}`}
 						>
 							<div
-								className={`max-w-2xl ${
+								className={`max-w-full lg:max-w-2xl ${
 									msg.role === "user" ? "order-2" : "order-1"
 								}`}
 							>
@@ -284,8 +316,8 @@ export default function CoachPage() {
 				</div>
 
 				{/* Quick Prompts */}
-				<div className="border-t border-border p-4">
-					<div className="mb-3 flex gap-2 overflow-x-auto pb-2">
+				<div className="border-t border-border p-3 lg:p-4">
+					<div className="mb-3 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
 						{quickPrompts.map((prompt) => (
 							<Button
 								key={prompt}
@@ -301,11 +333,11 @@ export default function CoachPage() {
 
 					{/* Input Area */}
 					<div className="flex gap-2">
-						<Button variant="outline" size="icon">
+						<Button variant="outline" size="icon" className="hidden lg:flex">
 							<Paperclip className="h-4 w-4" />
 						</Button>
 						<Input
-							placeholder="Ask your coach anything..."
+							placeholder="Ask your coach..."
 							value={message}
 							onChange={(e) => setMessage(e.target.value)}
 							onKeyDown={(e) => {
@@ -314,13 +346,13 @@ export default function CoachPage() {
 									setMessage("");
 								}
 							}}
-							className="flex-1"
+							className="flex-1 text-sm"
 						/>
 						<Button size="icon">
 							<Send className="h-4 w-4" />
 						</Button>
 					</div>
-					<p className="mt-2 text-xs text-muted-foreground">
+					<p className="mt-2 text-xs text-muted-foreground hidden lg:block">
 						Coach has access to your training history and current program
 					</p>
 				</div>

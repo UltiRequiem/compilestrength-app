@@ -189,6 +189,16 @@
 	.scrollbar-custom::-webkit-scrollbar-thumb:hover {
 		background: rgb(96 165 250);
 	}
+
+	/* Hide scrollbar but keep functionality */
+	.scrollbar-hide {
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
+	}
+
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
 }
 
 @layer base {
