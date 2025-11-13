@@ -52,9 +52,7 @@ export function getSubscriptionMessage(
 		};
 	}
 
-	const status = subscription.status as SubscriptionStatus;
-
-	switch (status) {
+	switch (subscription.status) {
 		case "active":
 			return {
 				hasAccess: true,

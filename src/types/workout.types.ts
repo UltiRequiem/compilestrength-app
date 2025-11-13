@@ -1,5 +1,3 @@
-// Shared workout types used across the application
-
 export interface Exercise {
 	id: string;
 	exerciseId?: string; // For DB references
@@ -52,7 +50,7 @@ export interface WorkoutProgram {
 
 export interface WorkoutRoutine extends WorkoutProgram {
 	// Extended version used in compiler/store
-	routine?: any; // JSON object containing the full routine structure
+	routine?: Record<string, unknown>; // JSON object containing the full routine structure
 	agentType?: string; // bodybuilding, powerlifting, endurance, general
 	conversationId?: string;
 }

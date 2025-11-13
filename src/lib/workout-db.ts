@@ -7,6 +7,7 @@ import {
 	workoutPrograms,
 } from "@/db/schema";
 import type { WorkoutRoutine } from "@/stores/workout-routine-store";
+import { inferDayType } from "./utils";
 
 export async function saveWorkoutRoutineToDb(
 	routine: WorkoutRoutine,
@@ -27,7 +28,7 @@ export async function saveWorkoutRoutineToDb(
 			.limit(1);
 
 		if (existingProgram.length > 0) {
-			console.log("⚠️ Workout routine already exists, skipping save");
+			console.log("! Workout routine already exists, skipping save");
 			return existingProgram[0];
 		}
 
@@ -52,16 +53,14 @@ export async function saveWorkoutRoutineToDb(
 					programId: program.id,
 					dayNumber: dayIndex + 1,
 					name: day.name,
-					type: inferDayType(day.name), // Helper function to determine day type
+					type: inferDayType(day.name),
 					description: `Day ${dayIndex + 1} - ${day.name}`,
 				})
 				.returning();
 
 			console.log("✅ Created workout day:", workoutDay.id, day.name);
 
-			// Create exercises for this day
 			for (const [exerciseIndex, exercise] of day.exercises.entries()) {
-				// First, ensure the exercise exists in the exercises table
 				const existingExercise = await db
 					.select()
 					.from(exercises)
@@ -71,7 +70,6 @@ export async function saveWorkoutRoutineToDb(
 				let exerciseId: string;
 
 				if (existingExercise.length === 0) {
-					// Create new exercise
 					const [newExercise] = await db
 						.insert(exercises)
 						.values({
@@ -114,15 +112,4 @@ export async function saveWorkoutRoutineToDb(
 		console.error("❌ Error saving workout routine to database:", error);
 		throw error;
 	}
-}
-
-function inferDayType(dayName: string): string {
-	const name = dayName.toLowerCase();
-	if (name.includes("push")) return "push";
-	if (name.includes("pull")) return "pull";
-	if (name.includes("leg")) return "legs";
-	if (name.includes("upper")) return "upper";
-	if (name.includes("lower")) return "lower";
-	if (name.includes("full")) return "full";
-	return "other"; // Default fallback
 }

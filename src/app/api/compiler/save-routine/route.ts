@@ -6,7 +6,6 @@ import type { WorkoutRoutine } from "@/stores/workout-routine-store";
 
 export async function POST(req: NextRequest) {
 	try {
-		// Get the authenticated user
 		const session = await auth.api.getSession({
 			headers: await headers(),
 		});
@@ -21,9 +20,6 @@ export async function POST(req: NextRequest) {
 			return new Response("Workout routine is required", { status: 400 });
 		}
 
-		console.log("📝 Saving routine for user:", session.user.id, routine.name);
-
-		// Save the routine to the database
 		const savedProgram = await saveWorkoutRoutineToDb(routine, session.user.id);
 
 		return Response.json({

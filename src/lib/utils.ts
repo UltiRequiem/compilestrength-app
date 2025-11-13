@@ -19,3 +19,26 @@ export function getInitials(name: string): string {
 		.toUpperCase()
 		.slice(0, 2);
 }
+
+export const DAY_TYPES = [
+	"push",
+	"pull",
+	"legs",
+	"upper",
+	"lower",
+	"full",
+] as const;
+
+export type DayType = (typeof DAY_TYPES)[number] | "other";
+
+export function inferDayType(dayName: string): DayType {
+	const name = dayName.toLowerCase();
+
+	for (const type of DAY_TYPES) {
+		if (name.includes(type)) {
+			return type;
+		}
+	}
+
+	return "other";
+}
