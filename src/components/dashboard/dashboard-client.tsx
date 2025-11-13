@@ -30,6 +30,13 @@ interface DashboardClientProps {
 		weight: number;
 		date: string;
 	}>;
+	stats: {
+		totalWorkouts: number;
+		workoutsChange: number;
+		currentStreak: number;
+		lastPR: { exerciseName: string; weight: number } | null;
+		nextWorkout: string | null;
+	};
 }
 
 export function DashboardClient({
@@ -37,6 +44,7 @@ export function DashboardClient({
 	today,
 	weekDays,
 	recentActivity,
+	stats,
 }: DashboardClientProps) {
 	// Use user preferences for weight units
 	const units = useUnits();
@@ -59,8 +67,16 @@ export function DashboardClient({
 						<Dumbbell className="h-4 w-4 text-primary" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold text-primary">47</div>
-						<p className="text-xs text-muted-foreground">+3 from last month</p>
+						<div className="text-2xl font-bold text-primary">
+							{stats.totalWorkouts}
+						</div>
+						<p className="text-xs text-muted-foreground">
+							{stats.workoutsChange > 0
+								? `+${stats.workoutsChange} this month`
+								: stats.workoutsChange === 0
+									? "No workouts this month"
+									: "Start tracking workouts"}
+						</p>
 					</CardContent>
 				</Card>
 
@@ -72,9 +88,13 @@ export function DashboardClient({
 						<Flame className="h-4 w-4 text-primary" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-2xl font-bold text-primary">12 days</div>
+						<div className="text-2xl font-bold text-primary">
+							{stats.currentStreak} {stats.currentStreak === 1 ? "day" : "days"}
+						</div>
 						<p className="text-xs text-muted-foreground">
-							Personal best: 21 days
+							{stats.currentStreak > 0
+								? "Keep it up!"
+								: "Start your streak today"}
 						</p>
 					</CardContent>
 				</Card>
@@ -85,13 +105,27 @@ export function DashboardClient({
 						<TrendingUp className="h-4 w-4 text-primary" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-lg font-bold text-primary">
-							Squat {formatWeight(convertWeight(315, "lbs", units), units)}
-						</div>
-						<p className="text-xs text-muted-foreground">
-							+{formatWeight(convertWeight(10, "lbs", units), units)} from
-							previous
-						</p>
+						{stats.lastPR ? (
+							<>
+								<div className="text-lg font-bold text-primary">
+									{stats.lastPR.exerciseName}{" "}
+									{formatWeight(
+										convertWeight(stats.lastPR.weight, "lbs", units),
+										units,
+									)}
+								</div>
+								<p className="text-xs text-muted-foreground">
+									Personal record
+								</p>
+							</>
+						) : (
+							<>
+								<div className="text-lg font-bold text-primary">No PRs yet</div>
+								<p className="text-xs text-muted-foreground">
+									Start logging workouts
+								</p>
+							</>
+						)}
 					</CardContent>
 				</Card>
 
@@ -101,8 +135,25 @@ export function DashboardClient({
 						<Calendar className="h-4 w-4 text-primary" />
 					</CardHeader>
 					<CardContent>
-						<div className="text-lg font-bold text-primary">Push Day A</div>
-						<p className="text-xs text-muted-foreground">Today, 6:00 PM</p>
+						{stats.nextWorkout ? (
+							<>
+								<div className="text-lg font-bold text-primary">
+									{stats.nextWorkout}
+								</div>
+								<p className="text-xs text-muted-foreground">
+									From your program
+								</p>
+							</>
+						) : (
+							<>
+								<div className="text-lg font-bold text-primary">
+									No program set
+								</div>
+								<p className="text-xs text-muted-foreground">
+									Generate a program
+								</p>
+							</>
+						)}
 					</CardContent>
 				</Card>
 			</div>

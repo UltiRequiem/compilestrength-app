@@ -49,7 +49,6 @@ const navigation = [
 	{ name: "Progress Tracker", href: "/app/gitgains", icon: LineChart },
 	{ name: "Performance Analysis", href: "/app/debugger", icon: BarChart3 },
 	{ name: "The Coach", href: "/app/coach", icon: User },
-	{ name: "Billing", href: "/app/billing", icon: CreditCard },
 	{ name: "Settings", href: "/app/settings", icon: Settings },
 ];
 

@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, gte, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { DashboardClient } from "@/components/dashboard/dashboard-client";
 import { db } from "@/db";
@@ -7,6 +7,8 @@ import {
 	programExercises,
 	workoutDays,
 	workoutPrograms,
+	workoutSessions,
+	workoutSets,
 } from "@/db/schema";
 import { requireAuth } from "@/lib/auth-utils";
 
@@ -184,38 +186,130 @@ export default async function DashboardPage() {
 					{ day: "Sun", workout: "Rest day", status: "upcoming" },
 				];
 
-	// Generate recent activity from user's routines
-	const recentActivity =
-		userRoutines.length > 0
-			? userRoutines[0].days
-					.slice(0, 2)
-					.flatMap((day) =>
-						day.exercises.slice(0, 3).map((exercise: any) => ({
-							exercise: exercise.name,
-							sets: exercise.sets,
-							reps: parseInt(exercise.reps.toString().split("-")[0], 10) || 8,
-							weight: exercise.weight || 225,
-							date: "From your routine",
-						})),
-					)
-					.slice(0, 5)
-			: // Fallback data
-				[
-					{
-						exercise: "Create a routine",
-						sets: 1,
-						reps: 1,
-						weight: 0,
-						date: "Use AI Compiler",
-					},
-					{
-						exercise: "Get started",
-						sets: 1,
-						reps: 1,
-						weight: 0,
-						date: "Visit /compiler",
-					},
-				];
+	// Calculate actual workout statistics
+	// 1. Total workouts (all completed sessions)
+	const [totalWorkoutsResult] = await db
+		.select({ count: count() })
+		.from(workoutSessions)
+		.where(
+			and(
+				eq(workoutSessions.userId, session.user.id),
+				sql`${workoutSessions.completedAt} IS NOT NULL`,
+			),
+		);
+	const totalWorkouts = totalWorkoutsResult?.count || 0;
+
+	// 2. Workouts last month (for comparison)
+	const lastMonth = new Date();
+	lastMonth.setMonth(lastMonth.getMonth() - 1);
+	const [lastMonthResult] = await db
+		.select({ count: count() })
+		.from(workoutSessions)
+		.where(
+			and(
+				eq(workoutSessions.userId, session.user.id),
+				sql`${workoutSessions.completedAt} IS NOT NULL`,
+				gte(workoutSessions.completedAt, lastMonth),
+			),
+		);
+	const workoutsThisMonth = lastMonthResult?.count || 0;
+
+	// 3. Current streak (consecutive days with workouts)
+	const recentSessions = await db
+		.select({ completedAt: workoutSessions.completedAt })
+		.from(workoutSessions)
+		.where(
+			and(
+				eq(workoutSessions.userId, session.user.id),
+				sql`${workoutSessions.completedAt} IS NOT NULL`,
+			),
+		)
+		.orderBy(desc(workoutSessions.completedAt))
+		.limit(30);
+
+	let currentStreak = 0;
+	if (recentSessions.length > 0) {
+		const sessionsMap = new Set(
+			recentSessions.map((s) =>
+				new Date(s.completedAt!).toDateString(),
+			),
+		);
+		const today = new Date();
+		let checkDate = new Date(today);
+		while (sessionsMap.has(checkDate.toDateString())) {
+			currentStreak++;
+			checkDate.setDate(checkDate.getDate() - 1);
+		}
+	}
+
+	// 4. Get recent workout sets with exercise details for activity feed
+	const recentSets = await db
+		.select({
+			exerciseName: exercises.name,
+			weight: workoutSets.weight,
+			reps: workoutSets.reps,
+			completedAt: workoutSessions.completedAt,
+		})
+		.from(workoutSets)
+		.innerJoin(exercises, eq(workoutSets.exerciseId, exercises.id))
+		.innerJoin(
+			workoutSessions,
+			eq(workoutSets.sessionId, workoutSessions.id),
+		)
+		.where(
+			and(
+				eq(workoutSessions.userId, session.user.id),
+				sql`${workoutSessions.completedAt} IS NOT NULL`,
+			),
+		)
+		.orderBy(desc(workoutSessions.completedAt))
+		.limit(10);
+
+	const recentActivity = recentSets.length > 0
+		? recentSets.map((set) => ({
+				exercise: set.exerciseName,
+				sets: 1,
+				reps: set.reps,
+				weight: Number(set.weight) || 0,
+				date: new Date(set.completedAt!).toLocaleDateString("en-US", {
+					month: "short",
+					day: "numeric",
+				}),
+			}))
+		: [
+				{
+					exercise: "No workouts logged yet",
+					sets: 0,
+					reps: 0,
+					weight: 0,
+					date: "Start logging",
+				},
+			];
+
+	// 5. Find last PR (highest weight for any exercise)
+	const lastPR = await db
+		.select({
+			exerciseName: exercises.name,
+			weight: sql<number>`MAX(${workoutSets.weight})`.as("maxWeight"),
+		})
+		.from(workoutSets)
+		.innerJoin(exercises, eq(workoutSets.exerciseId, exercises.id))
+		.innerJoin(
+			workoutSessions,
+			eq(workoutSets.sessionId, workoutSessions.id),
+		)
+		.where(eq(workoutSessions.userId, session.user.id))
+		.groupBy(exercises.name)
+		.orderBy(desc(sql`MAX(${workoutSets.weight})`))
+		.limit(1);
+
+	const stats = {
+		totalWorkouts,
+		workoutsChange: workoutsThisMonth,
+		currentStreak,
+		lastPR: lastPR[0] || null,
+		nextWorkout: userRoutines.length > 0 ? userRoutines[0].days[0]?.name : null,
+	};
 
 	return (
 		<DashboardClient
@@ -223,6 +317,7 @@ export default async function DashboardPage() {
 			today={today}
 			weekDays={weekDays}
 			recentActivity={recentActivity}
+			stats={stats}
 		/>
 	);
 }

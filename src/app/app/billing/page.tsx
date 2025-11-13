@@ -45,21 +45,6 @@ export default async function BillingPage() {
 					<BillingOverview />
 				</Suspense>
 
-				{/* Subscription Management - only show if has active subscription */}
-				{hasActiveSubscription && (
-					<Suspense
-						fallback={
-							<Card>
-								<CardHeader>
-									<CardTitle>Loading subscription details...</CardTitle>
-								</CardHeader>
-							</Card>
-						}
-					>
-						<Subscriptions />
-					</Suspense>
-				)}
-
 				{/* Available Plans - only show if no active subscription */}
 				{!hasActiveSubscription && (
 					<Suspense

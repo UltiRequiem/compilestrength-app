@@ -4,7 +4,6 @@ import {
 	CheckCircle,
 	CreditCard,
 	Download,
-	Link as LinkIcon,
 	Loader2,
 	Palette,
 	Shield,
@@ -324,58 +323,6 @@ export default function SettingsPage() {
 								Delete Account
 							</Button>
 						</div>
-					</CardContent>
-				</Card>
-
-				{/* Appearance */}
-				<Card className="border-primary/20">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<Palette className="h-5 w-5" />
-							Appearance
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="space-y-2">
-							<Label>Theme</Label>
-							<div className="grid grid-cols-3 gap-3">
-								<Button variant="default" size="sm">
-									Dark
-								</Button>
-								<Button variant="outline" size="sm">
-									Darker
-								</Button>
-								<Button variant="outline" size="sm">
-									Terminal
-								</Button>
-							</div>
-						</div>
-
-						<div className="space-y-2">
-							<Label>Accent Color</Label>
-							<div className="flex gap-2">
-								<div className="h-10 w-10 rounded-full bg-primary border-2 border-primary cursor-pointer" />
-								<div className="h-10 w-10 rounded-full bg-blue-500 border-2 border-transparent hover:border-border cursor-pointer" />
-								<div className="h-10 w-10 rounded-full bg-purple-500 border-2 border-transparent hover:border-border cursor-pointer" />
-								<div className="h-10 w-10 rounded-full bg-orange-500 border-2 border-transparent hover:border-border cursor-pointer" />
-							</div>
-						</div>
-
-						<div className="space-y-2">
-							<Label>Font Size</Label>
-							<div className="flex items-center gap-4">
-								<input
-									type="range"
-									min="12"
-									max="18"
-									defaultValue="14"
-									className="flex-1"
-								/>
-								<span className="text-sm text-muted-foreground w-12">14px</span>
-							</div>
-						</div>
-
-						<Button>Apply Changes</Button>
 					</CardContent>
 				</Card>
 			</div>
