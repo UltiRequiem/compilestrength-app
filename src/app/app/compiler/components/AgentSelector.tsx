@@ -2,6 +2,7 @@
 
 import { Brain, Dumbbell, Heart, Zap } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 type AgentType = "bodybuilding" | "powerlifting" | "endurance" | "general";
 
@@ -72,8 +73,7 @@ export function AgentSelector() {
 						const isAvailable = agent.available;
 
 						return (
-							<button
-								type="button"
+							<Button
 								key={agent.id}
 								onClick={() => handleAgentSelect(agent.id)}
 								disabled={!isAvailable}
@@ -94,7 +94,7 @@ export function AgentSelector() {
 								{!isAvailable && (
 									<span className="text-green-800 text-xs">(Soon)</span>
 								)}
-							</button>
+							</Button>
 						);
 					})}
 				</div>

@@ -254,107 +254,22 @@ export default function SettingsPage() {
 					</CardContent>
 				</Card>
 
-				{/* Subscription */}
+				{/* Subscription - Link to Billing Page */}
 				<Card className="border-primary/20">
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<CreditCard className="h-5 w-5" />
-							Subscription
+							Subscription & Billing
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-4">
-						<div className="rounded-lg border-2 border-primary p-6 glow-green">
-							<div className="mb-4 flex items-start justify-between">
-								<div>
-									<h3 className="text-xl font-bold">Pro Plan</h3>
-									<p className="text-sm text-muted-foreground">
-										Full access to all features
-									</p>
-								</div>
-								<Badge className="bg-primary">Active</Badge>
-							</div>
-							<ul className="mb-4 space-y-2 text-sm">
-								<li className="flex items-center gap-2">
-									<CheckCircle className="h-4 w-4 text-primary" />
-									AI Program Generation
-								</li>
-								<li className="flex items-center gap-2">
-									<CheckCircle className="h-4 w-4 text-primary" />
-									Gains Debugger
-								</li>
-								<li className="flex items-center gap-2">
-									<CheckCircle className="h-4 w-4 text-primary" />
-									Coach Chat (Unlimited)
-								</li>
-								<li className="flex items-center gap-2">
-									<CheckCircle className="h-4 w-4 text-primary" />
-									Advanced Analytics
-								</li>
-							</ul>
-							<p className="text-sm text-muted-foreground">
-								Renews on Dec 7, 2024 • $9.99/month
-							</p>
-						</div>
-
-						<div className="space-y-2">
-							<Label>Payment Method</Label>
-							<div className="flex items-center justify-between rounded-lg border border-border p-4">
-								<div className="flex items-center gap-3">
-									<CreditCard className="h-5 w-5" />
-									<div>
-										<p className="font-semibold">•••• •••• •••• 4242</p>
-										<p className="text-sm text-muted-foreground">
-											Expires 12/25
-										</p>
-									</div>
-								</div>
-								<Button variant="outline" size="sm">
-									Update
-								</Button>
-							</div>
-						</div>
-
-						<div className="space-y-2">
-							<Label>Billing History</Label>
-							<div className="rounded-lg border border-border overflow-hidden">
-								<table className="w-full text-sm">
-									<thead className="bg-muted">
-										<tr>
-											<th className="p-3 text-left font-semibold">Date</th>
-											<th className="p-3 text-left font-semibold">
-												Description
-											</th>
-											<th className="p-3 text-left font-semibold">Amount</th>
-											<th className="p-3 text-left font-semibold">Status</th>
-										</tr>
-									</thead>
-									<tbody className="divide-y divide-border">
-										<tr>
-											<td className="p-3">Nov 7, 2024</td>
-											<td className="p-3">Pro Plan - Monthly</td>
-											<td className="p-3 terminal-text">$9.99</td>
-											<td className="p-3">
-												<Badge variant="secondary" className="text-xs">
-													Paid
-												</Badge>
-											</td>
-										</tr>
-										<tr>
-											<td className="p-3">Oct 7, 2024</td>
-											<td className="p-3">Pro Plan - Monthly</td>
-											<td className="p-3 terminal-text">$9.99</td>
-											<td className="p-3">
-												<Badge variant="secondary" className="text-xs">
-													Paid
-												</Badge>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-
-						<Button variant="outline">Manage Subscription</Button>
+						<p className="text-muted-foreground">
+							Manage your subscription, view billing history, and update payment
+							methods.
+						</p>
+						<Button asChild>
+							<a href="/app/billing">Go to Billing</a>
+						</Button>
 					</CardContent>
 				</Card>
 
