@@ -8,12 +8,14 @@ import { webhookHasMeta } from "@/lib/lemonsqueezy-typeguards";
 
 export async function POST(request: Request) {
 	if (!env.LEMONSQUEEZY_WEBHOOK_SECRET) {
-		return new Response("Lemon Squeezy Webhook Secret not set in .env", {
-			status: 500,
-		});
+		return new Response(
+			"Lemon Squeezy isn't set up correctly one the server.",
+			{
+				status: 500,
+			},
+		);
 	}
 
-	// First, make sure the request is from Lemon Squeezy.
 	const rawBody = await request.text();
 	const secret = env.LEMONSQUEEZY_WEBHOOK_SECRET;
 
@@ -30,25 +32,22 @@ export async function POST(request: Request) {
 
 	const data = JSON.parse(rawBody) as unknown;
 
-	// Type guard to check if the object has a 'meta' property.
-	if (webhookHasMeta(data)) {
-		const webhookEventId = await storeWebhookEvent(
-			data.meta.event_name,
-			data as unknown as Record<string, unknown>,
-		);
-
-		// Non-blocking call to process the webhook event.
-		// We return 200 immediately so LemonSqueezy knows we received it
-		void processWebhookEvent(webhookEventId).catch((err) => {
-			console.error(
-				"Error processing LemonSqueezy webhook event",
-				webhookEventId,
-				err,
-			);
-		});
-
-		return new Response("OK", { status: 200 });
+	if (!webhookHasMeta(data)) {
+		return new Response("Data invalid", { status: 400 });
 	}
 
-	return new Response("Data invalid", { status: 400 });
+	const webhookEventId = await storeWebhookEvent(
+		data.meta.event_name,
+		data as unknown as Record<string, unknown>,
+	);
+
+	void processWebhookEvent(webhookEventId).catch((err) => {
+		console.error(
+			"Error processing LemonSqueezy webhook event",
+			webhookEventId,
+			err,
+		);
+	});
+
+	return new Response("OK", { status: 200 });
 }

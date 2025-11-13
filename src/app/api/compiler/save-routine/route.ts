@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
+import { transformTimestamps } from "@/lib/date-transform";
 import {
 	createErrorResponse,
 	createSuccessResponse,
@@ -25,17 +26,8 @@ export async function POST(req: NextRequest) {
 		const validatedData = validateRequest(saveRoutineSchema, body);
 		const { routine: rawRoutine } = validatedData;
 
-		const routine = {
-			...rawRoutine,
-			createdAt:
-				typeof rawRoutine.createdAt === "string"
-					? new Date(rawRoutine.createdAt)
-					: rawRoutine.createdAt,
-			updatedAt:
-				typeof rawRoutine.updatedAt === "string"
-					? new Date(rawRoutine.updatedAt)
-					: rawRoutine.updatedAt,
-		};
+		// Transform string dates to Date objects using type-safe helper
+		const routine = transformTimestamps(rawRoutine);
 
 		const savedProgram = await saveWorkoutRoutineToDb(routine, session.user.id);
 

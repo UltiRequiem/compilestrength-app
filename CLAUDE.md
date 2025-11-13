@@ -45,6 +45,7 @@ deployed on Cloudflare Workers.
   - `subscription-utils.ts` - Subscription status and validation
   - `lemonsqueezy-typeguards.ts` - Type guards for webhooks
   - `validation.ts` - Zod validation utilities and error handling
+  - `date-transform.ts` - Type-safe date transformation utilities
 - `src/config/` - Configuration files
   - `lemonsqueezy.ts` - LemonSqueezy SDK setup
 - `src/agents/` - AI agent implementations using Mastra
@@ -204,10 +205,14 @@ CompileStrength uses Zod for comprehensive runtime validation and TypeScript typ
 // In API route
 import { createWorkoutSetSchema } from "@/schemas";
 import { validateRequest, ValidationError, createValidationErrorResponse } from "@/lib/validation";
+import { transformTimestamps } from "@/lib/date-transform";
 
 const body = await request.json();
 const validatedData = validateRequest(createWorkoutSetSchema, body);
 // validatedData is now fully typed according to schema
+
+// Transform string dates to Date objects (type-safe)
+const dataWithDates = transformTimestamps(validatedData);
 ```
 
 **Type Inference:**
