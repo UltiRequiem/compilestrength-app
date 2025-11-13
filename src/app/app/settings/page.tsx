@@ -1,23 +1,8 @@
 "use client";
 
-import {
-	CheckCircle,
-	CreditCard,
-	Download,
-	Loader2,
-	Palette,
-	Shield,
-	Trash2,
-	User,
-} from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRequireAuth } from "@/lib/auth-client";
-import { getInitials } from "@/lib/utils";
 import {
 	useExperienceLevel,
 	useRestTimerDefault,
@@ -30,7 +15,11 @@ import {
 	useUnits,
 } from "@/providers/user-preferences-store-provider";
 import { updateUserPreferences } from "./actions";
+import DataPrivacySection from "./components/DataPrivacySection";
 import { SettingsHeader } from "./components/Hader";
+import ProfileSection from "./components/ProfileSection";
+import SubscriptionSection from "./components/SubscriptionSection";
+import TrainingPreferences from "./components/TrainingPreferences";
 
 export default function SettingsPage() {
 	const { session, isPending } = useRequireAuth();
@@ -93,222 +82,25 @@ export default function SettingsPage() {
 		<div className="mx-auto max-w-4xl">
 			<SettingsHeader />
 			<div className="space-y-6">
-				{/* Profile Section */}
-				<Card className="border-primary/20">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<User className="h-5 w-5" />
-							Profile
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="flex items-center gap-4">
-							<div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold">
-								{getInitials(session.user.name)}
-							</div>
-							<Button variant="outline" size="sm">
-								Change Avatar
-							</Button>
-						</div>
+				<ProfileSection userName={session.user.name} userEmail={session.user.email} />
 
-						<div className="grid gap-4 md:grid-cols-2">
-							<div className="space-y-2">
-								<Label>Full Name</Label>
-								<Input defaultValue={session.user.name} />
-							</div>
-							<div className="space-y-2">
-								<Label>Username</Label>
-								<Input
-									defaultValue={session.user.email.split("@")[0]}
-									placeholder="username"
-								/>
-							</div>
-						</div>
+				<TrainingPreferences
+					units={units}
+					restTimerDefault={restTimerDefault}
+					trainingGoal={trainingGoal}
+					experienceLevel={experienceLevel}
+					onUnitsChange={setUnits}
+					onRestTimerChange={setRestTimerDefault}
+					onTrainingGoalChange={setTrainingGoal}
+					onExperienceLevelChange={setExperienceLevel}
+					onSave={handleSavePreferences}
+					saving={saving}
+					saveMessage={saveMessage}
+				/>
 
-						<div className="space-y-2">
-							<Label>Email</Label>
-							<div className="flex gap-2">
-								<Input value={session.user.email} readOnly />
-								<Badge variant="secondary" className="flex items-center gap-1">
-									<CheckCircle className="h-3 w-3" />
-									Verified
-								</Badge>
-							</div>
-						</div>
+				<SubscriptionSection />
 
-						<div className="space-y-2">
-							<Label>Bio</Label>
-							<textarea
-								className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-								placeholder="Tell us about yourself..."
-								defaultValue=""
-							/>
-						</div>
-
-						<Button>Save Changes</Button>
-					</CardContent>
-				</Card>
-
-				{/* Training Preferences */}
-				<Card className="border-primary/20">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<Palette className="h-5 w-5" />
-							Training Preferences
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="grid gap-4 md:grid-cols-2">
-							<div className="space-y-2">
-								<Label>Preferred Units</Label>
-								<div className="flex gap-2">
-									<Button
-										variant={units === "lbs" ? "default" : "outline"}
-										size="sm"
-										className="flex-1"
-										onClick={() => setUnits("lbs")}
-									>
-										lbs
-									</Button>
-									<Button
-										variant={units === "kg" ? "default" : "outline"}
-										size="sm"
-										className="flex-1"
-										onClick={() => setUnits("kg")}
-									>
-										kg
-									</Button>
-								</div>
-							</div>
-
-							<div className="space-y-2">
-								<Label>Rest Timer Default (seconds)</Label>
-								<Input
-									type="number"
-									value={restTimerDefault}
-									onChange={(e) => setRestTimerDefault(Number(e.target.value))}
-									placeholder="90"
-								/>
-							</div>
-						</div>
-
-						<div className="grid gap-4 md:grid-cols-2">
-							<div className="space-y-2">
-								<Label>Training Goal</Label>
-								<Input
-									value={trainingGoal || ""}
-									onChange={(e) => setTrainingGoal(e.target.value || null)}
-									placeholder="strength, hypertrophy, endurance"
-								/>
-							</div>
-
-							<div className="space-y-2">
-								<Label>Experience Level</Label>
-								<Input
-									value={experienceLevel || ""}
-									onChange={(e) => setExperienceLevel(e.target.value || null)}
-									placeholder="beginner, intermediate, advanced"
-								/>
-							</div>
-						</div>
-
-						{saveMessage && (
-							<div
-								className={`rounded-lg border p-3 text-sm ${
-									saveMessage.includes("success")
-										? "border-primary/50 bg-primary/10 text-primary"
-										: "border-destructive/50 bg-destructive/10 text-destructive"
-								}`}
-							>
-								{saveMessage}
-							</div>
-						)}
-
-						<Button onClick={handleSavePreferences} disabled={saving}>
-							{saving ? (
-								<>
-									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-									Saving...
-								</>
-							) : (
-								"Save Preferences"
-							)}
-						</Button>
-					</CardContent>
-				</Card>
-
-				{/* Subscription - Link to Billing Page */}
-				<Card className="border-primary/20">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<CreditCard className="h-5 w-5" />
-							Subscription & Billing
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<p className="text-muted-foreground">
-							Manage your subscription, view billing history, and update payment
-							methods.
-						</p>
-						<Button asChild>
-							<a href="/app/billing">Go to Billing</a>
-						</Button>
-					</CardContent>
-				</Card>
-
-				{/* Data & Privacy */}
-				<Card className="border-primary/20">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<Shield className="h-5 w-5" />
-							Data & Privacy
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						<div className="flex items-center justify-between rounded-lg border border-border p-4">
-							<div>
-								<p className="font-semibold">Download Your Data</p>
-								<p className="text-sm text-muted-foreground">
-									Export all your workout data
-								</p>
-							</div>
-							<Button variant="outline" size="sm">
-								<Download className="h-4 w-4" />
-								Download
-							</Button>
-						</div>
-
-						<div className="flex items-center justify-between rounded-lg border border-border p-4">
-							<div>
-								<p className="font-semibold">Privacy Settings</p>
-								<p className="text-sm text-muted-foreground">
-									Control who can see your profile
-								</p>
-							</div>
-							<Button variant="outline" size="sm">
-								Manage
-							</Button>
-						</div>
-
-						<div className="rounded-lg border border-destructive/50 bg-destructive/5 p-4">
-							<div className="mb-3 flex items-start gap-3">
-								<Trash2 className="h-5 w-5 text-destructive" />
-								<div>
-									<p className="font-semibold text-destructive">
-										Delete Account
-									</p>
-									<p className="text-sm text-muted-foreground">
-										Permanently delete your account and all data. This action
-										cannot be undone.
-									</p>
-								</div>
-							</div>
-							<Button variant="destructive" size="sm">
-								Delete Account
-							</Button>
-						</div>
-					</CardContent>
-				</Card>
+				<DataPrivacySection />
 			</div>
 		</div>
 	);
