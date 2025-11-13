@@ -135,7 +135,12 @@ export async function PATCH(request: Request) {
 			);
 		}
 
-		const updateData: any = {};
+		const updateData: Partial<{
+			endTime: Date;
+			notes: string;
+			completedAt: Date;
+		}> = {};
+
 		if (endTime) updateData.endTime = new Date(endTime);
 		if (notes !== undefined) updateData.notes = notes;
 		if (completed) updateData.completedAt = new Date();
