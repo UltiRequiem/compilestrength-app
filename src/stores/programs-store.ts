@@ -86,7 +86,6 @@ export const useProgramsStore = create<ProgramsState>()((set, get) => ({
 	fetchRoutines: async () => {
 		const state = get();
 
-		// Don't refetch if we have recent data
 		if (state.routines.length > 0 && !state.shouldRefetch()) {
 			console.log("🏪 PROGRAMS STORE: Using cached data");
 			return;
@@ -97,25 +96,12 @@ export const useProgramsStore = create<ProgramsState>()((set, get) => ({
 
 		try {
 			const response = await fetch("/api/routines");
+
 			if (response.ok) {
 				const data = (await response.json()) as {
 					success: boolean;
 					routines: WorkoutRoutine[];
 				};
-
-				console.log("📊 PROGRAMS STORE: Fetched routines data:", data.routines);
-
-				// Log details about routines for debugging
-				if (data.routines && data.routines.length > 0) {
-					data.routines.forEach((routine, index) => {
-						console.log(`🔍 Routine ${index + 1}:`, {
-							name: routine.name,
-							frequency: routine.frequency,
-							daysCount: routine.days.length,
-							days: routine.days.map((d) => d.name),
-						});
-					});
-				}
 
 				state.setRoutines(data.routines || []);
 			} else {

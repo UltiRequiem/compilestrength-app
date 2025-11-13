@@ -25,7 +25,6 @@ export async function POST(req: NextRequest) {
 		const validatedData = validateRequest(saveRoutineSchema, body);
 		const { routine: rawRoutine } = validatedData;
 
-		// Convert string dates to Date objects if needed
 		const routine = {
 			...rawRoutine,
 			createdAt:

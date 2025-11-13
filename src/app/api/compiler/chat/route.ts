@@ -32,9 +32,9 @@ export async function POST(req: Request) {
 			messages: convertToModelMessages(messages),
 			tools: bodybuildingTools,
 			stopWhen: stepCountIs(10),
-			onStepFinish: ({ text, toolCalls, toolResults }) => {
+			onStepFinish({ text, toolCalls, toolResults }) {
 				console.log("Step finished:", {
-					text: text ? `${text.substring(0, 100)}...` : "No text",
+					text: `${text.substring(0, 100)}...`,
 					toolCallsCount: toolCalls.length,
 					toolResultsCount: toolResults.length,
 				});
