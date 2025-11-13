@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getUserSubscriptions } from "@/app/actions/lemonsqueezy";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +32,7 @@ import {
 	SidebarRail,
 } from "@/components/ui/sidebar";
 import { signOut, useSession } from "@/lib/auth-client";
+import { isValidSubscription } from "@/lib/subscription-utils";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -54,6 +57,30 @@ export function AppSidebar() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const { data: session, isPending } = useSession();
+	const [hasProSubscription, setHasProSubscription] = useState(false);
+
+	// Check if user has an active subscription
+	useEffect(() => {
+		const checkSubscription = async () => {
+			if (!session?.user) {
+				setHasProSubscription(false);
+				return;
+			}
+
+			try {
+				const subscriptions = await getUserSubscriptions();
+				const hasActive = subscriptions.some((sub) =>
+					isValidSubscription(sub.status),
+				);
+				setHasProSubscription(hasActive);
+			} catch (error) {
+				console.error("Error checking subscription:", error);
+				setHasProSubscription(false);
+			}
+		};
+
+		checkSubscription();
+	}, [session?.user]);
 
 	const handleLogout = async () => {
 		await signOut();
@@ -148,9 +175,11 @@ export function AppSidebar() {
 										<p className="truncate text-sm font-medium">
 											{session.user.name}
 										</p>
-										<Badge className="bg-primary text-[10px] px-1.5 py-0">
-											Pro
-										</Badge>
+										{hasProSubscription && (
+											<Badge className="bg-primary text-[10px] px-1.5 py-0">
+												Pro
+											</Badge>
+										)}
 									</div>
 								</div>
 							</div>

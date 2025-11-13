@@ -273,56 +273,6 @@ export default function SettingsPage() {
 					</CardContent>
 				</Card>
 
-				{/* Integrations */}
-				<Card className="border-primary/20">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2">
-							<LinkIcon className="h-5 w-5" />
-							Integrations
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-3">
-						{[
-							{ name: "Strava", connected: true },
-							{ name: "MyFitnessPal", connected: false },
-							{ name: "Fitbit", connected: false },
-						].map((integration) => (
-							<div
-								key={integration.name}
-								className="flex items-center justify-between rounded-lg border border-border p-4"
-							>
-								<div>
-									<p className="font-semibold">{integration.name}</p>
-									<p className="text-sm text-muted-foreground">
-										{integration.connected ? "Connected" : "Not connected"}
-									</p>
-								</div>
-								<Button
-									variant={integration.connected ? "outline" : "default"}
-									size="sm"
-								>
-									{integration.connected ? "Disconnect" : "Connect"}
-								</Button>
-							</div>
-						))}
-
-						<div className="rounded-lg border border-primary/50 p-4">
-							<p className="mb-2 font-semibold">API Access</p>
-							<p className="mb-3 text-sm text-muted-foreground">
-								Generate an API key to access your data programmatically
-							</p>
-							<div className="flex gap-2">
-								<Button variant="outline" size="sm">
-									Generate API Key
-								</Button>
-								<Button variant="ghost" size="sm">
-									View Documentation
-								</Button>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-
 				{/* Data & Privacy */}
 				<Card className="border-primary/20">
 					<CardHeader>
