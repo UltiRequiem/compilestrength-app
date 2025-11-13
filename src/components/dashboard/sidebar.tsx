@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/sidebar";
 import { signOut, useSession } from "@/lib/auth-client";
 import { isValidSubscription } from "@/lib/subscription-utils";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 
 const navigation = [
 	{ name: "Dashboard", href: "/app/dashboard", icon: Home },
@@ -84,15 +84,6 @@ export function AppSidebar() {
 	const handleLogout = async () => {
 		await signOut();
 		router.push("/login");
-	};
-
-	const getInitials = (name: string) => {
-		return name
-			.split(" ")
-			.map((n) => n[0])
-			.join("")
-			.toUpperCase()
-			.slice(0, 2);
 	};
 
 	return (

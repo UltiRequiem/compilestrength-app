@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRequireAuth } from "@/lib/auth-client";
+import { getInitials } from "@/lib/utils";
 import {
 	useExperienceLevel,
 	useRestTimerDefault,
@@ -29,28 +30,18 @@ import {
 	useUnits,
 } from "@/providers/user-preferences-store-provider";
 import { updateUserPreferences } from "./actions";
-
-const getInitials = (name: string) => {
-	return name
-		.split(" ")
-		.map((n) => n[0])
-		.join("")
-		.toUpperCase()
-		.slice(0, 2);
-};
+import { SettingsHeader } from "./components/Hader";
 
 export default function SettingsPage() {
 	const { session, isPending } = useRequireAuth();
 	const [saving, setSaving] = useState(false);
 	const [saveMessage, setSaveMessage] = useState("");
 
-	// Use global state from Zustand
 	const units = useUnits();
 	const restTimerDefault = useRestTimerDefault();
 	const trainingGoal = useTrainingGoal();
 	const experienceLevel = useExperienceLevel();
 
-	// Use individual action hooks to avoid infinite loop
 	const setUnits = useSetUnits();
 	const setRestTimerDefault = useSetRestTimerDefault();
 	const setTrainingGoal = useSetTrainingGoal();
@@ -60,6 +51,7 @@ export default function SettingsPage() {
 	const handleSavePreferences = async () => {
 		setSaving(true);
 		setSaveMessage("");
+
 		try {
 			const result = await updateUserPreferences({
 				units,
@@ -99,14 +91,7 @@ export default function SettingsPage() {
 
 	return (
 		<div className="mx-auto max-w-4xl">
-			{/* Header */}
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold">Settings</h1>
-				<p className="text-muted-foreground">
-					Manage your account and preferences
-				</p>
-			</div>
-
+			<SettingsHeader />
 			<div className="space-y-6">
 				{/* Profile Section */}
 				<Card className="border-primary/20">
