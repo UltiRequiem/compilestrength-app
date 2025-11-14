@@ -21,7 +21,7 @@ export const filePartSchema = z.object({
 export const toolInvocationPartSchema = z.object({
 	type: z.literal("tool-invocation"),
 	toolCallId: z.string(),
-	state: z.enum(["pending", "running", "completed", "failed"]),
+	state: z.enum(["input-streaming", "input-available", "output-available", "output-error"]),
 	input: z.record(z.string(), z.unknown()),
 	output: z.unknown().optional(),
 });
