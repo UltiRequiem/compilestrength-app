@@ -9,9 +9,11 @@ export class ValidationError extends Error {
 
 export function validateRequest<T>(schema: ZodSchema<T>, data: unknown): T {
 	const result = schema.safeParse(data);
+
 	if (!result.success) {
 		throw new ValidationError(result.error.issues);
 	}
+
 	return result.data;
 }
 

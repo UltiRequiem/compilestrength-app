@@ -27,11 +27,10 @@ export async function POST(request: Request) {
 
 	try {
 		const body = await request.json();
-		const validatedData = validateRequest(createWorkoutSetSchema, body);
+		const validatedData = createWorkoutSetSchema.parse(body);
 		const { sessionId, exerciseId, setNumber, reps, weight, rpe } =
 			validatedData;
 
-		// Verify the session belongs to the user
 		const [workoutSession] = await db
 			.select()
 			.from(workoutSessions)
@@ -49,7 +48,6 @@ export async function POST(request: Request) {
 			);
 		}
 
-		// Create new set
 		const [newSet] = await db
 			.insert(workoutSets)
 			.values({
@@ -83,7 +81,7 @@ export async function PATCH(request: Request) {
 
 	try {
 		const body = await request.json();
-		const validatedData = validateRequest(updateWorkoutSetSchema, body);
+		const validatedData = updateWorkoutSetSchema.parse(body);
 		const { setId, reps, weight, rpe } = validatedData;
 
 		// Verify the set belongs to the user's session
