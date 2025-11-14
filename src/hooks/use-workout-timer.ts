@@ -14,7 +14,9 @@ export function useWorkoutTimer() {
 				setElapsedTime((prev) => prev + 1);
 			}, 1000);
 		}
-		return () => clearInterval(interval);
+		return () => {
+			if (interval) clearInterval(interval);
+		};
 	}, [isRunning]);
 
 	// Rest timer
@@ -28,7 +30,9 @@ export function useWorkoutTimer() {
 			setIsResting(false);
 			setRestTimer(null);
 		}
-		return () => clearInterval(interval);
+		return () => {
+			if (interval) clearInterval(interval);
+		};
 	}, [isResting, restTimer]);
 
 	const startTimer = () => setIsRunning(true);
