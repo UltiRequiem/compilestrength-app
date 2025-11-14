@@ -52,7 +52,7 @@ export function useActiveSession() {
 									// Get completed sets for this exercise from the session
 									const completedSetsFromDB =
 										session.sets?.filter(
-											(s: any) => s.exerciseId === ex.exerciseId,
+											(s) => s.exerciseId === ex.exerciseId,
 										) || [];
 
 									// Create the full set structure
@@ -60,7 +60,7 @@ export function useActiveSession() {
 										{ length: ex.sets },
 										(_, i) => {
 											const existingSet = completedSetsFromDB.find(
-												(s: any) => s.setNumber === i + 1,
+												(s) => s.setNumber === i + 1,
 											);
 
 											if (existingSet) {
