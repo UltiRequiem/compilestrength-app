@@ -12,7 +12,7 @@ import {
 	X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,231 +24,133 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useActiveSession } from "@/hooks/use-active-session";
+import { useWorkoutPrograms } from "@/hooks/use-workout-programs";
+import { useWorkoutTimer } from "@/hooks/use-workout-timer";
 import { useRequireAuth } from "@/lib/auth-client";
 import {
 	useRestTimerDefault,
 	useUnits,
 } from "@/providers/user-preferences-store-provider";
-import {
-	Exercise,
-	type ExerciseWithSets,
-	Set,
-	WorkoutDay,
-	type WorkoutProgram,
-} from "./types";
 import { formatTime } from "./utils";
 
 export default function LogWorkoutPage() {
 	const { session, isPending } = useRequireAuth();
 	const router = useRouter();
-	const [elapsedTime, setElapsedTime] = useState(0);
-	const [isRunning, setIsRunning] = useState(true);
-	const [restTimer, setRestTimer] = useState<number | null>(null);
-	const [isResting, setIsResting] = useState(false);
-	const [programs, setPrograms] = useState<WorkoutProgram[]>([]);
-	const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
-	const [selectedDay, setSelectedDay] = useState<string | null>(null);
-	const [workoutSession, setWorkoutSession] = useState<any>(null);
-	const [exercises, setExercises] = useState<ExerciseWithSets[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [isStarting, setIsStarting] = useState(false);
+
+	// Custom hooks
+	const {
+		programs,
+		loading,
+		selectedProgram,
+		selectedDay,
+		loadPrograms,
+		selectProgram,
+		selectDay,
+		getCurrentProgram,
+		getCurrentDay,
+	} = useWorkoutPrograms();
+
+	const {
+		workoutSession,
+		exercises,
+		isStarting,
+		checkActiveSession,
+		startWorkout,
+		initializeExercises,
+		completeSet,
+		updateSetValue,
+		finishWorkout,
+		getSessionStartTime,
+		getCompletedSetsCount,
+		getTotalSetsCount,
+	} = useActiveSession();
+
+	const {
+		elapsedTime,
+		isRunning,
+		restTimer,
+		isResting,
+		toggleTimer,
+		startRest,
+		setInitialElapsedTime,
+	} = useWorkoutTimer();
 
 	// Use global preferences
 	const units = useUnits();
 	const defaultRestTime = useRestTimerDefault();
 
-	const loadPrograms = async () => {
-		try {
-			const response = await fetch("/api/workout-programs");
-			if (response.ok) {
-				const data = (await response.json()) as WorkoutProgram[];
-				setPrograms(data);
-				if (data.length > 0) {
-					setSelectedProgram(data[0].id);
-					if (data[0].days.length > 0) {
-						setSelectedDay(data[0].days[0].id);
-					}
-				}
-			}
-		} catch (error) {
-			console.error("Error loading programs:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	// Load workout programs
+	// Load programs and check for active session
 	useEffect(() => {
-		if (session) {
-			loadPrograms();
-		}
-	}, [session]);
+		if (!session) return;
 
-	const startWorkout = async () => {
+		loadPrograms();
+	}, [session, loadPrograms]);
+
+	// Check for active session after programs are loaded
+	useEffect(() => {
+		if (!session || programs.length === 0) return;
+
+		const restoreSession = async () => {
+			const result = await checkActiveSession(programs);
+			if (result) {
+				selectProgram(result.programId);
+				selectDay(result.dayId);
+				const initialElapsed = getSessionStartTime();
+				setInitialElapsedTime(initialElapsed);
+			}
+		};
+
+		restoreSession();
+	}, [
+		session,
+		programs,
+		checkActiveSession,
+		selectProgram,
+		selectDay,
+		getSessionStartTime,
+		setInitialElapsedTime,
+	]);
+
+	const handleStartWorkout = async () => {
 		if (!selectedDay) return;
 
-		setIsStarting(true);
 		try {
-			const response = await fetch("/api/workout-sessions", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ workoutDayId: selectedDay }),
-			});
-
-			if (response.ok) {
-				const sessionData = (await response.json()) as { id: string };
-				setWorkoutSession(sessionData);
-
-				// Initialize exercises with empty sets
-				const currentProgram = programs.find((p) => p.id === selectedProgram);
-				const currentDay = currentProgram?.days.find(
-					(d) => d.id === selectedDay,
-				);
-
-				if (currentDay) {
-					const exercisesWithSets: ExerciseWithSets[] =
-						currentDay.exercises.map((ex) => ({
-							...ex,
-							// Use a temporary ID for sets that haven't been saved to the database yet.
-							// The format 'temp_pending_${ex.id}_${i}' makes it clear this is not a persistent ID.
-							completedSets: Array.from({ length: ex.sets }, (_, i) => ({
-								id: `temp_pending_${ex.id}_${i}`,
-								number: i + 1,
-								setNumber: i + 1,
-								weight: 0,
-								reps: null,
-								rpe: null,
-								completed: false,
-								sessionId: sessionData.id || "",
-								exerciseId: ex.id,
-							})),
-						}));
-					setExercises(exercisesWithSets);
-				}
-			} else {
-				const error = (await response.json()) as { error?: string };
-				alert(error.error || "Failed to start workout");
+			const sessionData = await startWorkout(selectedDay);
+			const currentDay = getCurrentDay();
+			if (sessionData && currentDay) {
+				initializeExercises(currentDay, sessionData.id);
 			}
 		} catch (error) {
-			console.error("Error starting workout:", error);
-			alert("Failed to start workout");
-		} finally {
-			setIsStarting(false);
+			alert(error instanceof Error ? error.message : "Failed to start workout");
 		}
 	};
 
-	const completeSet = async (exerciseIdx: number, setIdx: number) => {
-		const exercise = exercises[exerciseIdx];
-		const set = exercise.completedSets[setIdx];
-
-		if (!set.reps || !set.weight) {
-			alert("Please enter weight and reps");
-			return;
-		}
-
+	const handleCompleteSet = async (exerciseIdx: number, setIdx: number) => {
 		try {
-			const response = await fetch("/api/workout-sets", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					sessionId: workoutSession.id,
-					exerciseId: exercise.exerciseId,
-					setNumber: set.number,
-					reps: set.reps,
-					weight: set.weight,
-					rpe: set.rpe,
-				}),
-			});
-
-			if (response.ok) {
-				const newSet = (await response.json()) as { id: string };
-				const newExercises = [...exercises];
-				newExercises[exerciseIdx].completedSets[setIdx] = {
-					...set,
-					id: newSet.id,
-					completed: true,
-				};
-				setExercises(newExercises);
-
-				// Auto-start rest timer
-				startRest(exercise.restSeconds || defaultRestTime);
-			}
+			await completeSet(exerciseIdx, setIdx);
+			const exercise = exercises[exerciseIdx];
+			// Auto-start rest timer
+			startRest(exercise.restSeconds || defaultRestTime);
 		} catch (error) {
-			console.error("Error completing set:", error);
-			alert("Failed to save set");
+			alert(error instanceof Error ? error.message : "Failed to save set");
 		}
 	};
 
-	const updateSetValue = (
-		exerciseIdx: number,
-		setIdx: number,
-		field: "weight" | "reps" | "rpe",
-		value: number,
-	) => {
-		const newExercises = [...exercises];
-		newExercises[exerciseIdx].completedSets[setIdx][field] = value as any;
-		setExercises(newExercises);
-	};
-
-	const finishWorkout = async () => {
-		if (!workoutSession) return;
-
+	const handleFinishWorkout = async () => {
 		try {
-			const response = await fetch("/api/workout-sessions", {
-				method: "PATCH",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					sessionId: workoutSession.id,
-					endTime: new Date().toISOString(),
-					completed: true,
-				}),
-			});
-
-			if (response.ok) {
-				router.push("/app");
-			}
+			await finishWorkout();
+			router.push("/app");
 		} catch (error) {
-			console.error("Error finishing workout:", error);
-			alert("Failed to finish workout");
+			alert(
+				error instanceof Error ? error.message : "Failed to finish workout",
+			);
 		}
 	};
 
-	useEffect(() => {
-		let interval: NodeJS.Timeout;
-		if (isRunning && workoutSession) {
-			interval = setInterval(() => {
-				setElapsedTime((prev) => prev + 1);
-			}, 1000);
-		}
-		return () => clearInterval(interval);
-	}, [isRunning, workoutSession]);
-
-	useEffect(() => {
-		let interval: NodeJS.Timeout;
-		if (isResting && restTimer !== null && restTimer > 0) {
-			interval = setInterval(() => {
-				setRestTimer((prev) => (prev ? prev - 1 : 0));
-			}, 1000);
-		} else if (restTimer === 0) {
-			setIsResting(false);
-			setRestTimer(null);
-		}
-		return () => clearInterval(interval);
-	}, [isResting, restTimer]);
-
-	const completedSets = exercises.reduce(
-		(acc, ex) => acc + ex.completedSets.filter((s) => s.completed).length,
-		0,
-	);
-	const totalSets = exercises.reduce(
-		(acc, ex) => acc + ex.completedSets.length,
-		0,
-	);
-
-	const startRest = (seconds: number) => {
-		setRestTimer(seconds);
-		setIsResting(true);
-	};
+	// Get computed values from hooks
+	const completedSets = getCompletedSetsCount();
+	const totalSets = getTotalSetsCount();
 
 	if (isPending || loading) {
 		return (
@@ -264,8 +166,8 @@ export default function LogWorkoutPage() {
 
 	// Show workout selection if no active session
 	if (!workoutSession) {
-		const currentProgram = programs.find((p) => p.id === selectedProgram);
-		const currentDay = currentProgram?.days.find((d) => d.id === selectedDay);
+		const currentProgram = getCurrentProgram();
+		const currentDay = getCurrentDay();
 
 		return (
 			<div className="mx-auto max-w-4xl">
@@ -305,13 +207,7 @@ export default function LogWorkoutPage() {
 									</label>
 									<Select
 										value={selectedProgram || undefined}
-										onValueChange={(value) => {
-											setSelectedProgram(value);
-											const program = programs.find((p) => p.id === value);
-											if (program && program.days.length > 0) {
-												setSelectedDay(program.days[0].id);
-											}
-										}}
+										onValueChange={selectProgram}
 									>
 										<SelectTrigger>
 											<SelectValue placeholder="Select a program" />
@@ -333,7 +229,7 @@ export default function LogWorkoutPage() {
 										</label>
 										<Select
 											value={selectedDay || undefined}
-											onValueChange={setSelectedDay}
+											onValueChange={selectDay}
 										>
 											<SelectTrigger>
 												<SelectValue placeholder="Select a day" />
@@ -389,7 +285,7 @@ export default function LogWorkoutPage() {
 										<Button
 											size="lg"
 											className="w-full"
-											onClick={startWorkout}
+											onClick={handleStartWorkout}
 											disabled={!selectedDay || isStarting}
 										>
 											{isStarting ? (
@@ -415,8 +311,7 @@ export default function LogWorkoutPage() {
 	}
 
 	// Active workout session
-	const currentProgram = programs.find((p) => p.id === selectedProgram);
-	const currentDay = currentProgram?.days.find((d) => d.id === selectedDay);
+	const currentDay = getCurrentDay();
 
 	return (
 		<div className="mx-auto max-w-4xl">
@@ -442,11 +337,7 @@ export default function LogWorkoutPage() {
 						</div>
 					</div>
 					<div className="flex gap-2">
-						<Button
-							variant="outline"
-							size="icon"
-							onClick={() => setIsRunning(!isRunning)}
-						>
+						<Button variant="outline" size="icon" onClick={toggleTimer}>
 							{isRunning ? (
 								<Pause className="h-4 w-4" />
 							) : (
@@ -638,7 +529,7 @@ export default function LogWorkoutPage() {
 																	size="sm"
 																	className="h-8"
 																	onClick={() =>
-																		completeSet(exerciseIdx, setIdx)
+																		handleCompleteSet(exerciseIdx, setIdx)
 																	}
 																>
 																	<CheckCircle className="h-3 w-3" />
@@ -682,7 +573,7 @@ export default function LogWorkoutPage() {
 									Save your workout and view summary
 								</p>
 							</div>
-							<Button size="lg" onClick={finishWorkout}>
+							<Button size="lg" onClick={handleFinishWorkout}>
 								Finish Workout
 							</Button>
 						</div>

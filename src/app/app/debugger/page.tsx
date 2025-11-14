@@ -56,7 +56,7 @@ export default async function DebuggerPage() {
 		if (!exerciseHistory.has(set.exerciseName)) {
 			exerciseHistory.set(set.exerciseName, []);
 		}
-		exerciseHistory.get(set.exerciseName)!.push({
+		exerciseHistory.get(set.exerciseName)?.push({
 			weight: Number(set.weight),
 			reps: set.reps,
 			date: new Date(set.completedAt!),

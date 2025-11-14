@@ -2,7 +2,6 @@
 
 import {
 	BarChart3,
-	CreditCard,
 	Dumbbell,
 	FolderOpen,
 	Home,

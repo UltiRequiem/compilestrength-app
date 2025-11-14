@@ -14,7 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUnits } from "@/providers/user-preferences-store-provider";
-import { convertWeight, formatWeight } from "@/stores/user-preferences-store";
 
 interface Issue {
 	id: string;
@@ -52,7 +51,7 @@ export function DebuggerClient({
 }: DebuggerClientProps) {
 	const [isAnalyzing, setIsAnalyzing] = useState(false);
 	const [analysisComplete, setAnalysisComplete] = useState(true);
-	const units = useUnits();
+	const _units = useUnits();
 
 	const handleAnalysis = () => {
 		setIsAnalyzing(true);

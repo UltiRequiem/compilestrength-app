@@ -1,12 +1,10 @@
 import type {
-	Exercise as SchemaExercise,
 	PersonalRecord as SchemaPersonalRecord,
 	UserProfile as SchemaUserProfile,
 	WorkoutDay as SchemaWorkoutDay,
 	WorkoutProgram as SchemaWorkoutProgram,
 	WorkoutRoutine as SchemaWorkoutRoutine,
 	WorkoutSession as SchemaWorkoutSession,
-	WorkoutSet as SchemaWorkoutSet,
 } from "@/schemas";
 
 // Extended Exercise type that includes both database and display properties

@@ -3,7 +3,6 @@ import { getUserSubscriptions } from "@/app/actions/lemonsqueezy";
 import { BillingOverview } from "@/components/billing/billing-overview";
 import { Plans } from "@/components/billing/plans";
 import { SubscriptionRefresh } from "@/components/billing/subscription-refresh";
-import { Subscriptions } from "@/components/billing/subscriptions";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireAuth } from "@/lib/auth-utils";
 import { isValidSubscription } from "@/lib/subscription-utils";
