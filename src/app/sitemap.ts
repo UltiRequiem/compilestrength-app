@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-	const baseUrl = "https://compilestrength.com";
+const baseUrl = "https://compilestrength.com";
 
+export default function sitemap(): MetadataRoute.Sitemap {
 	return [
 		{
 			url: baseUrl,
