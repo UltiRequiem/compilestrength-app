@@ -62,7 +62,11 @@ export function getSubscriptionMessage(
 		case "on_trial":
 			return {
 				hasAccess: true,
-				message: `Trial active until ${subscription.trialEndsAt ? new Date(subscription.trialEndsAt).toLocaleDateString() : "end of trial"}`,
+				message: `Trial active until ${
+					subscription.trialEndsAt
+						? new Date(subscription.trialEndsAt).toLocaleDateString()
+						: "end of trial"
+				}`,
 				type: "info",
 			};
 		case "paused":

@@ -9,7 +9,8 @@ CompileStrength is a full-stack fitness application with an AI-powered workout
 programming system designed for science-based lifters. Built with Next.js 15,
 deployed on Cloudflare Workers.
 
-**For design and branding guidelines, see [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md)**
+**For design and branding guidelines, see
+[docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md)**
 
 ## Core Architecture
 
@@ -72,20 +73,24 @@ deployed on Cloudflare Workers.
 The application has comprehensive workout tracking and billing models:
 
 **Authentication & Users:**
+
 - User management via Better Auth (user, session, account models)
 - User preferences (units, rest timers, training goals)
 
 **Workout Tracking:**
+
 - Workout Programs with configurable days and exercises
 - Exercise library with muscle groups and equipment types
 - Workout sessions with set tracking and RPE
 - Personal records and progression tracking
 
 **Billing & Subscriptions (LemonSqueezy):**
+
 - Plans table - Product/variant data synced from LemonSqueezy
 - Subscriptions table - User subscription tracking with status
 - WebhookEvents table - Webhook event logging and processing
-- UsageTracking table - Track usage limits (compiles, edits, messages per period)
+- UsageTracking table - Track usage limits (compiles, edits, messages per
+  period)
 
 ### Authentication Flow
 
@@ -118,7 +123,8 @@ The application has comprehensive workout tracking and billing models:
 
 ## Development Commands
 
-**Note:** This project uses **Bun** as the primary package manager and runtime. Commands can use either `npm` or `bun`.
+**Note:** This project uses **Bun** as the primary package manager and runtime.
+Commands can use either `npm` or `bun`.
 
 ### Essential Commands
 
@@ -159,10 +165,12 @@ npm run ngrok        # Start ngrok tunnel for webhook testing
 ```
 
 To use ngrok for testing LemonSqueezy webhooks:
+
 1. Add `NGROK_DOMAIN=your-subdomain.ngrok-free.app` to your `.env` file
 2. Run `bun dev` in one terminal
 3. Run `npm run ngrok` in another terminal
-4. Configure LemonSqueezy webhook to: `https://your-subdomain.ngrok-free.app/api/webhooks/lemonsqueezy`
+4. Configure LemonSqueezy webhook to:
+   `https://your-subdomain.ngrok-free.app/api/webhooks/lemonsqueezy`
 
 See [docs/NGROK_SETUP.md](docs/NGROK_SETUP.md) for detailed instructions.
 
@@ -178,9 +186,11 @@ npm run cf-typegen   # Generate Cloudflare Types
 
 ### Zod Schema Validation
 
-CompileStrength uses Zod for comprehensive runtime validation and TypeScript type inference across all API endpoints and data models.
+CompileStrength uses Zod for comprehensive runtime validation and TypeScript
+type inference across all API endpoints and data models.
 
 **Key Features:**
+
 - Runtime request/response validation with detailed error messages
 - Automatic TypeScript type inference from schemas
 - Centralized schema definitions in `src/schemas/`
@@ -188,6 +198,7 @@ CompileStrength uses Zod for comprehensive runtime validation and TypeScript typ
 - Consistent API response format with structured error details
 
 **Schema Organization:**
+
 - `workout.schemas.ts` - Workout sessions, sets, programs, routines
 - `user.schemas.ts` - User profiles and preferences
 - `billing.schemas.ts` - LemonSqueezy subscription and billing data
@@ -195,16 +206,22 @@ CompileStrength uses Zod for comprehensive runtime validation and TypeScript typ
 - `common.schemas.ts` - Shared utilities (pagination, search, responses)
 
 **API Validation Flow:**
+
 1. All API endpoints validate request bodies using `validateRequest()`
 2. Invalid requests return structured error responses with field-level details
 3. Valid data is automatically typed according to schema
 4. Responses follow consistent success/error format
 
 **Example Usage:**
+
 ```typescript
 // In API route
 import { createWorkoutSetSchema } from "@/schemas";
-import { validateRequest, ValidationError, createValidationErrorResponse } from "@/lib/validation";
+import {
+  createValidationErrorResponse,
+  validateRequest,
+  ValidationError,
+} from "@/lib/validation";
 import { transformTimestamps } from "@/lib/date-transform";
 
 const body = await request.json();
@@ -215,8 +232,9 @@ const validatedData = validateRequest(createWorkoutSetSchema, body);
 const dataWithDates = transformTimestamps(validatedData);
 ```
 
-**Type Inference:**
-Instead of manually defining interfaces, types are inferred from Zod schemas:
+**Type Inference:** Instead of manually defining interfaces, types are inferred
+from Zod schemas:
+
 ```typescript
 import type { CreateWorkoutSet, WorkoutSession } from "@/schemas";
 // Types automatically derived from schema definitions
@@ -227,20 +245,24 @@ import type { CreateWorkoutSet, WorkoutSession } from "@/schemas";
 ### Required Environment Variables
 
 **Authentication:**
+
 - `DATABASE_URL` - PostgreSQL connection string
 - `BETTER_AUTH_SECRET` - Authentication secret (min 32 chars)
 - `BETTER_AUTH_URL` - Base URL for auth (e.g., https://yourdomain.com)
 - `NEXT_PUBLIC_BETTER_AUTH_URL` - Public auth URL
 
 **LemonSqueezy Billing:**
+
 - `LEMONSQUEEZY_API_KEY` - API key from LemonSqueezy settings
 - `LEMONSQUEEZY_STORE_ID` - Your store ID from LemonSqueezy
 - `LEMONSQUEEZY_WEBHOOK_SECRET` - Webhook signing secret
 - `LEMONSQUEEZY_WEBHOOK_URL` - Optional, webhook URL for development
 
 **Optional:**
+
 - `OPENAI_API_KEY` - Optional, for AI workout compiler features
-- `NGROK_DOMAIN` - Optional, your ngrok static domain for webhook testing (e.g., `your-subdomain.ngrok-free.app`)
+- `NGROK_DOMAIN` - Optional, your ngrok static domain for webhook testing (e.g.,
+  `your-subdomain.ngrok-free.app`)
 
 ### Environment Setup
 
@@ -286,11 +308,14 @@ import type { CreateWorkoutSet, WorkoutSession } from "@/schemas";
 CompileStrength uses **Sonner** for non-blocking toast notifications:
 
 - **Package**: `sonner` - Modern, customizable toast library
-- **Setup**: `<Toaster />` component mounted in root layout (`src/app/layout.tsx`)
-- **Usage**: Import `toast` from `"sonner"` and use `toast.error()`, `toast.success()`, etc.
+- **Setup**: `<Toaster />` component mounted in root layout
+  (`src/app/layout.tsx`)
+- **Usage**: Import `toast` from `"sonner"` and use `toast.error()`,
+  `toast.success()`, etc.
 - **Styling**: Automatically inherits dark mode from app theme
 
 **Example Usage:**
+
 ```typescript
 import { toast } from "sonner";
 
@@ -301,7 +326,8 @@ toast.error("Failed to save workout");
 toast.success("Workout completed successfully");
 ```
 
-**Never use `alert()` or `confirm()` dialogs** - always use toast notifications for user feedback.
+**Never use `alert()` or `confirm()` dialogs** - always use toast notifications
+for user feedback.
 
 ### Styling
 
@@ -336,8 +362,10 @@ toast.success("Workout completed successfully");
 
 - All API endpoints MUST validate request bodies using Zod schemas
 - Use structured error responses via validation utilities
-- Follow consistent response format: `{ success: boolean, data?: any, error?: string }`
-- Handle validation errors with proper HTTP status codes (400 for validation failures)
+- Follow consistent response format:
+  `{ success: boolean, data?: any, error?: string }`
+- Handle validation errors with proper HTTP status codes (400 for validation
+  failures)
 - Prefer schema-inferred types over manually defined interfaces
 
 ## AI Integration
@@ -352,9 +380,11 @@ toast.success("Workout completed successfully");
 
 ### LemonSqueezy Integration
 
-CompileStrength uses LemonSqueezy for subscription billing with full webhook integration.
+CompileStrength uses LemonSqueezy for subscription billing with full webhook
+integration.
 
 **Key Features:**
+
 - Subscription management (create, pause, cancel, change plans)
 - 7-day free trial period for new subscriptions
 - Usage tracking and limits (1 compile/week, 5 edits, 50 messages)
@@ -365,12 +395,14 @@ CompileStrength uses LemonSqueezy for subscription billing with full webhook int
 ### Route Structure
 
 **Public Routes (No Auth Required):**
+
 - `/` - Landing page
 - `/login` - Login page
 - `/signup` - Signup page
 - `/tools/*` - Free fitness calculators (FFMI, etc.)
 
 **Protected Routes (Auth Required):**
+
 - `/app/*` - All dashboard pages require authentication
   - `/app` - Main dashboard (shows workout overview)
   - `/app/compiler` - AI workout compiler
@@ -382,11 +414,13 @@ CompileStrength uses LemonSqueezy for subscription billing with full webhook int
 ### Subscription Status Handling
 
 **Valid Subscription Statuses (grants access):**
+
 - `active` - Paid and active subscription
 - `on_trial` - In 7-day trial period
 - `paused` - Paused but can be resumed
 
 **Invalid Statuses (show upgrade prompts):**
+
 - `past_due` - Payment failed
 - `unpaid` - Subscription unpaid
 - `cancelled` - Subscription cancelled
@@ -395,6 +429,7 @@ CompileStrength uses LemonSqueezy for subscription billing with full webhook int
 ### Usage Limits
 
 Each subscription period tracks:
+
 - **Compiles**: 1 per week (AI workout generation)
 - **Routine Edits**: 5 per routine
 - **AI Messages**: 50 per conversation
@@ -404,6 +439,7 @@ Usage periods reset based on subscription start date (not calendar week).
 ### Webhook Events
 
 Webhook endpoint at `/api/webhooks/lemonsqueezy` handles:
+
 - `subscription_created` - New subscription started
 - `subscription_updated` - Subscription modified
 - `subscription_cancelled` - Subscription cancelled

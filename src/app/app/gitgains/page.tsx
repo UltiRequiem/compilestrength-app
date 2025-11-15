@@ -46,7 +46,9 @@ export default async function GitGainsPage() {
 				minute: "2-digit",
 			}),
 			type: "Workout",
-			message: `${session.setCount || 0} sets, ${Math.round(session.totalVolume || 0)} lbs volume`,
+			message: `${session.setCount || 0} sets, ${Math.round(
+				session.totalVolume || 0,
+			)} lbs volume`,
 			prs: [],
 		};
 	});

@@ -20,7 +20,8 @@ Workers.
 - **Authentication:** Better Auth Cloudflare with geolocation tracking
 - **Billing:** LemonSqueezy for subscription management
 - **AI:** Mastra framework with OpenAI integration
-- **Code Quality:** Biome for formatting and linting, ESLint for additional checks
+- **Code Quality:** Biome for formatting and linting, ESLint for additional
+  checks
 - **Deployment:** OpenNext.js adapter for Cloudflare Workers
 
 ## Features
@@ -156,7 +157,8 @@ Secrets persist across deployments. You only need to update them if they change.
 
 ## Development Commands
 
-**Note:** This project uses **Bun** as the primary package manager. You can use either `npm` or `bun` for most commands.
+**Note:** This project uses **Bun** as the primary package manager. You can use
+either `npm` or `bun` for most commands.
 
 ```bash
 # Development

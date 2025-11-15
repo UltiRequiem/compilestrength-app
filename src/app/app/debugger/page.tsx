@@ -103,7 +103,9 @@ export default async function DebuggerPage() {
 						description: `Your ${exerciseName} weight hasn't increased recently`,
 						details: [
 							`at ${exerciseName}`,
-							`Last 4 sessions: ${weights[0]} lbs × ${last4.map((s) => s.reps).join(", ")} reps`,
+							`Last 4 sessions: ${weights[0]} lbs × ${last4
+								.map((s) => s.reps)
+								.join(", ")} reps`,
 							`Recommended: Increase weight by 5 lbs or add 1-2 reps`,
 						],
 						trend: "flat",
@@ -169,7 +171,9 @@ export default async function DebuggerPage() {
 		} else if (sessionsPerWeek >= 3) {
 			workingWell.push({
 				id: "frequency-good",
-				text: `Great training frequency (~${sessionsPerWeek.toFixed(1)} sessions/week)`,
+				text: `Great training frequency (~${sessionsPerWeek.toFixed(
+					1,
+				)} sessions/week)`,
 			});
 		}
 	}

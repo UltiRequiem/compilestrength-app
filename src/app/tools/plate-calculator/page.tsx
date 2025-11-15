@@ -283,7 +283,9 @@ export default function PlateCalculator() {
 															<div
 																key={`left-${plateIndex}-${countIndex}`}
 																className={`w-3 h-12 ${plate.color} border border-zinc-600 -ml-1 first:ml-0`}
-																title={`${plate.weight}${unit === "kg" ? "kg" : "lb"}`}
+																title={`${plate.weight}${
+																	unit === "kg" ? "kg" : "lb"
+																}`}
 															/>
 														),
 													),
@@ -303,7 +305,9 @@ export default function PlateCalculator() {
 																<div
 																	key={`right-${plateIndex}-${countIndex}`}
 																	className={`w-3 h-12 ${plate.color} border border-zinc-600 -mr-1 last:mr-0`}
-																	title={`${plate.weight}${unit === "kg" ? "kg" : "lb"}`}
+																	title={`${plate.weight}${
+																		unit === "kg" ? "kg" : "lb"
+																	}`}
 																/>
 															),
 														),
