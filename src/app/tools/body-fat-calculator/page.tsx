@@ -225,7 +225,7 @@ export default function BodyFatCalculator() {
 								className="mt-1"
 							/>
 							<p className="text-xs text-zinc-400 mt-1">
-								Measure at the narrowest point, usually just above the navel
+								Measure at the navel (belly button) level
 							</p>
 						</div>
 
