@@ -71,9 +71,9 @@ export default async function LandingPage() {
 			/>
 
 			{/* Navbar */}
-			<nav className="border-b border-zinc-800 px-6 py-4 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
+			<nav className="border-b border-zinc-800 px-4 sm:px-6 py-4 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
 				<div className="max-w-7xl mx-auto flex items-center justify-between">
-					<Link href="/" className="flex items-center gap-2">
+					<Link href="/" className="flex items-center gap-2 shrink-0">
 						<Image
 							src="/logo.png"
 							alt="CompileStrength Logo"
@@ -81,64 +81,86 @@ export default async function LandingPage() {
 							height={32}
 							className="object-contain"
 						/>
-						<span className="text-xl font-bold">
+						<span className="text-lg sm:text-xl font-bold">
 							<span className="text-blue-500">Compile</span>
 							<span className="text-white">Strength</span>
 						</span>
 					</Link>
-					<div className="flex items-center gap-4">
-						<Link
-							href="/tools"
-							className="text-zinc-300 hover:text-white transition-colors"
-						>
-							Tools
-						</Link>
-						<Link
-							href="/blog"
-							className="text-zinc-300 hover:text-white transition-colors"
-						>
-							Blog
-						</Link>
+					<div className="flex items-center gap-2 sm:gap-4">
+						{/* Only show on larger screens */}
+						<div className="hidden lg:flex items-center gap-4">
+							<Link
+								href="/tools"
+								className="text-zinc-300 hover:text-white transition-colors"
+							>
+								Tools
+							</Link>
+							<Link
+								href="/blog"
+								className="text-zinc-300 hover:text-white transition-colors"
+							>
+								Blog
+							</Link>
+						</div>
 						{session ? (
 							<Link href="/app/dashboard">
-								<Button size="sm">Dashboard</Button>
+								<Button size="sm" className="shrink-0">
+									Dashboard
+								</Button>
 							</Link>
 						) : (
-							<>
-								<Link href="/login">
-									<Button variant="outline" size="sm">
+							<div className="flex items-center gap-2">
+								{/* Hide Login button on very small screens */}
+								<Link href="/login" className="hidden xs:block">
+									<Button
+										variant="outline"
+										size="sm"
+										className="shrink-0 text-xs sm:text-sm px-2 sm:px-4"
+									>
 										Login
 									</Button>
 								</Link>
 								<Link href="/signup">
-									<Button size="sm">Sign Up</Button>
+									<Button
+										size="sm"
+										className="shrink-0 text-xs sm:text-sm px-2 sm:px-4"
+									>
+										Sign Up
+									</Button>
 								</Link>
-							</>
+							</div>
 						)}
 					</div>
 				</div>
 			</nav>
 
 			{/* Hero Section */}
-			<main className="max-w-7xl mx-auto px-6 py-20">
+			<main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
 				<div className="text-center space-y-6">
-					<h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+					<h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight">
 						Training Programs Built on
 						<span className="text-blue-500 block mt-2">Exercise Science</span>
 					</h1>
-					<p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
+					<p className="text-lg sm:text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
 						AI-powered programming designed for lifters who understand
 						progressive overload, periodization, and evidence-based training
 						principles.
 					</p>
-					<div className="flex gap-4 justify-center pt-8">
-						<Link href="/signup">
-							<Button size="lg" className="text-lg h-12 px-8">
+					<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-8 max-w-md sm:max-w-none mx-auto">
+						<Link href="/signup" className="w-full sm:w-auto">
+							<Button
+								size="lg"
+								className="w-full sm:w-auto text-base sm:text-lg h-12 px-6 sm:px-8"
+							>
 								Start Free Trial
 							</Button>
 						</Link>
-						<Link href="/tools">
-							<Button size="lg" variant="outline" className="text-lg h-12 px-8">
+						<Link href="/tools" className="w-full sm:w-auto">
+							<Button
+								size="lg"
+								variant="outline"
+								className="w-full sm:w-auto text-base sm:text-lg h-12 px-6 sm:px-8"
+							>
 								Free Training Tools
 							</Button>
 						</Link>

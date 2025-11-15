@@ -50,15 +50,15 @@ export function DashboardClient({
 	const units = useUnits();
 	return (
 		<>
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold">
+			<div className="mb-6 sm:mb-8">
+				<h1 className="text-2xl sm:text-3xl font-bold">
 					Welcome back, {userName.split(" ")[0]}
 				</h1>
-				<p className="text-muted-foreground">{today}</p>
+				<p className="text-muted-foreground text-sm sm:text-base">{today}</p>
 			</div>
 
 			{/* Quick Stats */}
-			<div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+			<div className="mb-6 sm:mb-8 grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
 				<Card className="card-hover glow-blue-hover border-primary/20">
 					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 						<CardTitle className="text-sm font-medium">
@@ -157,9 +157,11 @@ export function DashboardClient({
 			</div>
 
 			{/* This Week's Program */}
-			<div className="mb-8">
-				<h2 className="mb-4 text-2xl font-bold">This Week&apos;s Program</h2>
-				<div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
+			<div className="mb-6 sm:mb-8">
+				<h2 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+					This Week&apos;s Program
+				</h2>
+				<div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4 lg:grid-cols-7">
 					{weekDays.map((item) => (
 						<Card
 							key={item.day}
@@ -171,13 +173,15 @@ export function DashboardClient({
 										: ""
 							}`}
 						>
-							<CardHeader className="p-4 pb-2">
-								<CardTitle className="text-sm font-semibold">
+							<CardHeader className="p-3 sm:p-4 pb-2">
+								<CardTitle className="text-xs sm:text-sm font-semibold">
 									{item.day}
 								</CardTitle>
 							</CardHeader>
-							<CardContent className="p-4 pt-0">
-								<p className="text-xs text-muted-foreground">{item.workout}</p>
+							<CardContent className="p-3 sm:p-4 pt-0">
+								<p className="text-[10px] sm:text-xs text-muted-foreground line-clamp-2">
+									{item.workout}
+								</p>
 								<div className="mt-2">
 									{item.status === "completed" && (
 										<Badge variant="secondary" className="text-[10px]">
@@ -194,21 +198,25 @@ export function DashboardClient({
 				</div>
 			</div>
 
-			<div className="grid gap-8 lg:grid-cols-2">
+			<div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
 				{/* Recent Activity */}
 				<div>
-					<h2 className="mb-4 text-2xl font-bold">Recent Activity</h2>
+					<h2 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+						Recent Activity
+					</h2>
 					<Card className="border-primary/20">
 						<CardContent className="p-0">
 							<div className="divide-y divide-border">
 								{recentActivity.map((activity) => (
 									<div
 										key={`${activity.exercise}-${activity.date}-${activity.weight}`}
-										className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors"
+										className="flex items-center justify-between p-3 sm:p-4 hover:bg-accent/50 transition-colors"
 									>
-										<div className="flex-1">
-											<p className="font-semibold">{activity.exercise}</p>
-											<p className="text-sm text-muted-foreground terminal-text">
+										<div className="flex-1 min-w-0">
+											<p className="font-semibold text-sm sm:text-base truncate">
+												{activity.exercise}
+											</p>
+											<p className="text-xs sm:text-sm text-muted-foreground terminal-text">
 												{activity.sets} × {activity.reps} @{" "}
 												{formatWeight(
 													convertWeight(activity.weight, "lbs", units),
@@ -230,18 +238,22 @@ export function DashboardClient({
 
 				{/* Quick Actions */}
 				<div>
-					<h2 className="mb-4 text-2xl font-bold">Quick Actions</h2>
-					<div className="space-y-3">
+					<h2 className="mb-3 sm:mb-4 text-xl sm:text-2xl font-bold">
+						Quick Actions
+					</h2>
+					<div className="space-y-2 sm:space-y-3">
 						<Button
-							className="w-full justify-start text-left h-auto py-4"
+							className="w-full justify-start text-left h-auto py-3 sm:py-4 px-3 sm:px-4"
 							onClick={() => {
 								window.location.href = "/app/compiler";
 							}}
 						>
-							<Sparkles className="h-5 w-5" />
-							<div className="flex-1">
-								<div className="font-semibold">Generate New Program</div>
-								<div className="text-xs opacity-80">
+							<Sparkles className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
+							<div className="flex-1 min-w-0 ml-2 sm:ml-3">
+								<div className="font-semibold text-sm sm:text-base">
+									Generate New Program
+								</div>
+								<div className="text-xs sm:text-xs opacity-80">
 									Let AI create a custom workout plan
 								</div>
 							</div>
@@ -249,15 +261,17 @@ export function DashboardClient({
 
 						<Button
 							variant="outline"
-							className="w-full justify-start text-left h-auto py-4 border-primary/50 hover:bg-primary/10"
+							className="w-full justify-start text-left h-auto py-3 sm:py-4 px-3 sm:px-4 border-primary/50 hover:bg-primary/10"
 							onClick={() => {
 								window.location.href = "/app/log-workout";
 							}}
 						>
-							<Play className="h-5 w-5 text-primary" />
-							<div className="flex-1">
-								<div className="font-semibold">Log Today&apos;s Workout</div>
-								<div className="text-xs opacity-80">
+							<Play className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+							<div className="flex-1 min-w-0 ml-2 sm:ml-3">
+								<div className="font-semibold text-sm sm:text-base">
+									Log Today&apos;s Workout
+								</div>
+								<div className="text-xs sm:text-xs opacity-80">
 									Start tracking your session
 								</div>
 							</div>
@@ -265,15 +279,17 @@ export function DashboardClient({
 
 						<Button
 							variant="outline"
-							className="w-full justify-start text-left h-auto py-4 border-primary/50 hover:bg-primary/10"
+							className="w-full justify-start text-left h-auto py-3 sm:py-4 px-3 sm:px-4 border-primary/50 hover:bg-primary/10"
 							onClick={() => {
 								window.location.href = "/app/debugger";
 							}}
 						>
-							<BarChart3 className="h-5 w-5 text-primary" />
-							<div className="flex-1">
-								<div className="font-semibold">Analyze Performance</div>
-								<div className="text-xs opacity-80">
+							<BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
+							<div className="flex-1 min-w-0 ml-2 sm:ml-3">
+								<div className="font-semibold text-sm sm:text-base">
+									Analyze Performance
+								</div>
+								<div className="text-xs sm:text-xs opacity-80">
 									Review training data and optimize your approach
 								</div>
 							</div>
