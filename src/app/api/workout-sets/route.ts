@@ -101,7 +101,6 @@ export async function PATCH(request: Request) {
 			);
 		}
 
-		// Update set
 		const [updatedSet] = await db
 			.update(workoutSets)
 			.set({
