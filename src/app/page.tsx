@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
-import Image from "next/image";
 import Link from "next/link";
+import { LandingNavbar } from "@/components/landing-navbar";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 
@@ -71,68 +71,7 @@ export default async function LandingPage() {
 			/>
 
 			{/* Navbar */}
-			<nav className="border-b border-zinc-800 px-4 sm:px-6 py-4 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
-				<div className="max-w-7xl mx-auto flex items-center justify-between">
-					<Link href="/" className="flex items-center gap-2 shrink-0">
-						<Image
-							src="/logo.png"
-							alt="CompileStrength Logo"
-							width={32}
-							height={32}
-							className="object-contain"
-						/>
-						<span className="text-lg sm:text-xl font-bold">
-							<span className="text-blue-500">Compile</span>
-							<span className="text-white">Strength</span>
-						</span>
-					</Link>
-					<div className="flex items-center gap-2 sm:gap-4">
-						{/* Only show on larger screens */}
-						<div className="hidden lg:flex items-center gap-4">
-							<Link
-								href="/tools"
-								className="text-zinc-300 hover:text-white transition-colors"
-							>
-								Tools
-							</Link>
-							<Link
-								href="/blog"
-								className="text-zinc-300 hover:text-white transition-colors"
-							>
-								Blog
-							</Link>
-						</div>
-						{session ? (
-							<Link href="/app/dashboard">
-								<Button size="sm" className="shrink-0">
-									Dashboard
-								</Button>
-							</Link>
-						) : (
-							<div className="flex items-center gap-2">
-								{/* Hide Login button on very small screens */}
-								<Link href="/login" className="hidden xs:block">
-									<Button
-										variant="outline"
-										size="sm"
-										className="shrink-0 text-xs sm:text-sm px-2 sm:px-4"
-									>
-										Login
-									</Button>
-								</Link>
-								<Link href="/signup">
-									<Button
-										size="sm"
-										className="shrink-0 text-xs sm:text-sm px-2 sm:px-4"
-									>
-										Sign Up
-									</Button>
-								</Link>
-							</div>
-						)}
-					</div>
-				</div>
-			</nav>
+			<LandingNavbar isLoggedIn={!!session} />
 
 			{/* Hero Section */}
 			<main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">

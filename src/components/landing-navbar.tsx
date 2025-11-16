@@ -1,19 +1,30 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { MobileMenu } from "@/components/shared/mobile-menu";
 import { Button } from "@/components/ui/button";
-import { useSession } from "@/lib/auth-client";
 
-export function Navbar() {
-	const { data: session } = useSession();
+interface LandingNavbarProps {
+	isLoggedIn: boolean;
+}
 
+export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
 	return (
 		<nav className="border-b border-zinc-800 px-4 sm:px-6 py-4 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
 			<div className="max-w-7xl mx-auto flex items-center justify-between">
-				<Link href="/" className="text-lg sm:text-xl font-bold shrink-0">
-					<span className="text-blue-500">Compile</span>
-					<span className="text-white">Strength</span>
+				<Link href="/" className="flex items-center gap-2 shrink-0">
+					<Image
+						src="/logo.png"
+						alt="CompileStrength Logo"
+						width={32}
+						height={32}
+						className="object-contain"
+					/>
+					<span className="text-lg sm:text-xl font-bold">
+						<span className="text-blue-500">Compile</span>
+						<span className="text-white">Strength</span>
+					</span>
 				</Link>
 
 				{/* Desktop Navigation */}
@@ -30,7 +41,7 @@ export function Navbar() {
 					>
 						Blog
 					</Link>
-					{session ? (
+					{isLoggedIn ? (
 						<Link href="/app/dashboard">
 							<Button size="sm" className="shrink-0">
 								Dashboard
@@ -53,7 +64,7 @@ export function Navbar() {
 				</div>
 
 				{/* Mobile Menu */}
-				<MobileMenu isLoggedIn={!!session} />
+				<MobileMenu isLoggedIn={isLoggedIn} />
 			</div>
 		</nav>
 	);
