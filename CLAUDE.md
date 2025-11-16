@@ -18,7 +18,7 @@ deployed on Cloudflare Workers.
 
 - **Package Manager**: Bun (primary, with bun.lock file)
 - **Frontend**: Next.js 15 with React 19, TailwindCSS v4
-- **Backend**: Cloudflare Workers with Node.js compatibility
+- **Backend**: Cloudflare Workers with Edge Runtime (NOT Node.js runtime)
 - **Database**: Neon PostgreSQL (serverless) with Drizzle ORM
 - **Database Driver**: @neondatabase/serverless (HTTP-based, optimized for
   Workers)
