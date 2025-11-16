@@ -2,6 +2,7 @@
 
 import {
 	BarChart3,
+	Calculator,
 	Dumbbell,
 	FolderOpen,
 	Home,
@@ -50,6 +51,7 @@ const navigation = [
 	{ name: "Progress Tracker", href: "/app/gitgains", icon: LineChart },
 	{ name: "Performance Analysis", href: "/app/debugger", icon: BarChart3 },
 	{ name: "The Coach", href: "/app/coach", icon: User },
+	{ name: "Tools", href: "/tools", icon: Calculator },
 	{ name: "Settings", href: "/app/settings", icon: Settings },
 ];
 
