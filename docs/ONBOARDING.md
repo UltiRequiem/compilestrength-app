@@ -1,6 +1,7 @@
 # CompileStrength Onboarding Guide
 
-Welcome to CompileStrength! This guide will help you understand the codebase, set up your development environment, and start contributing effectively.
+Welcome to CompileStrength! This guide will help you understand the codebase,
+set up your development environment, and start contributing effectively.
 
 ## 🚀 Quick Start Checklist
 
@@ -71,10 +72,12 @@ NGROK_DOMAIN="your-subdomain.ngrok-free.app"
 
 **Getting Credentials:**
 
-- **Neon Database**: Sign up at [neon.tech](https://neon.tech), create database, copy connection string
+- **Neon Database**: Sign up at [neon.tech](https://neon.tech), create database,
+  copy connection string
 - **Better Auth Secret**: Generate with `openssl rand -base64 32`
 - **LemonSqueezy**: See [LEMONSQUEEZY_SETUP.md](./LEMONSQUEEZY_SETUP.md)
-- **OpenAI**: Get API key from [platform.openai.com](https://platform.openai.com)
+- **OpenAI**: Get API key from
+  [platform.openai.com](https://platform.openai.com)
 
 ### 3. Database Setup
 
@@ -115,6 +118,7 @@ Test these key areas:
 ### Tech Stack Overview
 
 **Frontend:**
+
 - **Next.js 15** - React framework with App Router
 - **React 19** - UI framework
 - **TailwindCSS v4** - Styling
@@ -122,12 +126,14 @@ Test these key areas:
 - **Shadcn/ui** - Component library
 
 **Backend:**
+
 - **Cloudflare Workers** - Serverless deployment
 - **Neon PostgreSQL** - Database
 - **Drizzle ORM** - Type-safe database queries
 - **Better Auth** - Authentication with Cloudflare integration
 
 **Key Integrations:**
+
 - **LemonSqueezy** - Subscription billing
 - **OpenAI** - AI workout generation
 - **Mastra** - AI agent framework
@@ -158,16 +164,19 @@ src/
 ### Key Concepts
 
 **Route Structure:**
+
 - **Public**: `/`, `/tools/*`, `/login`, `/signup`
 - **Protected**: `/app/*` (requires authentication)
 - **API**: `/api/*` (server endpoints)
 
 **Database Models:**
+
 - **Auth**: Users, sessions, accounts (Better Auth)
 - **Workouts**: Programs, exercises, sessions, sets
 - **Billing**: Plans, subscriptions, webhooks, usage tracking
 
 **State Management:**
+
 - **Global**: User preferences via Zustand
 - **Local**: React state for component-specific data
 - **Server**: Database state via Drizzle ORM
@@ -177,6 +186,7 @@ src/
 ### Code Quality Standards
 
 **Formatting & Linting:**
+
 ```bash
 # Run Biome check with auto-fix (recommended)
 npm run biocheck
@@ -189,6 +199,7 @@ npm run lint
 ```
 
 **TypeScript & Build:**
+
 ```bash
 # Build check
 npm run build
@@ -198,6 +209,7 @@ npm run check
 ```
 
 **Always run before committing:**
+
 ```bash
 npm run biocheck && npm run check
 ```
@@ -205,6 +217,7 @@ npm run biocheck && npm run check
 ### Database Operations
 
 **Schema Changes:**
+
 ```bash
 # Modify schema in src/db/schema.ts
 # Push changes to database
@@ -216,6 +229,7 @@ bunx drizzle-kit migrate
 ```
 
 **Database Management:**
+
 ```bash
 # Open GUI
 bunx drizzle-kit studio
@@ -381,6 +395,7 @@ Follow [STYLE_GUIDE.md](./STYLE_GUIDE.md) for:
 - Brand voice (fitness-focused, NOT developer-focused)
 
 **Key Rules:**
+
 - Use `text-blue-500` for accents, not `text-green-400`
 - Reference training principles, not coding metaphors
 - Professional fitness language, not terminal commands

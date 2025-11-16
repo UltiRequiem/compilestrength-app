@@ -2,7 +2,9 @@
 
 **Live Site:** [compilestrength.com](https://compilestrength.com)
 
-A full-stack fitness application with AI-powered workout programming designed for science-based lifters. Built with Next.js 15 and deployed on Cloudflare Workers.
+A full-stack fitness application with AI-powered workout programming designed
+for science-based lifters. Built with Next.js 15 and deployed on Cloudflare
+Workers.
 
 ## Tech Stack
 
@@ -56,7 +58,8 @@ This application requires the following environment variables:
 - `DATABASE_URL` - Neon PostgreSQL connection string
 - `BETTER_AUTH_SECRET` - Secret for Better Auth (min 32 characters)
 - `BETTER_AUTH_URL` - Base URL for auth (e.g., `https://compilestrength.com`)
-- `NEXT_PUBLIC_BETTER_AUTH_URL` - Public auth URL (e.g., `https://compilestrength.com`)
+- `NEXT_PUBLIC_BETTER_AUTH_URL` - Public auth URL (e.g.,
+  `https://compilestrength.com`)
 
 ### Optional Variables
 
@@ -64,7 +67,8 @@ This application requires the following environment variables:
 - `LEMONSQUEEZY_API_KEY` - For subscription billing
 - `LEMONSQUEEZY_STORE_ID` - Your LemonSqueezy store ID
 - `LEMONSQUEEZY_WEBHOOK_SECRET` - For webhook signature verification
-- `NGROK_DOMAIN` - For local webhook testing (e.g., `your-subdomain.ngrok-free.app`)
+- `NGROK_DOMAIN` - For local webhook testing (e.g.,
+  `your-subdomain.ngrok-free.app`)
 
 ### Local Development
 
@@ -236,9 +240,11 @@ All tables use Drizzle ORM with full TypeScript type inference.
 
 👋 **New to the project?** Start with our comprehensive onboarding guide:
 
-**[📚 ONBOARDING.md](docs/ONBOARDING.md)** - Complete setup guide for new engineers
+**[📚 ONBOARDING.md](docs/ONBOARDING.md)** - Complete setup guide for new
+engineers
 
 This guide covers:
+
 - Development environment setup
 - Project architecture overview
 - Common development tasks
@@ -247,10 +253,14 @@ This guide covers:
 
 ### Quick Reference
 
-- **Architecture Details**: [CLAUDE.md](CLAUDE.md) - Comprehensive project documentation
-- **Design System**: [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) - Brand guidelines and UI patterns
-- **Billing Setup**: [docs/LEMONSQUEEZY_SETUP.md](docs/LEMONSQUEEZY_SETUP.md) - Subscription integration
-- **Webhook Testing**: [docs/NGROK_SETUP.md](docs/NGROK_SETUP.md) - Local webhook development
+- **Architecture Details**: [CLAUDE.md](CLAUDE.md) - Comprehensive project
+  documentation
+- **Design System**: [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) - Brand
+  guidelines and UI patterns
+- **Billing Setup**: [docs/LEMONSQUEEZY_SETUP.md](docs/LEMONSQUEEZY_SETUP.md) -
+  Subscription integration
+- **Webhook Testing**: [docs/NGROK_SETUP.md](docs/NGROK_SETUP.md) - Local
+  webhook development
 
 ## Contributing
 
