@@ -3,7 +3,7 @@ import { z } from "zod";
 // Base schemas for validation
 
 export const createWorkoutSessionSchema = z.object({
-	workoutDayId: z.string().optional(),
+	workoutDayId: z.string().min(1, "Workout day ID is required"),
 	notes: z.string().optional(),
 });
 

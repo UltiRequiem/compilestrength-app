@@ -16,7 +16,9 @@ async function resetDatabase() {
 	console.log("✅ Database reset complete!");
 }
 
-resetDatabase().catch((error) => {
+try {
+	await resetDatabase();
+} catch (error) {
 	console.error("❌ Error resetting database:", error);
 	process.exit(1);
-});
+}

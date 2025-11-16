@@ -8,7 +8,7 @@ import {
 import {
 	BODYBUILDING_SYSTEM_PROMPT,
 	bodybuildingTools,
-} from "@/agents/bodybuilding-agent";
+} from "@/agents/bodybuilding";
 
 export const maxDuration = 60;
 

@@ -18,7 +18,7 @@ deployed on Cloudflare Workers.
 
 - **Package Manager**: Bun (primary, with bun.lock file)
 - **Frontend**: Next.js 15 with React 19, TailwindCSS v4
-- **Backend**: Cloudflare Workers with Node.js compatibility
+- **Backend**: Cloudflare Workers with Edge Runtime (NOT Node.js runtime)
 - **Database**: Neon PostgreSQL (serverless) with Drizzle ORM
 - **Database Driver**: @neondatabase/serverless (HTTP-based, optimized for
   Workers)
@@ -43,10 +43,17 @@ deployed on Cloudflare Workers.
   - `dashboard/` - Dashboard-specific components
 - `src/lib/` - Core utilities
   - `auth-utils.ts` - Authentication helpers
+  - `auth-middleware.ts` - Proxy authentication utilities
   - `subscription-utils.ts` - Subscription status and validation
   - `lemonsqueezy-typeguards.ts` - Type guards for webhooks
   - `validation.ts` - Zod validation utilities and error handling
   - `date-transform.ts` - Type-safe date transformation utilities
+  - `queries/` - Organized database query functions
+    - `routines.ts` - User routine queries
+    - `workout-programs.ts` - Active program queries
+    - `workout-sessions.ts` - Session management queries
+    - `workout-sets.ts` - Set CRUD operations
+    - `index.ts` - Centralized query exports
 - `src/config/` - Configuration files
   - `lemonsqueezy.ts` - LemonSqueezy SDK setup
 - `src/agents/` - AI agent implementations using Mastra
@@ -97,9 +104,11 @@ The application has comprehensive workout tracking and billing models:
 - Better Auth Cloudflare handles email/password authentication
 - Drizzle ORM adapter connects to PostgreSQL database
 - Automatic geolocation tracking in sessions (via Cloudflare)
-- Session management integrated with Next.js middleware
-- Auth utilities in `src/lib/auth-client.ts` and `src/lib/auth-utils.ts`
+- Session management integrated with Next.js 16 proxy (`src/proxy.ts`)
+- Auth utilities in `src/lib/auth-client.ts`, `src/lib/auth-utils.ts`, and
+  `src/lib/auth-middleware.ts`
 - Cloudflare-specific features: IP detection, geolocation data
+- Centralized API authentication via proxy for Edge Runtime compatibility
 
 ### Global State Management (Zustand)
 

@@ -167,9 +167,9 @@ export default async function ToolsPage() {
 						</h2>
 						<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 							<Link href="/tools/ffmi-calculator">
-								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer">
+								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer h-full flex flex-col">
 									<h3 className="text-xl font-bold mb-2">FFMI Calculator</h3>
-									<p className="text-zinc-400 text-sm">
+									<p className="text-zinc-400 text-sm flex-1">
 										Calculate your Fat-Free Mass Index to assess muscle
 										development and natural genetic potential
 									</p>
@@ -177,11 +177,11 @@ export default async function ToolsPage() {
 							</Link>
 
 							<Link href="/tools/one-rep-max-calculator">
-								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer">
+								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer h-full flex flex-col">
 									<h3 className="text-xl font-bold mb-2">
 										One Rep Max Calculator
 									</h3>
-									<p className="text-zinc-400 text-sm">
+									<p className="text-zinc-400 text-sm flex-1">
 										Calculate your 1RM using multiple proven formulas for
 										strength assessment
 									</p>
@@ -189,9 +189,9 @@ export default async function ToolsPage() {
 							</Link>
 
 							<Link href="/tools/tdee-calculator">
-								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer">
+								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer h-full flex flex-col">
 									<h3 className="text-xl font-bold mb-2">TDEE Calculator</h3>
-									<p className="text-zinc-400 text-sm">
+									<p className="text-zinc-400 text-sm flex-1">
 										Calculate your Total Daily Energy Expenditure for accurate
 										calorie planning
 									</p>
@@ -199,30 +199,29 @@ export default async function ToolsPage() {
 							</Link>
 
 							<Link href="/tools/body-fat-calculator">
-								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer">
+								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer h-full flex flex-col">
 									<h3 className="text-xl font-bold mb-2">
 										Body Fat Calculator
 									</h3>
-									<p className="text-zinc-400 text-sm">
+									<p className="text-zinc-400 text-sm flex-1">
 										Calculate body fat percentage using US Navy and Army methods
-										with circumference measurements
 									</p>
 								</div>
 							</Link>
 
 							<Link href="/tools/plate-calculator">
-								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer">
+								<div className="border border-zinc-800 p-6 rounded-xl hover:bg-zinc-900 hover:border-blue-700 transition-all cursor-pointer h-full flex flex-col">
 									<h3 className="text-xl font-bold mb-2">Plate Calculator</h3>
-									<p className="text-zinc-400 text-sm">
+									<p className="text-zinc-400 text-sm flex-1">
 										Calculate which plates to load on your barbell for any
 										target weight
 									</p>
 								</div>
 							</Link>
 
-							<div className="border border-zinc-800 p-6 rounded-xl opacity-50">
+							<div className="border border-zinc-800 p-6 rounded-xl opacity-50 h-full flex flex-col">
 								<h3 className="text-xl font-bold mb-2">Macro Calculator</h3>
-								<p className="text-zinc-400 text-sm">Coming soon...</p>
+								<p className="text-zinc-400 text-sm flex-1">Coming soon...</p>
 							</div>
 						</div>
 					</div>
