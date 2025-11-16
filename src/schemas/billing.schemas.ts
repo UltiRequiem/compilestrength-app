@@ -23,7 +23,7 @@ export const subscriptionSchema = z.object({
 	lemonSqueezyId: z.string(),
 	orderId: z.number().int(),
 	name: z.string(),
-	email: z.string().email(),
+	email: z.email(),
 	status: z.string(),
 	statusFormatted: z.string(),
 	renewsAt: z.string().optional(),
@@ -64,7 +64,6 @@ export const usageTrackingSchema = z.object({
 	updatedAt: z.date(),
 });
 
-// Inferred types
 export type Plan = z.infer<typeof planSchema>;
 export type Subscription = z.infer<typeof subscriptionSchema>;
 export type WebhookEvent = z.infer<typeof webhookEventSchema>;

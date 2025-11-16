@@ -60,10 +60,10 @@ export const UserPreferencesStoreProvider = ({
 				storeRef.current.getState().setLoading(true);
 
 				try {
-					// Import getUserPreferences action dynamically to avoid SSR issues
 					const { getUserPreferences } = await import(
 						"@/app/app/settings/actions"
 					);
+
 					const preferences = await getUserPreferences();
 
 					if (preferences) {

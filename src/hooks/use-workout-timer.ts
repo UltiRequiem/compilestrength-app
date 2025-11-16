@@ -6,7 +6,6 @@ export function useWorkoutTimer() {
 	const [restTimer, setRestTimer] = useState<number | null>(null);
 	const [isResting, setIsResting] = useState(false);
 
-	// Main workout timer
 	useEffect(() => {
 		let interval: NodeJS.Timeout;
 		if (isRunning) {
@@ -19,7 +18,6 @@ export function useWorkoutTimer() {
 		};
 	}, [isRunning]);
 
-	// Rest timer
 	useEffect(() => {
 		let interval: NodeJS.Timeout;
 		if (isResting && restTimer !== null && restTimer > 0) {

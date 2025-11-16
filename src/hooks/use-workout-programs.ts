@@ -10,9 +10,11 @@ export function useWorkoutPrograms() {
 	const loadPrograms = useCallback(async () => {
 		try {
 			const response = await fetch("/api/workout-programs");
+
 			if (response.ok) {
 				const data = (await response.json()) as WorkoutProgram[];
 				setPrograms(data);
+
 				if (data.length > 0) {
 					setSelectedProgram(data[0].id);
 					if (data[0].days.length > 0) {

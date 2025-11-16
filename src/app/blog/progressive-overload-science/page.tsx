@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
+import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 
 export default async function ProgressiveOverloadBlogPost() {

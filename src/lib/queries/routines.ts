@@ -57,7 +57,7 @@ export async function getRoutinesByUserId(userId: string) {
 							sets: pe.sets,
 							reps: pe.reps,
 							restPeriod: pe.restSeconds,
-							notes: pe.notes || "",
+							notes: pe.notes ?? "",
 							order: pe.order,
 						})),
 					};
