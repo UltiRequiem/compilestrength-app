@@ -12,7 +12,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { WorkoutProgram, WorkoutDay } from "@/types/workout.types";
+import type { WorkoutDay, WorkoutProgram } from "@/types/workout.types";
 
 interface WorkoutListingProps {
 	programs: WorkoutProgram[];
@@ -72,8 +72,8 @@ export function WorkoutListing({
 						<Dumbbell className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
 						<h3 className="text-xl font-semibold mb-2">No Workout Programs</h3>
 						<p className="text-muted-foreground mb-6">
-							You don&apos;t have any workout programs yet. Create a program to start
-							logging workouts.
+							You don&apos;t have any workout programs yet. Create a program to
+							start logging workouts.
 						</p>
 						<Button onClick={() => router.push("/app/programs")}>
 							Create Program

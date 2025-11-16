@@ -1,6 +1,15 @@
 "use client";
 
-import { CheckCircle, Circle, Clock, Edit, Pause, Play, X, XCircle } from "lucide-react";
+import {
+	CheckCircle,
+	Circle,
+	Clock,
+	Edit,
+	Pause,
+	Play,
+	X,
+	XCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -9,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Input } from "@/components/ui/input";
-import { useWorkoutTimer } from "@/hooks/use-workout-timer";
+import type { useWorkoutTimer } from "@/hooks/use-workout-timer";
 import {
 	useRestTimerDefault,
 	useUnits,
@@ -31,6 +40,7 @@ interface WorkoutInProgressProps {
 	getCompletedSetsCount: () => number;
 	getTotalSetsCount: () => number;
 	currentDay: WorkoutDay | undefined;
+	workoutTimer: ReturnType<typeof useWorkoutTimer>;
 }
 
 export function WorkoutInProgress({
@@ -42,13 +52,19 @@ export function WorkoutInProgress({
 	getCompletedSetsCount,
 	getTotalSetsCount,
 	currentDay,
+	workoutTimer,
 }: WorkoutInProgressProps) {
 	const router = useRouter();
 	const [showAbortDialog, setShowAbortDialog] = useState(false);
 
 	// Temporary debug to see what we have
 	React.useEffect(() => {
-		console.log("WorkoutInProgress - exercises:", exercises.length, "currentDay:", currentDay?.name);
+		console.log(
+			"WorkoutInProgress - exercises:",
+			exercises.length,
+			"currentDay:",
+			currentDay?.name,
+		);
 	}, [exercises.length, currentDay?.name]);
 
 	const {
@@ -58,7 +74,7 @@ export function WorkoutInProgress({
 		isResting,
 		toggleTimer,
 		startRest,
-	} = useWorkoutTimer();
+	} = workoutTimer;
 
 	const units = useUnits();
 	const defaultRestTime = useRestTimerDefault();
@@ -257,9 +273,15 @@ export function WorkoutInProgress({
 																	className="h-8 w-20"
 																	value={set.weight || ""}
 																	onChange={(e) => {
-																		const value = Number.parseFloat(e.target.value) || 0;
+																		const value =
+																			Number.parseFloat(e.target.value) || 0;
 																		if (value >= 0) {
-																			updateSetValue(exerciseIdx, setIdx, "weight", value);
+																			updateSetValue(
+																				exerciseIdx,
+																				setIdx,
+																				"weight",
+																				value,
+																			);
 																		}
 																	}}
 																	placeholder="0"
@@ -279,9 +301,15 @@ export function WorkoutInProgress({
 																	className="h-8 w-16"
 																	value={set.reps || ""}
 																	onChange={(e) => {
-																		const value = Number.parseInt(e.target.value, 10) || 0;
+																		const value =
+																			Number.parseInt(e.target.value, 10) || 0;
 																		if (value >= 0) {
-																			updateSetValue(exerciseIdx, setIdx, "reps", value);
+																			updateSetValue(
+																				exerciseIdx,
+																				setIdx,
+																				"reps",
+																				value,
+																			);
 																		}
 																	}}
 																	placeholder="0"

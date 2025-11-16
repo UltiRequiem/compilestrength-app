@@ -46,19 +46,32 @@ export function useActiveSession() {
 				if (activeSession) {
 					const session = activeSession as ActiveSession;
 					setWorkoutSession(session);
-					console.log("checkActiveSession - Session set, workoutDayId:", session.workoutDayId);
+					console.log(
+						"checkActiveSession - Session set, workoutDayId:",
+						session.workoutDayId,
+					);
 
 					// Find the program and day for this session
 					const sessionProgram = programs.find((p) =>
 						p.days.some((d) => d.id === session.workoutDayId),
 					);
-					console.log("checkActiveSession - Found program:", sessionProgram?.name, "programs available:", programs.length);
+					console.log(
+						"checkActiveSession - Found program:",
+						sessionProgram?.name,
+						"programs available:",
+						programs.length,
+					);
 
 					if (sessionProgram) {
 						const currentDay = sessionProgram.days.find(
 							(d) => d.id === session.workoutDayId,
 						);
-						console.log("checkActiveSession - Found current day:", currentDay?.name, "exercises:", currentDay?.exercises?.length);
+						console.log(
+							"checkActiveSession - Found current day:",
+							currentDay?.name,
+							"exercises:",
+							currentDay?.exercises?.length,
+						);
 						if (currentDay) {
 							// Rebuild exercises with completed sets from the session
 							const exercisesWithSets: ExerciseWithSets[] =
@@ -112,13 +125,20 @@ export function useActiveSession() {
 									};
 								});
 
-							console.log("checkActiveSession - Built exercises:", exercisesWithSets.length, "setting exercises");
+							console.log(
+								"checkActiveSession - Built exercises:",
+								exercisesWithSets.length,
+								"setting exercises",
+							);
 							setExercises(exercisesWithSets);
 							console.log("checkActiveSession - Exercises set successfully");
 
 							// Verify exercises were set
 							setTimeout(() => {
-								console.log("checkActiveSession - Verify exercises after timeout, current exercises array length should be:", exercisesWithSets.length);
+								console.log(
+									"checkActiveSession - Verify exercises after timeout, current exercises array length should be:",
+									exercisesWithSets.length,
+								);
 							}, 100);
 							return {
 								programId: sessionProgram.id,
@@ -277,7 +297,8 @@ export function useActiveSession() {
 
 		const newExercises = [...exercises];
 		if (field === "weight" || field === "reps" || field === "rpe") {
-			(newExercises[exerciseIdx].completedSets[setIdx][field] as number) = value;
+			(newExercises[exerciseIdx].completedSets[setIdx][field] as number) =
+				value;
 		}
 		setExercises(newExercises);
 	};
@@ -326,14 +347,23 @@ export function useActiveSession() {
 	};
 
 	const getSessionStartTime = useCallback(() => {
-		console.log("getSessionStartTime called - workoutSession:", !!workoutSession, "startTime:", workoutSession?.startTime);
+		console.log(
+			"getSessionStartTime called - workoutSession:",
+			!!workoutSession,
+			"startTime:",
+			workoutSession?.startTime,
+		);
 		if (!workoutSession || !workoutSession.startTime) return 0;
 		try {
 			const startTime = new Date(workoutSession.startTime).getTime();
 			if (Number.isNaN(startTime)) return 0;
 			const now = Date.now();
 			const elapsed = Math.floor((now - startTime) / 1000);
-			console.log("getSessionStartTime - calculated elapsed:", elapsed, "seconds");
+			console.log(
+				"getSessionStartTime - calculated elapsed:",
+				elapsed,
+				"seconds",
+			);
 			return elapsed;
 		} catch {
 			return 0;

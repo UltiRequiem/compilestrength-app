@@ -42,7 +42,8 @@ export default function LogWorkoutPage() {
 		getTotalSetsCount,
 	} = useActiveSession();
 
-	const { setInitialElapsedTime } = useWorkoutTimer();
+	const workoutTimer = useWorkoutTimer();
+	const { setInitialElapsedTime } = workoutTimer;
 
 	useEffect(() => {
 		if (!session) return;
@@ -77,7 +78,10 @@ export default function LogWorkoutPage() {
 		if (workoutSession && workoutSession.startTime && !hasSetTimer.current) {
 			hasSetTimer.current = true;
 			const initialElapsed = getSessionStartTime();
-			console.log("Setting initial elapsed time after session set:", initialElapsed);
+			console.log(
+				"Setting initial elapsed time after session set:",
+				initialElapsed,
+			);
 			setInitialElapsedTime(initialElapsed);
 		}
 	}, [workoutSession, getSessionStartTime, setInitialElapsedTime]);
@@ -121,6 +125,7 @@ export default function LogWorkoutPage() {
 			getCompletedSetsCount={getCompletedSetsCount}
 			getTotalSetsCount={getTotalSetsCount}
 			currentDay={getCurrentDay()}
+			workoutTimer={workoutTimer}
 		/>
 	);
 }

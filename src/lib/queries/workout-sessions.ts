@@ -99,7 +99,8 @@ export async function updateWorkoutSession(
 
 	if (updateData.endTime) updatePayload.endTime = updateData.endTime;
 	if (updateData.notes !== undefined) updatePayload.notes = updateData.notes;
-	if (updateData.completed !== undefined) updatePayload.completedAt = new Date();
+	if (updateData.completed !== undefined)
+		updatePayload.completedAt = new Date();
 
 	const [updatedSession] = await db
 		.update(workoutSessions)
@@ -119,9 +120,7 @@ export async function deleteWorkoutSession(sessionId: string, userId: string) {
 	// console.log("deleteWorkoutSession - deleting session:", sessionId, "for user:", userId);
 
 	// First delete all workout sets for this session
-	await db
-		.delete(workoutSets)
-		.where(eq(workoutSets.sessionId, sessionId));
+	await db.delete(workoutSets).where(eq(workoutSets.sessionId, sessionId));
 
 	// Then delete the session
 	const [deletedSession] = await db
