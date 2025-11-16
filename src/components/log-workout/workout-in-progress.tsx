@@ -127,7 +127,6 @@ export function WorkoutInProgress() {
 				)}
 			</div>
 
-			{/* Exercises */}
 			<div className="space-y-6">
 				{exercises.map((exercise, exerciseIdx) => {
 					const isCurrentExercise =
@@ -297,7 +296,6 @@ export function WorkoutInProgress() {
 										</table>
 									</div>
 
-									{/* Quick Actions */}
 									<div className="flex gap-2">
 										<Button
 											variant="outline"
@@ -317,7 +315,6 @@ export function WorkoutInProgress() {
 				})}
 			</div>
 
-			{/* Finish Workout */}
 			{totalSets > 0 && (
 				<Card className="mt-8 border-primary/50">
 					<CardContent className="p-6">
